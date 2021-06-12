@@ -6,24 +6,21 @@
 //  Copyright © 2021 Emil Panecki. All rights reserved.
 //
 
-#ifndef ObstacleClass_hpp
-#define ObstacleClass_hpp
+#pragma once
 
 #include <SFML/Graphics.hpp>
-#include <stdio.h>
 
-#include "ResourcePath.hpp"
-
-class Obstacle {
-    
-    sf::Texture txt;
-    sf::Sprite sprite;
+class Obstacle
+{
     
 public:
     Obstacle(int x, int y);
     
     sf::Sprite getSprite();
+    
+private:
+    
+    sf::Texture txt;
+    sf::Sprite sprite;
   
 };
-
-#endif /* ObstacleClass_hpp */

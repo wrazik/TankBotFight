@@ -9,7 +9,9 @@
 #include "ObstacleClass.hpp"
 
 Obstacle::Obstacle(int x, int y) {
-    txt.loadFromFile(resourcePath() + "przeszkoda-obedience.jpg");
+    if(!txt.loadFromFile("przeszkoda-obedience.jpg")) {
+        return 0;
+    }
     sprite.setTexture(txt);
     sprite.setOrigin(sprite.getGlobalBounds().width/2, sprite.getGlobalBounds().height/2);
     

@@ -21,10 +21,7 @@
 #include "TankClass.hpp"
 #include "ObstacleClass.hpp"
 
-//Helping Libraries For SFML ( MacOS )
-#include "ResourcePath.hpp"
-
-int main(int, char const**)
+int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "TankBotFight");
 
@@ -34,12 +31,10 @@ int main(int, char const**)
     
     Obstacle obstracleA(100, 100);
     
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -49,24 +44,6 @@ int main(int, char const**)
                 window.close();
             }
         }
-        
-        /*
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-            tankA.move("up");
-        }
-        
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            tankA.move("left");
-        }
-        
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-            tankA.move("down");
-        }
-        
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            tankA.move("right");
-        }
-        */
         
         window.clear();
         window.draw(tankA.getSprite());
