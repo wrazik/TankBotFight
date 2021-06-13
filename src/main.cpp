@@ -14,42 +14,43 @@
 // function `resourcePath()` from ResourcePath.hpp
 //
 
-//SFML Libraries
+// SFML Libraries
 #include <SFML/Graphics.hpp>
 
-//My Libraries
-#include "TankClass.hpp"
-#include "ObstacleClass.hpp"
+// My Libraries
+#include "Obstacle.hpp"
+#include "Tank.hpp"
 
-int main()
+int
+main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "TankBotFight");
+  sf::RenderWindow window(sf::VideoMode(800, 600), "TankBotFight");
 
-    window.setFramerateLimit(1);
-    
-    Tank tankA(400, 300);
-    
-    Obstacle obstracleA(100, 100);
-    
-    while (window.isOpen()) {
-        
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-            
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                window.close();
-            }
-        }
-        
-        window.clear();
-        window.draw(tankA.getSprite());
-        window.draw(obstracleA.getSprite());
-        window.display();
+  window.setFramerateLimit(1);
+
+  Tank tank(400, 300, 0);
+
+  Obstacle obstracle(100, 100);
+
+  while (window.isOpen()) {
+
+    sf::Event event;
+    while (window.pollEvent(event)) {
+
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+
+      if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+        window.close();
+      }
     }
 
-    return EXIT_SUCCESS;
+    window.clear();
+    window.draw(tank.getSprite());
+    window.draw(obstracle.getSprite());
+    window.display();
+  }
+
+  return 0;
 }

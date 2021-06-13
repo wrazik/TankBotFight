@@ -12,15 +12,13 @@
 
 class Obstacle
 {
-    
+
 public:
-    Obstacle(int x, int y);
-    
-    sf::Sprite getSprite();
-    
+  Obstacle(int x, int y);
+
+  sf::Sprite getSprite();
+
 private:
-    
-    sf::Texture txt;
-    sf::Sprite sprite;
-  
+  sf::Texture txt;
+  sf::Sprite sprite;
 };

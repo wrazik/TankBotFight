@@ -10,9 +10,10 @@
 
 #include <SFML/Graphics.hpp>
 
-enum class Direction {
-    Up,
-    Down,
-    Left,
-    Right
+enum class Direction
+{
+  Up,
+  Down,
+  Left,
+  Right
 };
