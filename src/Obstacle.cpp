@@ -17,9 +17,9 @@ Obstacle::Obstacle(int x, int y)
   sprite.setTexture(txt);
   sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
 
-  sprite.setPosition(x, y);
+  sprite.setPosition(static_cast<float>(x), static_cast<float>(y));
 
-  sprite.scale(0.1, 0.1);
+  sprite.scale(0.1f, 0.1f);
 }
 
 sf::Sprite

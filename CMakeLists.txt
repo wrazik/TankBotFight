@@ -1,15 +1,23 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.18)
 project(TankBotFight)
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+include(CTest)
+
+set(SFML_VERSION "2.5.1")
+
+find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 
 add_executable(tank_bot_fight 
     src/main.cpp 
     src/Tank.cpp 
     src/Obstacle.cpp)
 
-target_compile_options(tank_bot_fight PUBLIC -Wall -Wpedantic -Werror)
+if(MSVC)
+    target_compile_options(tank_bot_fight PRIVATE /W3 /WX /O2)
+else()
+    target_compile_options(tank_bot_fight PRIVATE -Wall -pedantic -Werror -Wextra -O3)
+endif()
 
 target_include_directories(tank_bot_fight PRIVATE src)
 

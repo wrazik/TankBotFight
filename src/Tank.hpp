@@ -16,7 +16,7 @@ class Tank
 {
 
 public:
-  Tank(int x, int y, int speed);
+  Tank(int x, int y, float speed);
 
   void move(Direction direction);
 
@@ -26,7 +26,7 @@ public:
 
 private:
   int mHp = 100;
-  int mSpeed = 0;
+  float mSpeed = 0.f;
 
   sf::Texture txt;
   sf::Sprite sprite;
