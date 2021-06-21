@@ -15,8 +15,7 @@
 Tank::Tank(int x, int y, float speed)
   : mSpeed(speed)
 {
-  if (!txt.loadFromFile(files::asset_path() +
-                        "tamiya-135-us-medium-tank-m4-sherman-early-production.jpg")) {
+  if (!txt.loadFromFile(files::default_size_path() + "tank_green.png")) {
     throw std::runtime_error("Cannot a read graphic file!");
   }
   sprite.setTexture(txt);
