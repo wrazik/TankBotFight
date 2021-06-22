@@ -1,25 +1,49 @@
 #pragma once
 
+#include "TextureStore.hpp"
 #include <SFML/Graphics.hpp>
 
-enum class Direction;
+enum class Rotation
+{
+  None,
+  Clockwise,
+  Counterclockwise
+};
+
+class TankPart
+{
+public:
+  TankPart(sf::Texture& texture);
+
+  void rotate(const Rotation r);
+  void set_rotation(const int angle);
+  void draw(sf::RenderWindow& window, const float x, const float y);
+  float get_rotation() const;
+
+private:
+  void update();
+  sf::Sprite mSprite;
+  Rotation mRotation = Rotation::None;
+};
 
 class Tank
 {
-
 public:
-  Tank(int x, int y, float speed);
+  Tank(float x, float y, sf::Texture& body, sf::Texture& tower);
 
-  void move(Direction direction);
+  void rotate_body(Rotation r);
+  void rotate_tower(Rotation r);
 
-  void dead();
-
-  sf::Sprite& getSprite();
+  void draw(sf::RenderWindow& draw);
+  void set_current_speed(float speed);
 
 private:
-  int mHp = 100;
-  float mSpeed = 0.f;
+  void update();
+  inline constexpr static float M_SPEED = 0.01f;
 
-  sf::Texture txt;
-  sf::Sprite sprite;
+  sf::Vector2f mPos;
+  float mCurrentSpeed = 0.0f;
+
+  TankPart mBody;
+  TankPart mTower;
 };

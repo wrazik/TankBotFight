@@ -9,12 +9,13 @@ set(SFML_VERSION "2.5.1")
 find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 
 add_executable(tank_bot_fight 
-    src/main.cpp 
+    src/main.cpp
     src/Background.cpp
     src/Board.cpp
     src/Ground.cpp
-    src/Tank.cpp 
-    src/TextureStore.cpp 
+    src/KeyboardController.cpp
+    src/Tank.cpp
+    src/TextureStore.cpp
     src/Obstacle.cpp)
 
 if(MSVC)

@@ -8,9 +8,9 @@ inline constexpr int HEIGHT = 768;
 class Background
 {
 public:
-  Background(sf::RenderWindow& window);
+  Background(TextureStore& texture_store);
 
-  void draw();
+  void draw(sf::RenderWindow& mWindow);
 
 private:
   using GroundTypeVec = std::vector<std::vector<GroundType>>;
@@ -25,7 +25,6 @@ private:
 
   inline static constexpr int M_WIDTH = WIDTH / GROUND_WIDTH;
   inline static constexpr int M_HEIGHT = HEIGHT / GROUND_HEIGHT;
-  TextureStore mTextureStore;
-  sf::RenderWindow& mWindow;
+  TextureStore& mTextureStore;
   GroundVec mGround;
 };

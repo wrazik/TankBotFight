@@ -16,7 +16,13 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
   TankTest.cpp
+  ${CMAKE_SOURCE_DIR}/src/Background.cpp
+  ${CMAKE_SOURCE_DIR}/src/Board.cpp
+  ${CMAKE_SOURCE_DIR}/src/Ground.cpp
+  ${CMAKE_SOURCE_DIR}/src/KeyboardController.cpp
+  ${CMAKE_SOURCE_DIR}/src/Obstacle.cpp
   ${CMAKE_SOURCE_DIR}/src/Tank.cpp
+  ${CMAKE_SOURCE_DIR}/src/TextureStore.cpp
 )
 
 target_include_directories(run_tests PRIVATE

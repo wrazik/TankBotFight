@@ -1,53 +1,97 @@
-//
-//  Tank.cpp
-//  TankBotFight
-//
-//  Created by Emil Panecki on 10/06/2021.
-//  Copyright © 2021 Emil Panecki. All rights reserved.
-//
 #include "Tank.hpp"
+#include <cmath>
+#include <numbers>
 
-#include "Direction.hpp"
-#include "Files.hpp"
-#include <filesystem>
-#include <stdexcept>
+#include "TextureStore.hpp"
 
-Tank::Tank(int x, int y, float speed)
-  : mSpeed(speed)
+TankPart::TankPart(sf::Texture& texture)
 {
-  if (!txt.loadFromFile(files::default_size_path() + "tank_green.png")) {
-    throw std::runtime_error("Cannot a read graphic file!");
-  }
-  sprite.setTexture(txt);
-  sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-
-  sprite.setPosition(static_cast<float>(x), static_cast<float>(y));
-
-  sprite.scale(0.1f, 0.1f);
+  mSprite.setTexture(texture);
+  const auto [width, height] = texture.getSize();
+  mSprite.setOrigin(width / 2.f, height / 2.f);
 }
 
 void
-Tank::move(Direction direction)
+TankPart::rotate(const Rotation r)
 {
+  mRotation = r;
+}
 
-  switch (direction) {
-    case Direction::Up:
-      sprite.move(0.f, -mSpeed);
+void
+TankPart::set_rotation(const int angle)
+{
+  mSprite.setRotation(angle);
+}
+
+float
+TankPart::get_rotation() const
+{
+  return mSprite.getRotation();
+}
+
+void
+TankPart::update()
+{
+  switch (mRotation) {
+    case Rotation::Clockwise:
+      mSprite.rotate(10);
       break;
-    case Direction::Down:
-      sprite.move(0.f, mSpeed);
+    case Rotation::Counterclockwise:
+      mSprite.rotate(-10);
       break;
-    case Direction::Left:
-      sprite.move(-mSpeed, 0.f);
-      break;
-    case Direction::Right:
-      sprite.move(mSpeed, 0.f);
+    case Rotation::None:
       break;
   }
 }
 
-sf::Sprite&
-Tank::getSprite()
+void
+TankPart::draw(sf::RenderWindow& window, const float x, const float y)
 {
-  return sprite;
+  update();
+  mSprite.setPosition(x, y);
+  window.draw(mSprite);
+}
+
+Tank::Tank(float x, float y, sf::Texture& body, sf::Texture& tower)
+  : mPos({ x, y })
+  , mBody(body)
+  , mTower(tower)
+{
+  mTower.set_rotation(180);
+}
+
+void
+Tank::rotate_body(Rotation r)
+{
+  mBody.rotate(r);
+}
+
+void
+Tank::rotate_tower(Rotation r)
+{
+  mTower.rotate(r);
+}
+
+void
+Tank::set_current_speed(float speed)
+{
+  mCurrentSpeed = speed;
+}
+
+void
+Tank::update()
+{
+  const auto rotation_degree = mBody.get_rotation() + 90;
+  const auto rotation_radians = std::numbers::pi / 180.f * rotation_degree;
+
+  mPos.x += mCurrentSpeed * std::cos(rotation_radians);
+  mPos.y += mCurrentSpeed * std::sin(rotation_radians);
+}
+
+void
+Tank::draw(sf::RenderWindow& window)
+{
+  update();
+  mBody.draw(window, mPos.x, mPos.y);
+  mTower.draw(window, mPos.x, mPos.y);
 }

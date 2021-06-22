@@ -4,14 +4,14 @@
 
 #include "Files.hpp"
 
-Background::Background(sf::RenderWindow& window)
-  : mWindow(window)
+Background::Background(TextureStore& store)
+  : mTextureStore(store)
   , mGround(M_HEIGHT)
 {
   auto ground_types = generate_random_ground();
   for (int i = 0; i < M_HEIGHT; ++i) {
     for (int j = 0; j < M_WIDTH; ++j) {
-      mGround[i].emplace_back(mWindow, get_texture(ground_types, i, j), ground_types[i][j]);
+      mGround[i].emplace_back(get_texture(ground_types, i, j), ground_types[i][j]);
     }
   }
 }
@@ -88,11 +88,11 @@ Background::fill_with_sand(GroundTypeVec& ground_types,
 }
 
 void
-Background::draw()
+Background::draw(sf::RenderWindow& window)
 {
   for (int i = 0; i < M_HEIGHT; ++i) {
     for (int j = 0; j < M_WIDTH; ++j) {
-      mGround[i][j].draw(j * GROUND_HEIGHT, i * GROUND_WIDTH);
+      mGround[i][j].draw(window, j * GROUND_HEIGHT, i * GROUND_WIDTH);
     }
   }
 }

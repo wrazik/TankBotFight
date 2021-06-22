@@ -1,17 +1,15 @@
 #include "Ground.hpp"
 #include "Files.hpp"
 
-Ground::Ground(sf::RenderWindow& w, const sf::Texture& t, GroundType gt)
+Ground::Ground(sf::Texture& t, GroundType gt)
   : mGroundType(gt)
-  , mTexture(std::move(t))
-  , mWindow(w)
 {
-  mSprite.setTexture(mTexture);
+  mSprite.setTexture(t);
 }
 
 void
-Ground::draw(const int x, const int y)
+Ground::draw(sf::RenderWindow& window, const int x, const int y)
 {
   mSprite.setPosition(static_cast<float>(x), static_cast<float>(y));
-  mWindow.draw(mSprite);
+  window.draw(mSprite);
 }
