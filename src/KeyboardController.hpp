@@ -5,12 +5,11 @@ namespace sf {
 class Event;
 }
 
-class KeyboardController
-{
-public:
+class KeyboardController {
+ public:
   KeyboardController(Tank& tank);
   void update(const sf::Event& event);
 
-private:
+ private:
   Tank& mTank;
 };

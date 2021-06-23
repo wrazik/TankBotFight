@@ -2,15 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 
-class Obstacle
-{
-
-public:
+class Obstacle {
+ public:
   Obstacle(int x, int y);
 
   sf::Sprite getSprite();
 
-private:
+ private:
   sf::Texture txt;
   sf::Sprite sprite;
 };

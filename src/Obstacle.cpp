@@ -7,10 +7,10 @@
 //
 
 #include "Obstacle.hpp"
+
 #include <stdexcept>
 
-Obstacle::Obstacle(int x, int y)
-{
+Obstacle::Obstacle(int x, int y) {
   if (!txt.loadFromFile("../res/przeszkoda-obedience.jpg")) {
     throw std::runtime_error("Cannot read graphic file!");
   }
@@ -22,8 +22,4 @@ Obstacle::Obstacle(int x, int y)
   sprite.scale(0.1f, 0.1f);
 }
 
-sf::Sprite
-Obstacle::getSprite()
-{
-  return sprite;
-}
+sf::Sprite Obstacle::getSprite() { return sprite; }

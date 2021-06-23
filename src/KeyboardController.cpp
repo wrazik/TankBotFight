@@ -1,15 +1,12 @@
 #include "KeyboardController.hpp"
 
 #include <SFML/Graphics.hpp>
+
 #include "Tank.hpp"
 
-KeyboardController::KeyboardController(Tank& tank)
-  : mTank(tank)
-{}
+KeyboardController::KeyboardController(Tank& tank) : mTank(tank) {}
 
-void
-KeyboardController::update(const sf::Event& event)
-{
+void KeyboardController::update(const sf::Event& event) {
   if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
     mTank.rotate_body(Rotation::Clockwise);
   }

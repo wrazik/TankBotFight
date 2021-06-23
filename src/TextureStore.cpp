@@ -1,11 +1,10 @@
 #include "TextureStore.hpp"
 
-#include "Files.hpp"
 #include <utility>
 
-sf::Texture&
-TextureStore::get_texture(const std::string& path)
-{
+#include "Files.hpp"
+
+sf::Texture& TextureStore::get_texture(const std::string& path) {
   if (!mStore.contains(path)) {
     sf::Texture t;
     if (!t.loadFromFile(files::default_size_path() + path)) {

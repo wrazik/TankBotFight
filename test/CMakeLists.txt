@@ -16,6 +16,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
   TankTest.cpp
+  TextureStoreTest.cpp
   ${CMAKE_SOURCE_DIR}/src/Background.cpp
   ${CMAKE_SOURCE_DIR}/src/Board.cpp
   ${CMAKE_SOURCE_DIR}/src/Ground.cpp

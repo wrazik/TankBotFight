@@ -1,19 +1,19 @@
 #pragma once
 
-#include "Background.hpp"
-#include "Tank.hpp"
 #include <SFML/Graphics.hpp>
 
-class Board
-{
-public:
+#include "Background.hpp"
+#include "Tank.hpp"
+
+class Board {
+ public:
   Board();
 
   void register_tank();
 
   void run();
 
-private:
+ private:
   TextureStore mStore;
   sf::RenderWindow mWindow;
   Background mBackground;

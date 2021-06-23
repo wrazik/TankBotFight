@@ -1,8 +1,6 @@
 #include "Board.hpp"
 
-int
-main()
-{
+int main() {
   Board b;
   b.register_tank();
   b.run();

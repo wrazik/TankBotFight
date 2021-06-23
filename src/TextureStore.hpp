@@ -1,12 +1,10 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
 
-#include <SFML/Graphics.hpp>
-
-class TextureStore
-{
-public:
+class TextureStore {
+ public:
   TextureStore() = default;
   TextureStore(TextureStore&) = delete;
   TextureStore& operator=(TextureStore&) = delete;
@@ -16,6 +14,6 @@ public:
 
   sf::Texture& get_texture(const std::string& file);
 
-private:
+ private:
   std::unordered_map<std::string, sf::Texture> mStore;
 };

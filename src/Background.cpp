@@ -4,10 +4,7 @@
 
 #include "Files.hpp"
 
-Background::Background(TextureStore& store)
-  : mTextureStore(store)
-  , mGround(M_HEIGHT)
-{
+Background::Background(TextureStore& store) : mTextureStore(store), mGround(M_HEIGHT) {
   auto ground_types = generate_random_ground();
   for (int i = 0; i < M_HEIGHT; ++i) {
     for (int j = 0; j < M_WIDTH; ++j) {
@@ -16,9 +13,7 @@ Background::Background(TextureStore& store)
   }
 }
 
-sf::Texture&
-Background::get_texture(const Background::GroundTypeVec& v, int x, int y)
-{
+sf::Texture& Background::get_texture(const Background::GroundTypeVec& v, int x, int y) {
   if (v[x][y] == GroundType::Sand) {
     if (x - 1 > 0 && v[x - 1][y] == GroundType::Grass) {
       return mTextureStore.get_texture("tileGrass_transitionS.png");
@@ -34,9 +29,7 @@ Background::get_texture(const Background::GroundTypeVec& v, int x, int y)
   return mTextureStore.get_texture("tileGrass1.png");
 }
 
-Background::GroundTypeVec
-Background::generate_random_ground()
-{
+Background::GroundTypeVec Background::generate_random_ground() {
   Background::GroundTypeVec ground_types(M_HEIGHT);
   for (int i = 0; i < M_HEIGHT; ++i) {
     ground_types[i] = std::vector(M_WIDTH, GroundType::Grass);
@@ -73,13 +66,8 @@ Background::generate_random_ground()
   return ground_types;
 }
 
-void
-Background::fill_with_sand(GroundTypeVec& ground_types,
-                           int start_x,
-                           int start_y,
-                           int end_x,
-                           int end_y)
-{
+void Background::fill_with_sand(GroundTypeVec& ground_types, int start_x, int start_y, int end_x,
+                                int end_y) {
   for (int i = start_x; i < end_x; ++i) {
     for (int j = start_y; j < end_y; ++j) {
       ground_types[i][j] = GroundType::Sand;
@@ -87,9 +75,7 @@ Background::fill_with_sand(GroundTypeVec& ground_types,
   }
 }
 
-void
-Background::draw(sf::RenderWindow& window)
-{
+void Background::draw(sf::RenderWindow& window) {
   for (int i = 0; i < M_HEIGHT; ++i) {
     for (int j = 0; j < M_WIDTH; ++j) {
       mGround[i][j].draw(window, j * GROUND_HEIGHT, i * GROUND_WIDTH);
