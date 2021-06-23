@@ -1,4 +1,4 @@
-https://github.com/Clanhouse/TankBotFight/actions/workflows/ubuntu_gcc.yaml/badge.svg
+![example workflow](https://github.com/Clanhouse/TankBotFight/actions/workflows/ubuntu_gcc.yaml/badge.svg)
 
 # TankBotFight - platform for code competition
 
