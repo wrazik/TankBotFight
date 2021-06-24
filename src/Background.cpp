@@ -1,9 +1,11 @@
 #include "Background.hpp"
 
 #include <random>
+#include <string>
 
 #include "Files.hpp"
 
+using namespace std::string_literals;
 Background::Background(TextureStore& store) : mTextureStore(store), mGround(M_HEIGHT) {
   auto ground_types = generate_random_ground();
   for (int i = 0; i < M_HEIGHT; ++i) {
@@ -24,9 +26,9 @@ sf::Texture& Background::get_texture(const Background::GroundTypeVec& v, int x, 
     } else if (y + 1 < M_WIDTH && v[x][y + 1] == GroundType::Grass) {
       return mTextureStore.get_texture("tileGrass_transitionW.png");
     }
-    return mTextureStore.get_texture("tileSand1.png");
+    return mTextureStore.get_texture(one_of("tileSand1.png"s, "tileSand2.png"s));
   }
-  return mTextureStore.get_texture("tileGrass1.png");
+  return mTextureStore.get_texture(one_of("tileGrass1.png"s, "tileGrass2.png"s));
 }
 
 Background::GroundTypeVec Background::generate_random_ground() {
@@ -35,12 +37,8 @@ Background::GroundTypeVec Background::generate_random_ground() {
     ground_types[i] = std::vector(M_WIDTH, GroundType::Grass);
   }
 
-  std::random_device rd;
-  std::mt19937 mt(rd());
-  std::uniform_int_distribution<> rand_bool(0, 1);
-
-  const bool is_vertical = static_cast<bool>(rand_bool(mt));
-  const bool sand_above_number = static_cast<bool>(rand_bool(mt));
+  const bool is_vertical = static_cast<bool>(random_range(0, 1));
+  const bool sand_above_number = static_cast<bool>(random_range(0, 1));
 
   int start_x = 0;
   int start_y = 0;
@@ -48,18 +46,17 @@ Background::GroundTypeVec Background::generate_random_ground() {
   int end_y = M_WIDTH;
 
   if (is_vertical) {
-    std::uniform_int_distribution<> rand_int(0, M_HEIGHT - 1);
     if (sand_above_number) {
-      start_x = rand_int(mt);
+      start_x = random_range(0, M_HEIGHT - 1);
     } else {
-      end_x = rand_int(mt);
+      end_x = random_range(0, M_HEIGHT - 1);
     }
   } else {
     std::uniform_int_distribution<> rand_int(0, M_WIDTH - 1);
     if (sand_above_number) {
-      start_y = rand_int(mt);
+      start_y = random_range(0, M_WIDTH - 1);
     } else {
-      end_y = rand_int(mt);
+      end_y = random_range(0, M_WIDTH - 1);
     }
   }
   fill_with_sand(ground_types, start_x, start_y, end_x, end_y);

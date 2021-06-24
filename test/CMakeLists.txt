@@ -15,6 +15,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
+  RandomTests.cpp
   TankTest.cpp
   TextureStoreTest.cpp
   ${CMAKE_SOURCE_DIR}/src/Background.cpp
@@ -24,6 +25,7 @@ add_executable(run_tests
   ${CMAKE_SOURCE_DIR}/src/Obstacle.cpp
   ${CMAKE_SOURCE_DIR}/src/Tank.cpp
   ${CMAKE_SOURCE_DIR}/src/TextureStore.cpp
+  ${CMAKE_SOURCE_DIR}/src/Random.cpp
 )
 
 target_include_directories(run_tests PRIVATE

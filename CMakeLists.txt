@@ -16,7 +16,8 @@ add_executable(tank_bot_fight
     src/KeyboardController.cpp
     src/Tank.cpp
     src/TextureStore.cpp
-    src/Obstacle.cpp)
+    src/Obstacle.cpp
+    src/Random.cpp)
 
 if(MSVC)
     target_compile_options(tank_bot_fight PRIVATE /W3 /WX /O2)

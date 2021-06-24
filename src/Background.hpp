@@ -1,5 +1,8 @@
 #pragma once
+#include <vector>
+
 #include "Ground.hpp"
+#include "Random.hpp"
 #include "TextureStore.hpp"
 
 inline constexpr int WIDTH = 1024;
