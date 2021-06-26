@@ -15,17 +15,10 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
+  FillVecTests.cpp
   RandomTests.cpp
-  TankTest.cpp
-  TextureStoreTest.cpp
-  ${CMAKE_SOURCE_DIR}/src/Background.cpp
-  ${CMAKE_SOURCE_DIR}/src/Board.cpp
-  ${CMAKE_SOURCE_DIR}/src/Ground.cpp
-  ${CMAKE_SOURCE_DIR}/src/KeyboardController.cpp
-  ${CMAKE_SOURCE_DIR}/src/Obstacle.cpp
-  ${CMAKE_SOURCE_DIR}/src/Tank.cpp
-  ${CMAKE_SOURCE_DIR}/src/TextureStore.cpp
-  ${CMAKE_SOURCE_DIR}/src/Random.cpp
+  TankTests.cpp
+  TextureStoreTests.cpp
 )
 
 target_include_directories(run_tests PRIVATE
@@ -36,6 +29,7 @@ target_link_libraries(
   run_tests
   gtest_main
   sfml-graphics
+  tank_bot_fight_lib
 )
 
 include(GoogleTest)

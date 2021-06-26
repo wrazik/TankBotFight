@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Background.hpp"
+#include "background/Background.hpp"
 #include "Tank.hpp"
 
 class Board {

@@ -4,6 +4,7 @@
 
 #include "KeyboardController.hpp"
 #include "Random.hpp"
+#include "Size.hpp"
 
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
   mWindow.setFramerateLimit(30);
