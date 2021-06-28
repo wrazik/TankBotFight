@@ -1,14 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-enum class Surface {
+enum class SurfaceType {
   Sand,
   Grass,
 };
 
 struct GroundType {
-    Surface mSurface;
-    bool mIsRoad;
+  SurfaceType mSurface;
+  bool mIsRoad;
 };
 
 class Ground {

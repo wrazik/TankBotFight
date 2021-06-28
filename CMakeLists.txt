@@ -11,6 +11,7 @@ find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 
 add_library(tank_bot_fight_lib STATIC
     src/background/Background.cpp
+    src/background/BackgroundTextureName.cpp
     src/background/Ground.cpp
     src/background/RoadGenerator.cpp
     src/background/SurfaceGenerator.cpp

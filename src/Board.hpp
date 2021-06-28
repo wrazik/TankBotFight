@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "background/Background.hpp"
 #include "Tank.hpp"
+#include "background/Background.hpp"
 
 class Board {
  public:

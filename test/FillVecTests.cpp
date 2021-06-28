@@ -26,7 +26,7 @@ void compare(const Vec& lhs, const Vec& rhs) {
 }
 
 TEST_F(FillVecTest, FillWholeVec) {
-  fill_vec(mVec, 0, 0, SIZE, SIZE, true);
+  fill_vec(mVec, 0, 0, SIZE - 1, SIZE - 1, true);
   compare(mVec, {
                     {true, true, true, true},
                     {true, true, true, true},
@@ -35,18 +35,18 @@ TEST_F(FillVecTest, FillWholeVec) {
                 });
 }
 
-TEST_F(FillVecTest, FillZeroElements) {
-  fill_vec(mVec, 2, 2, 2, 2, true);
+TEST_F(FillVecTest, FillOneElement) {
+  fill_vec(mVec, 1, 1, 1, 1, true);
   compare(mVec, {
                     {false, false, false, false},
-                    {false, false, false, false},
+                    {false, true, false, false},
                     {false, false, false, false},
                     {false, false, false, false},
                 });
 }
 
 TEST_F(FillVecTest, FillFirstTwoRows) {
-  fill_vec(mVec, 0, 0, 2, SIZE, true);
+  fill_vec(mVec, 0, 0, 1, SIZE - 1, true);
   compare(mVec, {
                     {true, true, true, true},
                     {true, true, true, true},
@@ -56,12 +56,22 @@ TEST_F(FillVecTest, FillFirstTwoRows) {
 }
 
 TEST_F(FillVecTest, FillLastTwoColumns) {
-  fill_vec(mVec, 0, 2, SIZE, SIZE, true);
+  fill_vec(mVec, 0, 2, SIZE - 1, SIZE - 1, true);
   compare(mVec, {
                     {false, false, true, true},
                     {false, false, true, true},
                     {false, false, true, true},
                     {false, false, true, true},
+                });
+}
+
+TEST_F(FillVecTest, FillSecondColumn) {
+  fill_vec(mVec, 0, 1, SIZE - 1, 1, true);
+  compare(mVec, {
+                    {false, true, false, false},
+                    {false, true, false, false},
+                    {false, true, false, false},
+                    {false, true, false, false},
                 });
 }
 

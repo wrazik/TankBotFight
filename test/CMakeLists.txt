@@ -15,6 +15,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
+  BackgroundTextureNameTests.cpp
   FillVecTests.cpp
   RandomTests.cpp
   TankTests.cpp
