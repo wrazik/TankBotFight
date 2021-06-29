@@ -11,24 +11,45 @@ std::string BackgroundTextureName::get(const GroundTypeVec& v, int x, int y) {
   return get_surface(v, x, y);
 }
 
-std::array<std::optional<GroundType>, 4> BackgroundTextureName::get_neighbors(
-    const GroundTypeVec& v, int x, int y) {
-  auto get_elem = [&v](const int x, const int y) -> std::optional<GroundType> {
-    if (x >= 0 && y >= 0 && x < FIELDS_HEIGHT - 1 && y < FIELDS_WIDTH - 1) {
-      return v[x][y];
-    }
-    return std::nullopt;
-  };
-  return {get_elem(x, y - 1), get_elem(x + 1, y), get_elem(x - 1, y), get_elem(x, y + 1)};
+std::optional<GroundType> BackgroundTextureName::get_elem(const GroundTypeVec& v, int x, int y) {
+  if (x >= 0 && y >= 0 && x < v.size() && y < v[0].size()) {
+    return v[x][y];
+  }
+  return std::nullopt;
 }
 
-bool BackgroundTextureName::is_crossroad(const GroundTypeVec& v, int x, int y) {
-  return std::ranges::count_if(get_neighbors(v, x, y),
-                               [](const auto& el) { return el && el->mIsRoad; }) > 2;
+std::array<std::optional<GroundType>, 4> BackgroundTextureName::get_neighbors(
+    const GroundTypeVec& v, int x, int y) {
+  return {get_elem(v, x, y - 1), get_elem(v, x + 1, y), get_elem(v, x - 1, y),
+          get_elem(v, x, y + 1)};
+}
+
+bool BackgroundTextureName::is_t_crossroad(const GroundTypeVec& v, int x, int y) {
+  const auto [left, down, up, right] = get_neighbors(v, x, y);
+
+  // clang-format off
+  return (
+      (down && down->mIsRoad) && 
+      (left && left->mIsRoad) &&
+      (right && right->mIsRoad)
+    );
+  // clang-format on
+}
+
+bool BackgroundTextureName::is_x_crossroad(const GroundTypeVec& v, int x, int y) {
+  const auto [left, down, up, right] = get_neighbors(v, x, y);
+
+  // clang-format off
+  return 
+    (!right || right->mIsRoad) && 
+    (!left || left->mIsRoad) &&  
+    (!up || up->mIsRoad) && 
+    (!down || down->mIsRoad);
+  // clang-format on
 }
 
 bool BackgroundTextureName::is_vertical_road(const GroundTypeVec& v, int x, int y) {
-  const auto [left, up, down, right] = get_neighbors(v, x, y);
+  const auto [left, down, up, right] = get_neighbors(v, x, y);
 
   // clang-format off
   return 
@@ -40,7 +61,7 @@ bool BackgroundTextureName::is_vertical_road(const GroundTypeVec& v, int x, int 
 }
 
 bool BackgroundTextureName::is_horizontal_road(const GroundTypeVec& v, int x, int y) {
-  const auto [left, up, down, right] = get_neighbors(v, x, y);
+  const auto [left, down, up, right] = get_neighbors(v, x, y);
   // clang-format off
   return 
     (!up || !up->mIsRoad) && 
@@ -55,9 +76,15 @@ std::string BackgroundTextureName::get_road(const GroundTypeVec& v, int x, int y
   const auto& me = v[x][y];
   const auto [left, up, down, right] = get_neighbors(v, x, y);
   if (v[x][y].mSurface == SurfaceType::Sand) {
-    texture_name += "Sand_road";
+    texture_name += "Sand_road"s;
   } else {
-    texture_name += "Grass_road";
+    texture_name += "Grass_road"s;
+  }
+
+  if (is_x_crossroad(v, x, y)) {
+    return texture_name + one_of("CrossingRound.png"s, "Crossing.png"s);
+  } else if (is_t_crossroad(v, x, y)) {
+    return texture_name + "SplitS.png"s;
   }
 
   if (me.mSurface == SurfaceType::Sand) {
@@ -72,14 +99,11 @@ std::string BackgroundTextureName::get_road(const GroundTypeVec& v, int x, int y
     }
   }
   if (is_vertical_road(v, x, y)) {
-    texture_name += "North.png";
+    return texture_name + "North.png";
   } else if (is_horizontal_road(v, x, y)) {
-    texture_name += "East.png";
+    return texture_name + "East.png";
   }
-  if (is_crossroad(v, x, y)) {
-    texture_name += one_of("CrossingRound.png"s, "Crossing.png"s);
-  }
-  return texture_name;
+  throw std::runtime_error("Not recognized background pattern");
 }
 
 std::string BackgroundTextureName::get_surface(const GroundTypeVec& v, int x, int y) {

@@ -175,3 +175,21 @@ TEST_F(BackgroundRoadTest, GrassCrossroad) {
   const auto name = get_name();
   EXPECT_TRUE(name == "tileGrass_roadCrossingRound.png"s || name == "tileGrass_roadCrossing.png"s);
 }
+
+TEST_F(BackgroundRoadTest, GrassTLetter) {
+  mVec = {
+      {GRASS, GRASS, GRASS},
+      {GRASS_ROAD, GRASS_ROAD, GRASS_ROAD},
+      {GRASS, GRASS_ROAD, GRASS},
+  };
+  EXPECT_EQ(get_name(), "tileGrass_roadSplitS.png"s);
+}
+
+TEST_F(BackgroundRoadTest, SandTLetter) {
+  mVec = {
+      {SAND, SAND, SAND},
+      {SAND_ROAD, SAND_ROAD, SAND_ROAD},
+      {SAND, SAND_ROAD, SAND},
+  };
+  EXPECT_EQ(get_name(), "tileSand_roadSplitS.png"s);
+}

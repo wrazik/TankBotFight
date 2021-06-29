@@ -32,6 +32,12 @@ enum Pattern {
    * * * | *
    * * * | */
   SingleCrossroad,
+  /* * * * *
+     - - - + -
+   * * * | *
+   * * * | *
+   * * * | */
+  TLetter,
   Size
 };
 }

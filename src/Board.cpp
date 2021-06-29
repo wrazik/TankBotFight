@@ -14,9 +14,11 @@ void Board::register_tank() {
   using namespace std::string_literals;
   auto& body_texture = mStore.get_texture(one_of("tankBody_red.png"s, "tankBody_dark.png"s,
                                                  "tankBody_blue.png"s, "tankBody_green.png"s));
+  body_texture.setSmooth(true);
   auto& tower_texture =
       mStore.get_texture(one_of("tankDark_barrel2_outline.png", "tankRed_barrel2_outline.png",
                                 "tankGreen_barrel2_outline.png", "tankBlue_barrel2_outline.png"));
+  tower_texture.setSmooth(true);
   mTanks.emplace_back(WIDTH / 2.0f, 50.0f, body_texture, tower_texture);
 }
 
