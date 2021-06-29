@@ -15,22 +15,22 @@ SurfaceGenerator::SurfaceVec SurfaceGenerator::generate() {
 
   switch (pattern) {
     case SurfacePattern::VerticalSandGrass: {
-      const int column = random_range(0, FIELDS_WIDTH - 1);
+      const int column = random_range(2, FIELDS_WIDTH - 3);
       fill_vec(surface_types, 0, column, FIELDS_HEIGHT - 1, FIELDS_WIDTH - 1, SurfaceType::Sand);
       break;
     }
     case SurfacePattern::VerticalGrassSand: {
-      const int column = random_range(0, FIELDS_WIDTH - 1);
+      const int column = random_range(2, FIELDS_WIDTH - 3);
       fill_vec(surface_types, 0, 0, FIELDS_HEIGHT - 1, column, SurfaceType::Sand);
       break;
     }
     case SurfacePattern::HorizontalSandGrass: {
-      const int row = random_range(0, FIELDS_HEIGHT - 1);
+      const int row = random_range(2, FIELDS_HEIGHT - 3);
       fill_vec(surface_types, 0, 0, row, FIELDS_WIDTH - 1, SurfaceType::Sand);
       break;
     }
     case SurfacePattern::HorizontalGrassSand: {
-      const int row = random_range(0, FIELDS_HEIGHT - 1);
+      const int row = random_range(2, FIELDS_HEIGHT - 3);
       fill_vec(surface_types, row, 0, FIELDS_HEIGHT - 1, FIELDS_WIDTH - 1, SurfaceType::Sand);
       break;
     }

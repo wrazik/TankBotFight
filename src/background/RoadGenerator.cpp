@@ -22,6 +22,14 @@ RoadGenerator::RoadVec RoadGenerator::generate() {
       fill_vec(road_vec, row, 0, row, FIELDS_WIDTH - 1, true);
       break;
     }
+
+    case RoadPattern::SingleCrossroad: {
+      const auto x = random_range(2, FIELDS_HEIGHT - 2);
+      const auto y = random_range(2, FIELDS_WIDTH - 2);
+      fill_vec(road_vec, x, 0, x, FIELDS_WIDTH - 1, true);
+      fill_vec(road_vec, 0, y, FIELDS_HEIGHT - 1, y, true);
+      break;
+    }
     default:
       break;
   }

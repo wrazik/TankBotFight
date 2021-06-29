@@ -1,5 +1,6 @@
 #pragma once
 #include <background/Ground.hpp>
+#include <optional>
 #include <string>
 
 class BackgroundTextureName {
@@ -11,4 +12,9 @@ class BackgroundTextureName {
  private:
   static std::string get_road(const GroundTypeVec& v, int x, int y);
   static std::string get_surface(const GroundTypeVec& v, int x, int y);
+  static std::array<std::optional<GroundType>, 4> get_neighbors(const GroundTypeVec& v, int x,
+                                                                int y);
+  static bool is_vertical_road(const GroundTypeVec& v, int x, int y);
+  static bool is_horizontal_road(const GroundTypeVec& v, int x, int y);
+  static bool is_crossroad(const GroundTypeVec& v, int x, int y);
 };

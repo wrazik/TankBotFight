@@ -155,3 +155,23 @@ TEST_F(BackgroundRoadTest, HorizontalSandToGrass) {
   EXPECT_TRUE(name == "tileGrass_roadTransitionN.png"s ||
               name == "tileGrass_roadTransitionN_dirt.png"s);
 }
+
+TEST_F(BackgroundRoadTest, SandCrossroad) {
+  mVec = {
+      {SAND, SAND_ROAD, SAND},
+      {SAND_ROAD, SAND_ROAD, SAND_ROAD},
+      {SAND, SAND_ROAD, SAND},
+  };
+  const auto name = get_name();
+  EXPECT_TRUE(name == "tileSand_roadCrossingRound.png"s || name == "tileSand_roadCrossing.png"s);
+}
+
+TEST_F(BackgroundRoadTest, GrassCrossroad) {
+  mVec = {
+      {GRASS, GRASS_ROAD, GRASS},
+      {GRASS_ROAD, GRASS_ROAD, GRASS_ROAD},
+      {GRASS, GRASS_ROAD, GRASS},
+  };
+  const auto name = get_name();
+  EXPECT_TRUE(name == "tileGrass_roadCrossingRound.png"s || name == "tileGrass_roadCrossing.png"s);
+}

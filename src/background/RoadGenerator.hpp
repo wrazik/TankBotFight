@@ -26,33 +26,12 @@ enum Pattern {
    * * * | *
    * * * | */
   HorizontalLine,
-  //    /* * * | *
-  //     - - - + -
-  //     * * * | *
-  //     * * * | *
-  //     * * * | */
-  //    SingleCrossroad,
-  //    /* * | * *
-  //     * * | * *
-  //     * * | * *
-  //     * * L - -
-  //     * * * * */
-  //    UpperRight,
-  //    UpperLeft,
-  //    LowerRight,
-  //    LowerLeft,
-  //    /* * * * *
-  //     - - - - -
-  //     * * | * *
-  //     * * | * *
-  //     * * | * */
-  //    LetterT,
-  //    /* * | * *
-  //     * * | * *
-  //     - - - - -
-  //     * * * * *
-  //     * * * * */
-  //    ReversedT
+  /* * * | *
+     - - - + -
+   * * * | *
+   * * * | *
+   * * * | */
+  SingleCrossroad,
   Size
 };
 }
