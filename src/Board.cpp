@@ -19,11 +19,18 @@ void Board::register_tank() {
       mStore.get_texture(one_of("tankDark_barrel2_outline.png", "tankRed_barrel2_outline.png",
                                 "tankGreen_barrel2_outline.png", "tankBlue_barrel2_outline.png"));
   tower_texture.setSmooth(true);
-  mTanks.emplace_back(WIDTH / 2.0f, 50.0f, body_texture, tower_texture);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture);
+  tank.set_rotation(180);
+  mTanks.push_back(std::move(tank));
+}
+
+void Board::fire_missle(const float angle, const float x, const float y) {
+  auto& missle_texture = mStore.get_texture("bulletDark3.png");
+  mMissles.emplace_back(missle_texture, angle, x, y);
 }
 
 void Board::run() {
-  KeyboardController keyboard_controller(mTanks[0]);
+  KeyboardController keyboard_controller(mTanks[0], *this);
 
   while (mWindow.isOpen()) {
     sf::Event event;
@@ -43,6 +50,17 @@ void Board::run() {
     for (auto& tank : mTanks) {
       tank.draw(mWindow);
     }
+    for (auto& missle : mMissles) {
+      missle.draw(mWindow);
+    }
+    remove_missles();
     mWindow.display();
   }
+}
+
+void Board::remove_missles() {
+  std::erase_if(mMissles, [](const auto& missle) -> bool {
+    const auto [x, y] = missle.get_pos();
+    return (x > WIDTH || y > HEIGHT || x < 0 || y < 0);
+  });
 }

@@ -28,6 +28,7 @@ class Tank {
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
   void set_rotation(const int angle);
+  float get_tower_rotation() const;
 
   void draw(sf::RenderWindow& draw);
   void set_current_speed(float speed);

@@ -5,9 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 include(CTest)
 
 set(SFML_VERSION "2.5.1")
-
 find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
-
 
 add_library(tank_bot_fight_lib STATIC
     src/background/Background.cpp
@@ -17,6 +15,7 @@ add_library(tank_bot_fight_lib STATIC
     src/background/SurfaceGenerator.cpp
     src/Board.cpp
     src/KeyboardController.cpp
+    src/Missle.cpp
     src/Tank.cpp
     src/TextureStore.cpp
     src/Obstacle.cpp

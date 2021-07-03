@@ -5,7 +5,7 @@
 
 #include "TextureStore.hpp"
 
-TankPart::TankPart(sf::Texture& texture) {
+TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
   mSprite.setOrigin(width / 2.f, height / 2.f);
@@ -30,13 +30,13 @@ void TankPart::update() {
   }
 }
 
-void TankPart::draw(sf::RenderWindow& window, const float x, const float y) {
+void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
   update();
   mSprite.setPosition(x, y);
   window.draw(mSprite);
 }
 
-Tank::Tank(float x, float y, sf::Texture& body, sf::Texture& tower)
+Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower)
     : mPos({x, y}), mBody(body), mTower(tower) {
   mTower.set_rotation(180);
 }
@@ -55,14 +55,16 @@ void Tank::set_current_speed(float speed) { mCurrentSpeed = speed; }
 sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
-  const auto rotation_degree = mBody.get_rotation() + 90;
+  const auto rotation_degree = mBody.get_rotation() - 90;
   const auto rotation_radians = std::numbers::pi / 180.f * rotation_degree;
 
   mPos.x += mCurrentSpeed * std::cos(rotation_radians);
   mPos.y += mCurrentSpeed * std::sin(rotation_radians);
 }
 
-void Tank::draw(sf::RenderWindow& window) {
+float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
+
+void Tank::draw(sf::RenderWindow &window) {
   update();
   mBody.draw(window, mPos.x, mPos.y);
   mTower.draw(window, mPos.x, mPos.y);
