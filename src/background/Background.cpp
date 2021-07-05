@@ -16,7 +16,7 @@ Background::Background(TextureStore& store) : mTextureStore(store), mGround(FIEL
   std::vector<std::vector<GroundType>> grounds(FIELDS_HEIGHT);
   for (int i = 0; i < FIELDS_HEIGHT; ++i) {
     for (int j = 0; j < FIELDS_WIDTH; ++j) {
-      grounds[i].emplace_back(surface_types[i][j], road_types[i][j]);
+      grounds[i].push_back(GroundType{surface_types[i][j], road_types[i][j]});
     }
   }
 

@@ -34,6 +34,8 @@ SurfaceGenerator::SurfaceVec SurfaceGenerator::generate() {
       fill_vec(surface_types, row, 0, FIELDS_HEIGHT - 1, FIELDS_WIDTH - 1, SurfaceType::Sand);
       break;
     }
+    default:
+      break;
   }
   return surface_types;
 }

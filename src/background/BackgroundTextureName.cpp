@@ -2,6 +2,7 @@
 
 #include <Random.hpp>
 #include <Size.hpp>
+#include <array>
 #include <optional>
 
 using namespace std::string_literals;

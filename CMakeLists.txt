@@ -4,8 +4,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 include(CTest)
 
-set(SFML_VERSION "2.5.1")
-find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 
 add_library(tank_bot_fight_lib STATIC
     src/background/Background.cpp
@@ -36,6 +34,15 @@ endif()
 
 target_include_directories(tank_bot_fight PRIVATE src)
 
+if (${APPLE})
+    target_include_directories(tank_bot_fight PRIVATE /usr/local/Cellar/sfml/2.5.1_1/include)
+    target_include_directories(tank_bot_fight_lib PRIVATE /usr/local/Cellar/sfml/2.5.1_1/include)
+endif()
+
+
+find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 target_link_libraries(tank_bot_fight sfml-graphics pthread tank_bot_fight_lib)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/lib/range-v3)
 
 add_subdirectory(test)

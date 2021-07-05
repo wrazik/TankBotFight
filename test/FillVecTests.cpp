@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <ranges>
+#include <range/v3/algorithm/equal.hpp>
 #include <vector>
 
 #include "background/FillVec.hpp"
@@ -21,7 +21,7 @@ struct FillVecTest : ::testing::Test {
 void compare(const Vec& lhs, const Vec& rhs) {
   ASSERT_EQ(lhs.size(), rhs.size());
   for (int i = 0; i < lhs.size(); ++i) {
-    ASSERT_TRUE(std::ranges::equal(lhs[i], rhs[i]));
+    ASSERT_TRUE(ranges::equal(lhs[i], rhs[i]));
   }
 }
 

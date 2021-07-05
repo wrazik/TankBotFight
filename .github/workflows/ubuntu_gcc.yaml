@@ -1,4 +1,4 @@
-name: Ubuntu_gcc11
+name: Ubuntu / gcc11
 on: [push]
 
 env:
@@ -17,6 +17,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: true
+        submodules: true
 
     - name: Checkout LFS objects
       run: git lfs checkout
@@ -30,7 +31,11 @@ jobs:
     - name: Check formatting
       run: |
         clang-format --version  
-        find src test -regex '.*\.\(cpp\|hpp\|cc\|cxx\)' -exec clang-format --dry-run --Werror {} \;
+        clang-format --dry-run --Werror src/*.cpp
+        clang-format --dry-run --Werror test/*.cpp
+        clang-format --dry-run --Werror src/*.hpp
+        clang-format --dry-run --Werror src/background/*.hpp
+        clang-format --dry-run --Werror src/background/*.cpp
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory

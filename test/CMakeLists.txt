@@ -31,6 +31,7 @@ target_link_libraries(
   gtest_main
   sfml-graphics
   tank_bot_fight_lib
+  range-v3::range-v3
 )
 
 include(GoogleTest)

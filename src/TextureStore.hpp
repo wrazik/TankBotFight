@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <map>
 #include <string>
+#include <unordered_map>
 
 class TextureStore {
  public:

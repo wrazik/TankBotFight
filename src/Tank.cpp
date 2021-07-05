@@ -1,8 +1,8 @@
 #include "Tank.hpp"
 
 #include <cmath>
-#include <numbers>
 
+#include "Size.hpp"
 #include "TextureStore.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
@@ -56,7 +56,7 @@ sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
   const auto rotation_degree = mBody.get_rotation() - 90;
-  const auto rotation_radians = std::numbers::pi / 180.f * rotation_degree;
+  const auto rotation_radians = pi / 180.f * rotation_degree;
 
   mPos.x += mCurrentSpeed * std::cos(rotation_radians);
   mPos.y += mCurrentSpeed * std::sin(rotation_radians);
