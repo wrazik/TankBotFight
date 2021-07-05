@@ -11,9 +11,9 @@ Client will communicate with platform with platform via sockets.
 
 
 # Current state
-Currently we have moving tank & background. No network yet, no API definitions.
+Currently we have moving & shooting tank, background with customly generated roads. No network yet, no collisions yet.
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/6102580/124426797-d5501800-dd6a-11eb-8df5-14d487e59c32.gif)
 
-https://user-images.githubusercontent.com/6102580/122928505-3a1e7200-d36a-11eb-823c-079c70acecb9.mp4
 
 # How to run
 To compile the project you should have compiler that supports C++20 & cmake.
