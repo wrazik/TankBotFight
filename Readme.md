@@ -1,5 +1,5 @@
-![example workflow](https://github.com/Clanhouse/TankBotFight/actions/workflows/ubuntu_gcc.yaml/badge.svg)
-[![MacOS / clang](https://github.com/Clanhouse/TankBotFight/actions/workflows/macos_clang.yaml/badge.svg?branch=master)](https://github.com/Clanhouse/TankBotFight/actions/workflows/macos_clang.yaml)
+![example workflow](https://github.com/wrazik/TankBotFight/actions/workflows/ubuntu_gcc.yaml/badge.svg)
+[![MacOS / clang](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml/badge.svg?branch=master)](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml)
 # TankBotFight - platform for code competition
 
 This project is C++ Platform for competition between AI bots written in any supported language.
