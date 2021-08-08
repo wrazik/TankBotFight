@@ -17,13 +17,31 @@ Currently we have moving & shooting tank, background with customly generated roa
 
 # How to run
 To compile the project you should have compiler that supports C++20 & cmake.
+You have to remember about two things: 
+- Graphical files are stored in git-lfs
+- range-v3 library is added as submodule
 
+So, before you start, you must first download checkout git-lfs (https://git-lfs.github.com/)
+```bash
+> git lfs install
+> git lfs pull
+```
+In case you already run `git lfs install` before cloning the repo, `pull` is not needed
+
+To download submodules, run:
+```bash
+> git submodule init
+> git submodule update
+```
+
+Now, you can proceed with standard cmake-like project:
 ```
 mkdir build
 cd build
 cmake ..
 make
 ```
+
 # Contributing
 TODO
 # Supported languages
