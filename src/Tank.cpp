@@ -55,43 +55,31 @@ void Tank::set_current_speed(float speed) { mCurrentSpeed = speed; }
 sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
-  if(!mBorder)
-  {
-    const auto rotation_degree = mBody.get_rotation() - 90;
-    const auto rotation_radians = pi / 180.f * rotation_degree;
+  const auto rotation_degree = mBody.get_rotation() - 90;
+  const auto rotation_radians = pi / 180.f * rotation_degree;
 
-    mPos.x += mCurrentSpeed * std::cos(rotation_radians);
-    mPos.y += mCurrentSpeed * std::sin(rotation_radians);
-  };
+  mPos.x += mCurrentSpeed * std::cos(rotation_radians);
+  mPos.y += mCurrentSpeed * std::sin(rotation_radians);
 }
 
 float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
 
 void Tank::draw(sf::RenderWindow &window) {
-  check_border();
-  update();
+  if (is_not_on_border()) {
+    update();
+  }
   mBody.draw(window, mPos.x, mPos.y);
   mTower.draw(window, mPos.x, mPos.y);
 }
 
-void Tank::check_border()
-{
+bool Tank::is_not_on_border() {
   auto [x,y]=mPos;
   float rotation=mBody.get_rotation();
   float xcheck=mCurrentSpeed*(rotation-180);
-  float ycheck=mCurrentSpeed;
+  float ycheck=mCurrentSpeed*(rotation-90)*(rotation-270);
 
-  if (rotation>90 && rotation<270)
-  {
-      ycheck*=-1;
+  if ((x<20 && xcheck>0) || (x>WIDTH-20 && xcheck<0) || (y<20 && ycheck>0) || (y>HEIGHT-20 && ycheck<0)) {
+    return false;
   }
-
-  if ((x<20 && xcheck>0) || (x>WIDTH-20 && xcheck<0) || (y<20 && ycheck>0) || (y>HEIGHT-20 && ycheck<0))
-  {
-    mBorder=true;
-  }
-  else
-  {
-    mBorder=false;
-  }
+  return true;
 }

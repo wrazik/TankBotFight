@@ -111,3 +111,13 @@ TEST_F(TankTest, RotateBody_ShouldAffectMoving) {
   EXPECT_PRED_FORMAT2(testing::FloatLE, x, 0.f);
   EXPECT_PRED_FORMAT2(testing::FloatLE, -10.f, y);
 }
+
+TEST_F(TankTest, ShouldRemainInBorder) {
+  mTank.set_rotation(90);
+  mTank.draw(dummy);
+  mTank.set_current_speed(-100.0f);
+  mTank.draw(dummy);
+
+  const auto [x, y] = mTank.get_position();
+  EXPECT_PRED_FORMAT2(testing::FloatLE, x, 20.f);
+}

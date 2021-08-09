@@ -34,7 +34,7 @@ class Tank {
   void set_current_speed(float speed);
   sf::Vector2f get_position();
 
-  void check_border();
+  bool is_not_on_border();
 
  private:
   inline constexpr static float M_SPEED = 0.01f;
@@ -42,7 +42,6 @@ class Tank {
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
-  bool mBorder = false;
 
   TankPart mBody;
   TankPart mTower;
