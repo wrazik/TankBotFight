@@ -5,6 +5,7 @@
 #include "Missle.hpp"
 #include "Tank.hpp"
 #include "background/Background.hpp"
+#include "SquareRootEngine.hpp"
 
 class Board {
  public:
@@ -17,10 +18,14 @@ class Board {
 
  private:
   void remove_missles();
+  void display_speed();
 
   TextureStore mStore;
   sf::RenderWindow mWindow;
   Background mBackground;
   std::vector<Tank> mTanks;
   std::vector<Missle> mMissles;
+  SquareRootEngine mEngine;
+  sf::Font font;
+  sf::Text text;
 };

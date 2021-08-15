@@ -35,16 +35,16 @@ void KeyboardController::update(const sf::Event& event) {
     mTank.rotate_tower(Rotation::None);
   }
   if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) {
-    mTank.set_current_speed(5);
+    mTank.set_speed(5);
   }
   if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::W) {
-    mTank.set_current_speed(0);
+    mTank.set_speed(0);
   }
   if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-    mTank.set_current_speed(-5);
+    mTank.set_speed(-5);
   }
   if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::S) {
-    mTank.set_current_speed(0);
+    mTank.set_speed(0);
   }
   if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
     const auto now = std::chrono::system_clock::now();

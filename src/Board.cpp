@@ -5,8 +5,10 @@
 #include "KeyboardController.hpp"
 #include "Random.hpp"
 #include "Size.hpp"
+#include "Files.hpp"
 
-Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
+Board::Board()
+    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore), mEngine(70) {
   mWindow.setFramerateLimit(30);
 }
 
@@ -21,9 +23,11 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, mEngine);
   tank.set_rotation(180);
   mTanks.push_back(std::move(tank));
+  font.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
+  text.setFont(font);
 }
 
 void Board::fire_missle(const float angle, const float x, const float y) {
@@ -58,9 +62,15 @@ void Board::run() {
     for (auto& missle : mMissles) {
       missle.draw(mWindow);
     }
+    display_speed();
     remove_missles();
     mWindow.display();
   }
+}
+
+void Board::display_speed() {
+  text.setString(std::to_string(mTanks[0].get_current_speed()));
+  mWindow.draw(text);
 }
 
 void Board::remove_missles() {
