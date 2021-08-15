@@ -53,6 +53,7 @@ void KeyboardController::update(const sf::Event& event) {
       mLastShot = now;
       mBoard.fire_missle(mTank.get_tower_rotation(), mTank.get_position().x,
                          mTank.get_position().y);
+      mTank.shot();
     }
   }
 }

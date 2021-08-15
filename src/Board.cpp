@@ -19,7 +19,9 @@ void Board::register_tank() {
       mStore.get_texture(one_of("tankDark_barrel2_outline.png", "tankRed_barrel2_outline.png",
                                 "tankGreen_barrel2_outline.png", "tankBlue_barrel2_outline.png"));
   tower_texture.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture);
+  auto& shot_texture = mStore.get_texture("shotOrange.png");
+  shot_texture.setSmooth(true);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture);
   tank.set_rotation(180);
   mTanks.push_back(std::move(tank));
 }
@@ -45,6 +47,9 @@ void Board::run() {
       keyboard_controller.update(event);
     }
 
+    for (auto& tank : mTanks) {
+      tank.update();
+    }
     mWindow.clear();
     mBackground.draw(mWindow);
     for (auto& tank : mTanks) {
