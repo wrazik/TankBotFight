@@ -13,11 +13,14 @@ static sf::Texture create_dummy_texture() {
 
 struct TankTest : ::testing::Test {
   TankTest()
-      : mBody(create_dummy_texture()), mTower(create_dummy_texture()), mTank(0, 0, mBody, mTower) {}
+      : mBody(create_dummy_texture()),
+        mTower(create_dummy_texture()),
+        mShot(create_dummy_texture()),
+        mTank(0, 0, mBody, mTower, mShot) {}
 
   sf::Texture mBody;
   sf::Texture mTower;
-  sf::RenderWindow dummy;
+  sf::Texture mShot;
   Tank mTank;
 };
 
@@ -31,66 +34,66 @@ void expect_vec2f_eq(const sf::Vector2f& lhs, const sf::Vector2f& rhs) {
 TEST_F(TankTest, SetSpeed_ShouldMoveUp) {
   expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {0.f, -10.f});
 }
 
-TEST_F(TankTest, Rotate90Degree_ShouldMoveLeft) {
+TEST_F(TankTest, Rotate90Degree_ShouldMoveRight) {
   mTank.set_rotation(90);
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {10.f, 0.f});
 }
 
 TEST_F(TankTest, Rotate180Degree_ShouldMoveDown) {
   mTank.set_rotation(180);
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {0.f, 10.f});
 }
 
 TEST_F(TankTest, Rotate270Degree_ShouldMoveLeft) {
   mTank.set_rotation(270);
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {-10.f, 0.f});
 }
 
 TEST_F(TankTest, MoveUpAndDown_ShouldReturnSamePos) {
   expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_current_speed(-10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
 }
 
 TEST_F(TankTest, MoveTurn180Move_ShouldReturn) {
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
 
   mTank.set_rotation(180);
-  mTank.draw(dummy);
+  mTank.update();
   expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
 }
 
 TEST_F(TankTest, MoveSquare_ShouldReturnToStart) {
   mTank.set_current_speed(10.0f);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_rotation(90);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_rotation(180);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_rotation(270);
-  mTank.draw(dummy);
+  mTank.update();
 
   expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
 }
 
-TEST_F(TankTest, RotateTower_ShoudntAffectMoving) {
+TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
   mTank.set_current_speed(10.0f);
   mTank.rotate_tower(Rotation::Clockwise);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.rotate_tower(Rotation::Counterclockwise);
 
   expect_vec2f_eq(mTank.get_position(), {0.f, -10.f});
@@ -99,13 +102,13 @@ TEST_F(TankTest, RotateTower_ShoudntAffectMoving) {
 TEST_F(TankTest, RotateBody_ShouldAffectMoving) {
   mTank.set_current_speed(10.0f);
   mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_current_speed(-10.0f);
   mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.draw(dummy);
+  mTank.update();
   mTank.set_current_speed(10.0f);
   mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.draw(dummy);
+  mTank.update();
 
   const auto [x, y] = mTank.get_position();
   EXPECT_PRED_FORMAT2(testing::FloatLE, x, 0.f);
