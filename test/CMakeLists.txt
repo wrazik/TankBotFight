@@ -20,6 +20,8 @@ add_executable(run_tests
   RandomTests.cpp
   TankTests.cpp
   TextureStoreTests.cpp
+  SquareRootEngineTests.cpp
+  TestUtility.cpp
 )
 
 target_include_directories(run_tests PRIVATE
@@ -28,6 +30,7 @@ target_include_directories(run_tests PRIVATE
 
 target_link_libraries(
   run_tests
+  gmock
   gtest_main
   sfml-graphics
   tank_bot_fight_lib
