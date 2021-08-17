@@ -45,6 +45,9 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
   mShot.set_rotation(180);
 }
 
+void Tank::set_gear(Gear gear) {
+  mEngine.set_gear(gear);
+}
 
 void Tank::rotate_body(Rotation r) { mBody.rotate(r); }
 

@@ -10,6 +10,7 @@ inline constexpr int shotAnimationDistance = 30;
 inline constexpr std::chrono::milliseconds shotAnimationDuration = std::chrono::milliseconds(100);
 
 class Engine;
+enum class Gear;
 class TankPart {
  public:
   TankPart(sf::Texture& texture);
@@ -35,6 +36,7 @@ class Tank {
   void set_rotation(const int angle);
 
   void set_speed(float speed);
+  void set_gear(Gear gear);
   void draw(sf::RenderWindow& draw);
   void update();
   void shot();

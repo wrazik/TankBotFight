@@ -19,6 +19,7 @@ struct EngineMock : Engine {
   MOCK_METHOD(float, get_current_speed, (), (const, override));
   MOCK_METHOD(sf::Vector2f, get_position_delta, (float), (override));
   MOCK_METHOD(void, update, (), (override));
+  MOCK_METHOD(void, set_gear, (Gear), (override));
 };
 
 struct TankTest : ::testing::Test {
