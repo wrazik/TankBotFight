@@ -26,7 +26,7 @@ jobs:
       run: |
         echo "deb http://mirrors.kernel.org/ubuntu hirsute main universe" | sudo tee /etc/apt/sources.list.d/gcc-11.list 
         sudo apt-get update
-        sudo apt-get install -y gcc-11 g++-11 libsfml-dev xvfb clang-format libprotobuf-dev
+        sudo apt-get install -y gcc-11 g++-11 libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev
 
     - name: Check formatting
       run: |
@@ -36,6 +36,14 @@ jobs:
         clang-format --dry-run --Werror src/*.hpp
         clang-format --dry-run --Werror src/background/*.hpp
         clang-format --dry-run --Werror src/background/*.cpp
+
+    - name: Install vcpkg packages
+      env:
+        CC: gcc-11
+        CXX: g++-11
+      run: |
+        ./vcpkg/bootstrap-vcpkg.sh
+        ./vcpkg/vcpkg install
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
