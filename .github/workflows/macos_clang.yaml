@@ -24,9 +24,11 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
-      - name: Install deps
+      - name: Install vcpkg packages
+        # vcpkg does not compile with macos-clang, use default gcc :|
         run: |
-          brew install sfml
+          ./vcpkg/bootstrap-vcpkg.sh
+          ./vcpkg/vcpkg install
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
