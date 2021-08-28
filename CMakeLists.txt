@@ -43,7 +43,7 @@ if(UNIX AND NOT APPLE)
     set(EXTRA_LIBS GL)
 endif()
 
-target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics pthread ${EXTRA_LIBS})
+target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS})
 target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics)
 
 add_subdirectory(test)
