@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.18)
+set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake")
+
 project(TankBotFight)
 set(CMAKE_CXX_STANDARD 20)
 
 include(CTest)
-
 
 add_library(tank_bot_fight_lib STATIC
     src/background/Background.cpp
@@ -34,15 +35,15 @@ endif()
 
 target_include_directories(tank_bot_fight PRIVATE src)
 
-if (${APPLE})
-    target_include_directories(tank_bot_fight PRIVATE /usr/local/Cellar/sfml/2.5.1_1/include)
-    target_include_directories(tank_bot_fight_lib PRIVATE /usr/local/Cellar/sfml/2.5.1_1/include)
+find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
+find_package(range-v3 REQUIRED)
+
+if(UNIX AND NOT APPLE)
+    # workaround for missing opengl dependency in SFML CMake (https://github.com/microsoft/vcpkg/issues/10949)
+    set(EXTRA_LIBS GL)
 endif()
 
-
-find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
-target_link_libraries(tank_bot_fight sfml-graphics pthread tank_bot_fight_lib)
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/lib/range-v3)
+target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS})
+target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics)
 
 add_subdirectory(test)

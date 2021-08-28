@@ -1,0 +1,8 @@
+{
+  "name": "tank-bot-fight",
+  "version-string": "0.0.1",
+  "dependencies": [
+    "sfml",
+    "range-v3"
+  ]
+}
