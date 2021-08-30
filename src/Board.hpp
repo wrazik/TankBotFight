@@ -11,6 +11,7 @@ class Board {
   Board();
 
   void register_tank();
+  void register_enemy_tank();
   void fire_missle(const float angle, const float x, const float y);
 
   void run();

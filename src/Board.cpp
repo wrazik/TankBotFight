@@ -26,6 +26,22 @@ void Board::register_tank() {
   mTanks.push_back(std::move(tank));
 }
 
+void Board::register_enemy_tank() {     
+    using namespace std::string_literals;
+    auto& body_texture = mStore.get_texture(one_of("tankBody_red.png"s, "tankBody_dark.png"s,
+                                                   "tankBody_blue.png"s, "tankBody_green.png"s));
+    body_texture.setSmooth(true);
+    auto& tower_texture =
+        mStore.get_texture(one_of("tankDark_barrel2_outline.png", "tankRed_barrel2_outline.png",
+                                  "tankGreen_barrel2_outline.png", "tankBlue_barrel2_outline.png"));
+    tower_texture.setSmooth(true);
+    auto& shot_texture = mStore.get_texture("shotOrange.png");
+    shot_texture.setSmooth(true);
+    auto tank = Tank(WIDTH / 2.0f, HEIGHT-50.f, body_texture, tower_texture, shot_texture);
+    tank.set_rotation(0);
+    mTanks.push_back(std::move(tank));
+}
+
 void Board::fire_missle(const float angle, const float x, const float y) {
   auto& missle_texture = mStore.get_texture("bulletDark3.png");
   mMissles.emplace_back(missle_texture, angle, x, y);
