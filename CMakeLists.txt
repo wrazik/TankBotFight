@@ -28,7 +28,7 @@ add_executable(tank_bot_fight
 )
 
 if(MSVC)
-    target_compile_options(tank_bot_fight PRIVATE /W3 /WX /O2)
+    target_compile_options(tank_bot_fight PRIVATE /W3 /WX $<$<CONFIG:Release>:/O2>)
 else()
     target_compile_options(tank_bot_fight PRIVATE -Wall -pedantic -Werror -Wextra -O3)
 endif()
