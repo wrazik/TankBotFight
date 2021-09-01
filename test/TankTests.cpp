@@ -6,8 +6,8 @@
 #include "SquareRootEngine.hpp"
 #include "Tank.hpp"
 #include "TestUtility.hpp"
-#include "utility.hpp"
 #include "gmock/gmock.h"
+#include "utility.hpp"
 
 static sf::Texture create_dummy_texture() {
   sf::Texture dummy;
