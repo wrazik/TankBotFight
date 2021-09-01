@@ -6,7 +6,7 @@
 #include "Size.hpp"
 
 float to_radians(float);
-SquareRootEngine::SquareRootEngine(int step_count) : mStepCount(step_count) {}
+SquareRootEngine::SquareRootEngine(int step_count, int max_speed) : mStepCount(step_count), mMaxSpeed(max_speed) {}
 
 void SquareRootEngine::set_gear(Gear gear) {
   if (mCurrentGear == Gear::Neutral && gear != Gear::Neutral) {
@@ -23,31 +23,6 @@ int SquareRootEngine::get_step_for_current_speed() {
   return std::pow(mCurrentSpeed * std::sqrt(mStepCount) / mMaxSpeed, 2);
 }
 
-void SquareRootEngine::set_speed(float speed) {
-  // dryfowanie
-  // zmiana stanu
-  if (mMaxSpeed == 0 && speed != 0) {
-    mChangeState = true;
-    mFreeride = false;
-  }
-  if (mMaxSpeed != 0 && speed == 0) {
-    std::cout << mStep << '\n';
-    // mStep = mStepCount - mStep;
-    mChangeState = true;
-    mFreeride = true;
-    std::cout << mStepCount << '\n';
-    std::cout << mStep << '\n';
-  } else {
-    // brake = false;
-  }
-  // hamowanie / cofanie
-  if (speed < 0) {
-  }
-  // przyspieszanie / jechanie
-  if (speed > 0) {
-  }
-  mMaxSpeed = speed;
-}
 
 float SquareRootEngine::get_current_speed() const { return mCurrentSpeed; }
 

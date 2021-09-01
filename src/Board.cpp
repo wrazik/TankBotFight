@@ -8,7 +8,7 @@
 #include "Files.hpp"
 
 Board::Board()
-    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore), mEngine(70) {
+    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore), mEngine(70, 5) {
   mWindow.setFramerateLimit(30);
 }
 

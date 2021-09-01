@@ -8,7 +8,6 @@ enum class Gear {
 };
 class Engine {
  public:
-  virtual void set_speed(float speed) = 0;
   virtual void set_gear(Gear) = 0;
   virtual float get_current_speed() const = 0;
   virtual sf::Vector2f get_position_delta(float rotation_radians) = 0;

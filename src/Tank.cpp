@@ -62,8 +62,6 @@ void Tank::set_rotation(const int angle) {
   mShot.set_rotation(angle);
 }
 
-void Tank::set_speed(float speed) { mEngine.set_speed(speed); }
-
 sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
