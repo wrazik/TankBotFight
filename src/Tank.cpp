@@ -38,13 +38,13 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
 }
 
 Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           Engine &engine)
-    : mPos({x, y}), mBody(body), mTower(tower), mShot(shot), mEngine(engine) {
+           std::unique_ptr<Engine> engine)
+    : mPos({x, y}), mBody(body), mTower(tower), mShot(shot), mEngine(std::move(engine)) {
   mTower.set_rotation(180);
   mShot.set_rotation(180);
 }
 
-void Tank::set_gear(Gear gear) { mEngine.set_gear(gear); }
+void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
 void Tank::rotate_body(Rotation r) { mBody.rotate(r); }
 
@@ -65,17 +65,17 @@ void Tank::update() {
   mBody.update();
   mTower.update();
   mShot.update();
-  mEngine.update();
+  mEngine->update();
 
   update_position();
   update_shot();
 }
 
 void Tank::update_position() {
-  mPos += mEngine.get_position_delta(to_radians(mBody.get_rotation()));
+  mPos += mEngine->get_position_delta(to_radians(mBody.get_rotation()));
 }
 
-float Tank::get_current_speed() { return mEngine.get_current_speed(); }
+float Tank::get_current_speed() { return mEngine->get_current_speed(); }
 
 void Tank::update_shot() {
   auto now = std::chrono::system_clock::now();

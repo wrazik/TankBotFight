@@ -26,8 +26,6 @@ struct TankTest : ::testing::Test {
   sf::Texture mBody;
   sf::Texture mTower;
   sf::Texture mShot;
-  testing::StrictMock<EngineMock> mEngineStrictMock;
-  testing::NiceMock<EngineMock> mEngineNiceMock;
   Tank mTankSUT;
 
   float speed;
@@ -37,31 +35,33 @@ struct TankTest : ::testing::Test {
       : mBody(create_dummy_texture()),
         mTower(create_dummy_texture()),
         mShot(create_dummy_texture()),
-        mTankSUT(create_tank(mEngineStrictMock)),
+        mTankSUT(create_tank(std::make_unique<testing::StrictMock<EngineMock>>())),
         speed{1.f},
         angle{90} {}
 
-  Tank create_tank(testing::NiceMock<EngineMock>& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, engine);
+  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>> engine) {
+    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
   }
 
-  Tank create_tank(testing::StrictMock<EngineMock>& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, engine);
+  Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>> engine) {
+    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
   }
 };
 
 TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithAngleRotation) {
-  Tank mTankSUT = create_tank(mEngineNiceMock);
+  auto mEngineNiceMock = std::make_unique<testing::NiceMock<EngineMock>>();
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(angle)));
+  Tank mTankSUT = create_tank(std::move(mEngineNiceMock));
   mTankSUT.set_rotation(angle);
-  EXPECT_CALL(mEngineNiceMock, get_position_delta(to_radians(angle)));
 
   mTankSUT.update();
 }
 
 TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
-  Tank mTankSUT = create_tank(mEngineNiceMock);
   sf::Vector2f expectedPosition = {0.f, 10.f};
-  EXPECT_CALL(mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expectedPosition));
+  auto mEngineNiceMock = std::make_unique<testing::NiceMock<EngineMock>>();
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expectedPosition));
+  Tank mTankSUT = create_tank(std::move(mEngineNiceMock));
 
   mTankSUT.update();
 
@@ -69,11 +69,12 @@ TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
 }
 
 TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum) {
-  Tank mTankSUT = create_tank(mEngineNiceMock);
+  sf::Vector2f singleMove = {3.f, -7.f};
+  auto mEngineNiceMock = std::make_unique<testing::NiceMock<EngineMock>>();
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(singleMove));
+  Tank mTankSUT = create_tank(std::move(mEngineNiceMock));
   int updateCount = 3;
   sf::Vector2f expectedPosition = {9.f, -21.f};
-  sf::Vector2f singleMove = {3.f, -7.f};
-  EXPECT_CALL(mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(singleMove));
 
   update_many(mTankSUT, updateCount);
 
@@ -81,10 +82,10 @@ TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum)
 }
 
 TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
-  Tank mTankSUT = create_tank(mEngineNiceMock);
+  auto mEngineNiceMock = std::make_unique<testing::NiceMock<EngineMock>>();
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(angle)));
+  Tank mTankSUT = create_tank(std::move(mEngineNiceMock));
   mTankSUT.set_rotation(angle);
-  EXPECT_CALL(mEngineNiceMock, get_position_delta(to_radians(angle)));
-  mTankSUT.set_gear(Gear::Drive);
 
   mTankSUT.rotate_tower(Rotation::Clockwise);
   mTankSUT.rotate_tower(Rotation::Clockwise);

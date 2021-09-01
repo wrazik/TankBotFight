@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <chrono>
+#include <memory>
 
 #include "TextureStore.hpp"
 
@@ -28,8 +29,10 @@ class TankPart {
 
 class Tank {
  public:
-  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot, Engine& engine);
+  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
+       std::unique_ptr<Engine> engine);
   Tank(const Tank&) = default;
+  Tank(Tank&&) = default;
 
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
@@ -58,5 +61,5 @@ class Tank {
   TankPart mBody;
   TankPart mTower;
   TankPart mShot;
-  Engine& mEngine;
+  std::unique_ptr<Engine> mEngine;
 };
