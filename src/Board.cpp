@@ -2,10 +2,10 @@
 
 #include <string>
 
+#include "Files.hpp"
 #include "KeyboardController.hpp"
 #include "Random.hpp"
 #include "Size.hpp"
-#include "Files.hpp"
 
 Board::Board()
     : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore), mEngine(70, 5) {

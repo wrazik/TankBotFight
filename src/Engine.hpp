@@ -1,11 +1,7 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
 
-enum class Gear {
-  Drive,
-  Neutral,
-  Reverse
-};
+enum class Gear { Drive, Neutral, Reverse };
 class Engine {
  public:
   virtual void set_gear(Gear) = 0;

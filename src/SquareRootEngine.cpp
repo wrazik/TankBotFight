@@ -4,35 +4,34 @@
 #include <iostream>
 
 #include "Size.hpp"
+#include "utility.hpp"
 
-float to_radians(float);
-SquareRootEngine::SquareRootEngine(int step_count, int max_speed) : mStepCount(step_count), mMaxSpeed(max_speed) {}
+SquareRootEngine::SquareRootEngine(int step_count, int max_speed)
+    : mStepCount(step_count), mMaxSpeed(max_speed) {}
 
 void SquareRootEngine::set_gear(Gear gear) {
   if (mCurrentGear == Gear::Neutral && gear != Gear::Neutral) {
     mStep = get_step_for_current_speed();
   }
-  std::cout << mStep << '\n';
   mCurrentGear = gear;
 }
 
-int SquareRootEngine::get_step_for_current_speed() {
+int SquareRootEngine::get_step_for_current_speed() const {
   if (mCurrentSpeed == 0) {
     return 1;
   }
   return std::pow(mCurrentSpeed * std::sqrt(mStepCount) / mMaxSpeed, 2);
 }
 
-
 float SquareRootEngine::get_current_speed() const { return mCurrentSpeed; }
 
 void SquareRootEngine::update() {
   mBrake = update_brake();
-  update_current_speed();
-  update_step();
+  mCurrentSpeed = update_current_speed();
+  mStep = update_step();
 }
 
-bool SquareRootEngine::update_brake() {
+bool SquareRootEngine::update_brake() const {
   if (mCurrentGear == Gear::Reverse && mCurrentSpeed > 0) {
     return true;
   }
@@ -42,74 +41,44 @@ bool SquareRootEngine::update_brake() {
   return false;
 }
 
-void SquareRootEngine::update_step() {
-  
+int SquareRootEngine::update_step() const {
   if (mCurrentSpeed == 0) {
-    mStep = 1;
+    return 1;
   }
-  // std::cout << mStep << '\n';
   if (mStep < mStepCount) {
-    mStep++;
+    return mStep + 1;
   }
-  // if (mMaxSpeed == 0) {
-  //   mStep--;
-  // }
+  return mStep;
 }
 
-void SquareRootEngine::update_current_speed() {
-  // gdy gracz przyspiesza to powinien przyspieszac pierwiastkowo [OK]
-  // gdy gracz puszcza przyspieszczenie to powinien 'dryfowac', zwalniajac pierwiastkowo [OK]
-  // gdy gracz znowu chce przyspieszac, to powinien przyspieszac z aktualnej predkosci [FAIL]
-  // gdy gracz przyspieszajac, nagle stwierdza ze chce sie cofac to powinien najpierw hamowac
-  // (szybciej zwalniac), a potem dopiero sie cofac z funkcja pierwiastkowa [FAIL]
-
-  // check if speed is not out of bounds
+float SquareRootEngine::update_current_speed() const {
   if (mBrake) {
-    std::cout << "BRAKES!\n";
-    if (mCurrentSpeed < 0) {
-      mCurrentSpeed += 3 * freeride();
-      mCurrentSpeed = mCurrentSpeed > 0 ? 0 : mCurrentSpeed;
-    }
-    if (mCurrentSpeed > 0) {
-      mCurrentSpeed -= 3 * freeride();
-      mCurrentSpeed = mCurrentSpeed < 0 ? 0 : mCurrentSpeed;
-    }
+    return reduce_abs_speed_by(3 * freeride());
   } else if (mCurrentGear == Gear::Neutral) {
-    if (mCurrentSpeed < 0) {
-      mCurrentSpeed += freeride();
-      mCurrentSpeed = mCurrentSpeed > 0 ? 0 : mCurrentSpeed;
-    }
-    if (mCurrentSpeed > 0) {
-      mCurrentSpeed -= freeride();
-      mCurrentSpeed = mCurrentSpeed < 0 ? 0 : mCurrentSpeed;
-    }
-    // mStep--;
-    // std::cout << "speed " << mCurrentSpeed << "\n";
+    return reduce_abs_speed_by(freeride());
   } else if (mCurrentGear == Gear::Drive) {
-    if (mCurrentSpeed < mMaxSpeed) {
-      mCurrentSpeed += get_speed_delta();
-    }
-    // mStep++;
+    return mCurrentSpeed + get_speed_delta();
   } else if (mCurrentGear == Gear::Reverse) {
-    mCurrentSpeed -= get_speed_delta();
+    return mCurrentSpeed - get_speed_delta();
   }
-  // if (mMaxSpeed != 0) {
-  //   brake = false;
-  // // }
-  // if (mStep < mStepCount && mStep > 0) {
-  //   // mStep++;
-  // }
+  throw std::logic_error("unexpected exception; gear is other than {neutral, drive, reverse}");
 }
 
-float SquareRootEngine::accelerate() {
-  return mMaxSpeed * (std::sqrt(mStep) / std::sqrt(mStepCount));
+float SquareRootEngine::reduce_abs_speed_by(float amount) const {
+  if (mCurrentSpeed < 0) {
+    return std::min(mCurrentSpeed + amount, 0.f);
+  }
+  if (mCurrentSpeed > 0) {
+    return std::max(mCurrentSpeed - amount, 0.f);
+  }
+  return mCurrentSpeed;
 }
 
-float SquareRootEngine::get_speed_delta() {
+float SquareRootEngine::get_speed_delta() const {
   return mMaxSpeed * (std::sqrt(mStep) / std::sqrt(mStepCount)) - std::abs(mCurrentSpeed);
 }
 
-float SquareRootEngine::freeride() { return mMaxSpeed / mStepCount; }
+float SquareRootEngine::freeride() const { return mMaxSpeed / mStepCount; }
 
 sf::Vector2f SquareRootEngine::get_position_delta(float rotation_radians) {
   mPositionDelta.x = mCurrentSpeed * std::cos(rotation_radians - pi / 2);

@@ -3,6 +3,7 @@
 #include "Size.hpp"
 #include "SquareRootEngine.hpp"
 #include "TestUtility.hpp"
+#include "utility.hpp"
 
 struct SquareRootEngineTest : ::testing::Test {
   double mPrecision;
@@ -25,10 +26,20 @@ struct SquareRootEngineTest : ::testing::Test {
 
 auto getSpeedDelta(auto speed_before, auto speed_after) { return speed_after - speed_before; }
 
-TEST_F(SquareRootEngineTest, Given1StepCountAndDriveGearThenGetCurrentSpeedShouldReturnMaxSpeed) {
+TEST_F(SquareRootEngineTest,
+       Given1StepCountAnd1UpdateAndDriveGearThenGetCurrentSpeedShouldReturnMaxSpeed) {
   engineSUT.set_gear(Gear::Drive);
 
   engineSUT.update();
+
+  EXPECT_NEAR(maxSpeed, engineSUT.get_current_speed(), mPrecision);
+}
+
+TEST_F(SquareRootEngineTest,
+       Given1StepCountAndMultipleUpdatesAndDriveGearThenGetCurrentSpeedShouldReturnMaxSpeed) {
+  engineSUT.set_gear(Gear::Drive);
+
+  update_many(engineSUT, 3);
 
   EXPECT_NEAR(maxSpeed, engineSUT.get_current_speed(), mPrecision);
 }
@@ -38,6 +49,16 @@ TEST_F(SquareRootEngineTest,
   engineSUT.set_gear(Gear::Reverse);
 
   engineSUT.update();
+
+  EXPECT_NEAR(-maxSpeed, engineSUT.get_current_speed(), mPrecision);
+}
+
+TEST_F(
+    SquareRootEngineTest,
+    Given1StepCountAndMultipleUpdatesAndReverseGearThenGetCurrentSpeedShouldReturnNegativeMaxSpeed) {
+  engineSUT.set_gear(Gear::Reverse);
+
+  update_many(engineSUT, 3);
 
   EXPECT_NEAR(-maxSpeed, engineSUT.get_current_speed(), mPrecision);
 }
@@ -245,8 +266,9 @@ TEST_F(
   EXPECT_NEAR(zero, engineSUT.get_current_speed(), mPrecision);
 }
 
-TEST_F(SquareRootEngineTest,
-       GivenTankMovingForwardAndMaxSpeed10AndStepCount10WhenGearSetToReverseThenSpeedShouldDecreaseBy3DownTo0) {
+TEST_F(
+    SquareRootEngineTest,
+    GivenTankMovingForwardAndMaxSpeed10AndStepCount10WhenGearSetToReverseThenSpeedShouldDecreaseBy3DownTo0) {
   stepCount = 10;
   maxSpeed = 10;
   auto expectedSpeedDelta = -3.f;
@@ -257,14 +279,16 @@ TEST_F(SquareRootEngineTest,
   for (int i = 0; i < 3; i++) {
     auto speedBefore = engineSUT.get_current_speed();
     engineSUT.update();
-    EXPECT_NEAR(expectedSpeedDelta, getSpeedDelta(speedBefore, engineSUT.get_current_speed()), mPrecision);
+    EXPECT_NEAR(expectedSpeedDelta, getSpeedDelta(speedBefore, engineSUT.get_current_speed()),
+                mPrecision);
   }
   engineSUT.update();
   EXPECT_NEAR(zero, engineSUT.get_current_speed(), mPrecision);
 }
 
-TEST_F(SquareRootEngineTest,
-       GivenTankMovingBackwardAndMaxSpeed10AndStepCount10WhenGearSetToDriveThenSpeedShouldIncreaseBy3UpTo0) {
+TEST_F(
+    SquareRootEngineTest,
+    GivenTankMovingBackwardAndMaxSpeed10AndStepCount10WhenGearSetToDriveThenSpeedShouldIncreaseBy3UpTo0) {
   stepCount = 10;
   maxSpeed = 10;
   auto expectedSpeedDelta = 3.f;
@@ -275,7 +299,8 @@ TEST_F(SquareRootEngineTest,
   for (int i = 0; i < 3; i++) {
     auto speedBefore = engineSUT.get_current_speed();
     engineSUT.update();
-    EXPECT_NEAR(expectedSpeedDelta, getSpeedDelta(speedBefore, engineSUT.get_current_speed()), mPrecision);
+    EXPECT_NEAR(expectedSpeedDelta, getSpeedDelta(speedBefore, engineSUT.get_current_speed()),
+                mPrecision);
   }
   engineSUT.update();
   EXPECT_NEAR(zero, engineSUT.get_current_speed(), mPrecision);

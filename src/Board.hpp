@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "Missle.hpp"
+#include "SquareRootEngine.hpp"
 #include "Tank.hpp"
 #include "background/Background.hpp"
-#include "SquareRootEngine.hpp"
 
 class Board {
  public:

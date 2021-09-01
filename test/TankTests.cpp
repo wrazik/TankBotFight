@@ -6,6 +6,7 @@
 #include "SquareRootEngine.hpp"
 #include "Tank.hpp"
 #include "TestUtility.hpp"
+#include "utility.hpp"
 #include "gmock/gmock.h"
 
 static sf::Texture create_dummy_texture() {
@@ -49,12 +50,11 @@ struct TankTest : ::testing::Test {
   }
 };
 
-
 TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithAngleRotation) {
   Tank mTankSUT = create_tank(mEngineNiceMock);
   mTankSUT.set_rotation(angle);
   EXPECT_CALL(mEngineNiceMock, get_position_delta(to_radians(angle)));
-  
+
   mTankSUT.update();
 }
 
@@ -62,9 +62,9 @@ TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
   Tank mTankSUT = create_tank(mEngineNiceMock);
   sf::Vector2f expectedPosition = {0.f, 10.f};
   EXPECT_CALL(mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expectedPosition));
-  
+
   mTankSUT.update();
-  
+
   expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
 }
 
@@ -74,9 +74,9 @@ TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum)
   sf::Vector2f expectedPosition = {9.f, -21.f};
   sf::Vector2f singleMove = {3.f, -7.f};
   EXPECT_CALL(mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(singleMove));
-  
+
   update_many(mTankSUT, updateCount);
-  
+
   expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
 }
 

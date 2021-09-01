@@ -12,13 +12,13 @@ class SquareRootEngine : public Engine {
   ~SquareRootEngine() = default;
 
  private:
-  void update_current_speed();
-  void update_step();
-  bool update_brake();
-  int get_step_for_current_speed();
-  float accelerate();
-  float get_speed_delta();
-  float freeride();
+  float update_current_speed() const;
+  int update_step() const;
+  bool update_brake() const;
+  int get_step_for_current_speed() const;
+  float get_speed_delta() const;
+  float freeride() const;
+  float reduce_abs_speed_by(float) const;
 
   Gear mCurrentGear{Gear::Neutral};
   float mCurrentSpeed{};
@@ -27,7 +27,4 @@ class SquareRootEngine : public Engine {
   int mStepCount{};
   sf::Vector2f mPositionDelta{};
   bool mBrake{false};
-  bool mFreeride{false};
-  bool mChangeState{false};
-  float mSpeedAtChange{};
 };

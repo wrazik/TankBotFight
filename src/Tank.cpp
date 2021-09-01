@@ -5,8 +5,7 @@
 #include "Engine.hpp"
 #include "Size.hpp"
 #include "TextureStore.hpp"
-
-float to_radians(float degrees) { return pi / 180.f * degrees; }
+#include "utility.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
@@ -45,9 +44,7 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
   mShot.set_rotation(180);
 }
 
-void Tank::set_gear(Gear gear) {
-  mEngine.set_gear(gear);
-}
+void Tank::set_gear(Gear gear) { mEngine.set_gear(gear); }
 
 void Tank::rotate_body(Rotation r) { mBody.rotate(r); }
 

@@ -39,7 +39,7 @@ class Tank {
   void draw(sf::RenderWindow& draw);
   void update();
   void shot();
- 
+
   float get_tower_rotation() const;
   sf::Vector2f get_position();
   float get_current_speed();
