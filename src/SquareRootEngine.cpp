@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <algorithm>
 
 #include "Size.hpp"
 #include "utility.hpp"
