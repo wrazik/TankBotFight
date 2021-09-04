@@ -31,7 +31,7 @@ class Tank {
  public:
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
        std::unique_ptr<Engine> engine);
-  Tank(const Tank&) = default;
+  Tank(const Tank&) = delete;
   Tank(Tank&&) = default;
 
   void rotate_body(Rotation r);

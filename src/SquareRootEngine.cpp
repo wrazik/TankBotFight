@@ -1,7 +1,7 @@
 #include "SquareRootEngine.hpp"
 
 #include <cmath>
-#include <iostream>
+#include <stdexcept>
 
 #include "Size.hpp"
 #include "utility.hpp"
