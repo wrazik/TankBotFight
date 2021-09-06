@@ -10,6 +10,10 @@
 SquareRootEngine::SquareRootEngine(int step_count, int max_speed)
     : mStepCount(step_count), mMaxSpeed(max_speed) {}
 
+std::unique_ptr<Engine> SquareRootEngine::copy() const {
+  return std::make_unique<SquareRootEngine>(mStepCount, mMaxSpeed);
+}
+
 void SquareRootEngine::set_gear(Gear gear) {
   if (mCurrentGear == Gear::Neutral && gear != Gear::Neutral) {
     mStep = get_step_for_current_speed();

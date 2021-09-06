@@ -9,6 +9,7 @@ class SquareRootEngine : public Engine {
   float get_current_speed() const override;
   sf::Vector2f get_position_delta(float rotation_radians) override;
   void update() override;
+  std::unique_ptr<Engine> copy() const;
   ~SquareRootEngine() = default;
 
  private:

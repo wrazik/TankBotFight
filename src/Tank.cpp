@@ -44,6 +44,21 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
   mShot.set_rotation(180);
 }
 
+Tank::Tank(const Tank& rhs)
+: mPos(rhs.mPos), mBody(rhs.mBody), mTower(rhs.mTower), mShot(rhs.mShot), mEngine(rhs.mEngine->copy()) {
+}
+
+Tank& Tank::operator=(const Tank& rhs) {
+  mPos = rhs.mPos;
+  mCurrentSpeed = rhs.mCurrentSpeed;
+  mShotStart = rhs.mShotStart;
+  mDrawShot = rhs.mDrawShot;
+  mBody = rhs.mBody;
+  mTower = rhs.mTower;
+  mShot = rhs.mShot;
+  mEngine = rhs.mEngine->copy();
+}
+
 void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
 void Tank::rotate_body(Rotation r) { mBody.rotate(r); }
