@@ -30,7 +30,7 @@ void Board::register_tank() {
   mText.setFont(mFont);
 }
 
-void Board::fire_missle(const float angle, const float x, const float y) {
+void Board::fire_missle(const int angle, const float x, const float y) {
   auto& missle_texture = mStore.get_texture("bulletDark3.png");
   mMissles.emplace_back(missle_texture, angle, x, y);
 }
