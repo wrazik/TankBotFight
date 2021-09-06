@@ -26,8 +26,8 @@ void Board::register_tank() {
                    std::make_unique<SquareRootEngine>(70, 5));
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));
-  font.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
-  text.setFont(font);
+  mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
+  mText.setFont(mFont);
 }
 
 void Board::fire_missle(const float angle, const float x, const float y) {
@@ -69,8 +69,8 @@ void Board::run() {
 }
 
 void Board::display_speed() {
-  text.setString(std::to_string(mTanks[0].get_current_speed()));
-  mWindow.draw(text);
+  mText.setString(std::to_string(mTanks[0].get_current_speed()));
+  mWindow.draw(mText);
 }
 
 void Board::remove_missles() {

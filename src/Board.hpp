@@ -25,6 +25,6 @@ class Board {
   Background mBackground;
   std::vector<Tank> mTanks;
   std::vector<Missle> mMissles;
-  sf::Font font;
-  sf::Text text;
+  sf::Font mFont;
+  sf::Text mText;
 };

@@ -7,14 +7,14 @@
 #include "Size.hpp"
 #include "utility.hpp"
 
-SquareRootEngine::SquareRootEngine(int step_count, int max_speed)
+SquareRootEngine::SquareRootEngine(const int step_count, const int max_speed)
     : mStepCount(step_count), mMaxSpeed(max_speed) {}
 
 std::unique_ptr<Engine> SquareRootEngine::copy() const {
   return std::make_unique<SquareRootEngine>(mStepCount, mMaxSpeed);
 }
 
-void SquareRootEngine::set_gear(Gear gear) {
+void SquareRootEngine::set_gear(const Gear gear) {
   if (mCurrentGear == Gear::Neutral && gear != Gear::Neutral) {
     mStep = get_step_for_current_speed();
   }
@@ -31,12 +31,12 @@ int SquareRootEngine::get_step_for_current_speed() const {
 float SquareRootEngine::get_current_speed() const { return mCurrentSpeed; }
 
 void SquareRootEngine::update() {
-  mBrake = update_brake();
-  mCurrentSpeed = update_current_speed();
-  mStep = update_step();
+  mBrake = is_braking();
+  mCurrentSpeed = calculate_current_speed();
+  mStep = calculate_step();
 }
 
-bool SquareRootEngine::update_brake() const {
+bool SquareRootEngine::is_braking() const {
   if (mCurrentGear == Gear::Reverse && mCurrentSpeed > 0) {
     return true;
   }
@@ -46,7 +46,7 @@ bool SquareRootEngine::update_brake() const {
   return false;
 }
 
-int SquareRootEngine::update_step() const {
+int SquareRootEngine::calculate_step() const {
   if (mCurrentSpeed == 0) {
     return 1;
   }
@@ -56,20 +56,22 @@ int SquareRootEngine::update_step() const {
   return mStep;
 }
 
-float SquareRootEngine::update_current_speed() const {
+float SquareRootEngine::calculate_current_speed() const {
   if (mBrake) {
     return reduce_abs_speed_by(3 * freeride());
-  } else if (mCurrentGear == Gear::Neutral) {
-    return reduce_abs_speed_by(freeride());
-  } else if (mCurrentGear == Gear::Drive) {
-    return mCurrentSpeed + get_speed_delta();
-  } else if (mCurrentGear == Gear::Reverse) {
-    return mCurrentSpeed - get_speed_delta();
   }
-  throw std::logic_error("unexpected exception; gear is other than {neutral, drive, reverse}");
+  switch (mCurrentGear) {
+    case Gear::Neutral:
+      return reduce_abs_speed_by(freeride());
+    case Gear::Drive:
+      return mCurrentSpeed + get_speed_delta();
+    case Gear::Reverse:
+      return mCurrentSpeed - get_speed_delta();
+  }
+  return 0;
 }
 
-float SquareRootEngine::reduce_abs_speed_by(float amount) const {
+float SquareRootEngine::reduce_abs_speed_by(const float amount) const {
   if (mCurrentSpeed < 0) {
     return std::min(mCurrentSpeed + amount, 0.f);
   }
@@ -85,7 +87,7 @@ float SquareRootEngine::get_speed_delta() const {
 
 float SquareRootEngine::freeride() const { return mMaxSpeed / mStepCount; }
 
-sf::Vector2f SquareRootEngine::get_position_delta(float rotation_radians) {
+sf::Vector2f SquareRootEngine::get_position_delta(const float rotation_radians) {
   mPositionDelta.x = mCurrentSpeed * std::cos(rotation_radians - pi / 2);
   mPositionDelta.y = mCurrentSpeed * std::sin(rotation_radians - pi / 2);
   return mPositionDelta;

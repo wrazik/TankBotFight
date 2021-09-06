@@ -30,7 +30,7 @@ class TankPart {
 class Tank {
  public:
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
-       std::unique_ptr<Engine> engine);
+       std::unique_ptr<Engine>&& engine);
   Tank(const Tank&);
   Tank(Tank&&) = default;
   Tank& operator=(const Tank&);
