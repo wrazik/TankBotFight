@@ -38,17 +38,20 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
 }
 
 Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           std::unique_ptr<Engine>&& engine)
+           std::unique_ptr<Engine> &&engine)
     : mPos({x, y}), mBody(body), mTower(tower), mShot(shot), mEngine(std::move(engine)) {
   mTower.set_rotation(180);
   mShot.set_rotation(180);
 }
 
-Tank::Tank(const Tank& rhs)
-: mPos(rhs.mPos), mBody(rhs.mBody), mTower(rhs.mTower), mShot(rhs.mShot), mEngine(rhs.mEngine->copy()) {
-}
+Tank::Tank(const Tank &rhs)
+    : mPos(rhs.mPos),
+      mBody(rhs.mBody),
+      mTower(rhs.mTower),
+      mShot(rhs.mShot),
+      mEngine(rhs.mEngine->copy()) {}
 
-Tank& Tank::operator=(const Tank& rhs) {
+Tank &Tank::operator=(const Tank &rhs) {
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
   mShotStart = rhs.mShotStart;

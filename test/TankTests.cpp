@@ -27,8 +27,10 @@ struct TankTest : ::testing::Test {
   sf::Texture mBody{create_dummy_texture()};
   sf::Texture mTower{create_dummy_texture()};
   sf::Texture mShot{create_dummy_texture()};
-  std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{std::make_unique<testing::NiceMock<EngineMock>>()};
-  std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
+  std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
+      std::make_unique<testing::NiceMock<EngineMock>>()};
+  std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
+      std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
   Tank mTankSUT{create_tank(std::move(mEngine))};
 
   float mSpeed{1.f};
