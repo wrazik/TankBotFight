@@ -52,6 +52,9 @@ Tank::Tank(const Tank &rhs)
       mEngine(rhs.mEngine->copy()) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
+  if (this == &rhs) {
+    return *this;
+  }
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
   mShotStart = rhs.mShotStart;
@@ -60,6 +63,7 @@ Tank &Tank::operator=(const Tank &rhs) {
   mTower = rhs.mTower;
   mShot = rhs.mShot;
   mEngine = rhs.mEngine->copy();
+  return *this;
 }
 
 void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
