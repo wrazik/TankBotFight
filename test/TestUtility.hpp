@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
-#include <ranges>
+#include <range/v3/view/iota.hpp>
 
 #include "Engine.hpp"
 #include "Tank.hpp"
@@ -13,7 +13,7 @@ concept Updatable = requires(T a) {
 };
 
 void update_many(Updatable auto& updatable, int count) {
-  for (int i : std::ranges::iota_view{0, count}) {
+  for (int i : ranges::iota_view(0, count)) {
     updatable.update();
   }
 }

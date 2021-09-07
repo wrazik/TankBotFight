@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <ranges>
+#include <range/v3/view/iota.hpp>
 
 #include "Size.hpp"
 #include "SquareRootEngine.hpp"
@@ -21,7 +21,7 @@ struct SquareRootEngineTest : ::testing::Test {
   SquareRootEngine mEngineSUT{mStepCount, mMaxSpeed};
 
   void assertSpeedDelta(const auto expected_speed_delta, const int count) {
-    for (int i : std::ranges::iota_view{0, count}) {
+    for (int i : ranges::iota_view(0, count)) {
       const auto speedBefore = mEngineSUT.get_current_speed();
       mEngineSUT.update();
       EXPECT_NEAR(expected_speed_delta, getSpeedDelta(speedBefore, mEngineSUT.get_current_speed()),
