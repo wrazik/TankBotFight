@@ -11,11 +11,14 @@ Client will communicate with platform with platform via sockets.
 
 
 
+
+
+
 # Current state
 Currently we have moving & shooting tank, background with customly generated roads. No network yet, no collisions yet.
 
 
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/6102580/124426797-d5501800-dd6a-11eb-8df5-14d487e59c32.gif)
+https://user-images.githubusercontent.com/6102580/132492151-9a1b2057-5ddf-46e5-9a37-08de3bba44d1.mp4
 
 
 # How to run
