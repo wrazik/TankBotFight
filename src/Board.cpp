@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Files.hpp"
 #include "KeyboardController.hpp"
 #include "Random.hpp"
 #include "Size.hpp"
@@ -21,12 +22,15 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture,
+                   std::make_unique<SquareRootEngine>(70, 5));
   tank.set_rotation(180);
-  mTanks.push_back(std::move(tank));
+  mTanks.emplace_back(std::move(tank));
+  mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
+  mText.setFont(mFont);
 }
 
-void Board::fire_missle(const float angle, const float x, const float y) {
+void Board::fire_missle(const int angle, const float x, const float y) {
   auto& missle_texture = mStore.get_texture("bulletDark3.png");
   mMissles.emplace_back(missle_texture, angle, x, y);
 }
@@ -58,9 +62,15 @@ void Board::run() {
     for (auto& missle : mMissles) {
       missle.draw(mWindow);
     }
+    display_speed();
     remove_missles();
     mWindow.display();
   }
+}
+
+void Board::display_speed() {
+  mText.setString(std::to_string(mTanks[0].get_current_speed()));
+  mWindow.draw(mText);
 }
 
 void Board::remove_missles() {

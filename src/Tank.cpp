@@ -2,10 +2,10 @@
 
 #include <cmath>
 
+#include "Engine.hpp"
 #include "Size.hpp"
 #include "TextureStore.hpp"
-
-float to_radians(float degrees) { return pi / 180.f * degrees; }
+#include "utility.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
@@ -37,11 +37,36 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
   window.draw(mSprite);
 }
 
-Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot)
-    : mPos({x, y}), mBody(body), mTower(tower), mShot(shot) {
+Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
+           std::unique_ptr<Engine> &&engine)
+    : mPos({x, y}), mBody(body), mTower(tower), mShot(shot), mEngine(std::move(engine)) {
   mTower.set_rotation(180);
   mShot.set_rotation(180);
 }
+
+Tank::Tank(const Tank &rhs)
+    : mPos(rhs.mPos),
+      mBody(rhs.mBody),
+      mTower(rhs.mTower),
+      mShot(rhs.mShot),
+      mEngine(rhs.mEngine->copy()) {}
+
+Tank &Tank::operator=(const Tank &rhs) {
+  if (this == &rhs) {
+    return *this;
+  }
+  mPos = rhs.mPos;
+  mCurrentSpeed = rhs.mCurrentSpeed;
+  mShotStart = rhs.mShotStart;
+  mDrawShot = rhs.mDrawShot;
+  mBody = rhs.mBody;
+  mTower = rhs.mTower;
+  mShot = rhs.mShot;
+  mEngine = rhs.mEngine->copy();
+  return *this;
+}
+
+void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
 void Tank::rotate_body(Rotation r) { mBody.rotate(r); }
 
@@ -56,26 +81,23 @@ void Tank::set_rotation(const int angle) {
   mShot.set_rotation(angle);
 }
 
-void Tank::set_current_speed(float speed) { mCurrentSpeed = speed; }
-
 sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
   mBody.update();
   mTower.update();
   mShot.update();
+  mEngine->update();
 
   update_position();
   update_shot();
 }
 
 void Tank::update_position() {
-  const auto rotation_degree = mBody.get_rotation() - 90;
-  const auto rotation_radians = to_radians(rotation_degree);
-
-  mPos.x += mCurrentSpeed * std::cos(rotation_radians);
-  mPos.y += mCurrentSpeed * std::sin(rotation_radians);
+  mPos += mEngine->get_position_delta(to_radians(mBody.get_rotation()));
 }
+
+float Tank::get_current_speed() { return mEngine->get_current_speed(); }
 
 void Tank::update_shot() {
   auto now = std::chrono::system_clock::now();

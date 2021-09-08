@@ -3,6 +3,7 @@ set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 project(TankBotFight)
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CTest)
 
@@ -19,6 +20,7 @@ add_library(tank_bot_fight_lib STATIC
     src/TextureStore.cpp
     src/Obstacle.cpp
     src/Random.cpp
+    src/SquareRootEngine.cpp
 )
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)

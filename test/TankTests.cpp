@@ -3,7 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
+#include "SquareRootEngine.hpp"
 #include "Tank.hpp"
+#include "TestUtility.hpp"
+#include "gmock/gmock.h"
+#include "utility.hpp"
 
 static sf::Texture create_dummy_texture() {
   sf::Texture dummy;
@@ -11,106 +15,68 @@ static sf::Texture create_dummy_texture() {
   return dummy;
 }
 
-struct TankTest : ::testing::Test {
-  TankTest()
-      : mBody(create_dummy_texture()),
-        mTower(create_dummy_texture()),
-        mShot(create_dummy_texture()),
-        mTank(0, 0, mBody, mTower, mShot) {}
-
-  sf::Texture mBody;
-  sf::Texture mTower;
-  sf::Texture mShot;
-  Tank mTank;
+struct EngineMock : Engine {
+  MOCK_METHOD(void, set_gear, (Gear), (override));
+  MOCK_METHOD(float, get_current_speed, (), (const, override));
+  MOCK_METHOD(sf::Vector2f, get_position_delta, (float), (override));
+  MOCK_METHOD(std::unique_ptr<Engine>, copy, (), (const, override));
+  MOCK_METHOD(void, update, (), (override));
 };
 
-void expect_vec2f_eq(const sf::Vector2f& lhs, const sf::Vector2f& rhs) {
-  const auto [x1, y1] = lhs;
-  const auto [x2, y2] = rhs;
-  EXPECT_NEAR(x1, x2, 0.0001);
-  EXPECT_NEAR(y1, y2, 0.0001);
+struct TankTest : ::testing::Test {
+  sf::Texture mBody{create_dummy_texture()};
+  sf::Texture mTower{create_dummy_texture()};
+  sf::Texture mShot{create_dummy_texture()};
+  std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
+      std::make_unique<testing::NiceMock<EngineMock>>()};
+  std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
+      std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
+  Tank mTankSUT{create_tank(std::move(mEngine))};
+
+  float mSpeed{1.f};
+  int mAngle{90};
+
+  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
+    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+  }
+
+  Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
+    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+  }
+};
+
+TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithAngleRotation) {
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(mAngle)));
+  mTankSUT.set_rotation(mAngle);
+
+  mTankSUT.update();
 }
 
-TEST_F(TankTest, SetSpeed_ShouldMoveUp) {
-  expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {0.f, -10.f});
+TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
+  const sf::Vector2f expectedPosition = {0.f, 10.f};
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expectedPosition));
+
+  mTankSUT.update();
+
+  expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
 }
 
-TEST_F(TankTest, Rotate90Degree_ShouldMoveRight) {
-  mTank.set_rotation(90);
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {10.f, 0.f});
-}
+TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum) {
+  const sf::Vector2f singleMove = {3.f, -7.f};
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(singleMove));
+  const int updateCount = 3;
+  const sf::Vector2f expectedPosition = {9.f, -21.f};
 
-TEST_F(TankTest, Rotate180Degree_ShouldMoveDown) {
-  mTank.set_rotation(180);
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {0.f, 10.f});
-}
+  update_many(mTankSUT, updateCount);
 
-TEST_F(TankTest, Rotate270Degree_ShouldMoveLeft) {
-  mTank.set_rotation(270);
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {-10.f, 0.f});
-}
-
-TEST_F(TankTest, MoveUpAndDown_ShouldReturnSamePos) {
-  expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  mTank.set_current_speed(-10.0f);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
-}
-
-TEST_F(TankTest, MoveTurn180Move_ShouldReturn) {
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-
-  mTank.set_rotation(180);
-  mTank.update();
-  expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
-}
-
-TEST_F(TankTest, MoveSquare_ShouldReturnToStart) {
-  mTank.set_current_speed(10.0f);
-  mTank.update();
-  mTank.set_rotation(90);
-  mTank.update();
-  mTank.set_rotation(180);
-  mTank.update();
-  mTank.set_rotation(270);
-  mTank.update();
-
-  expect_vec2f_eq(mTank.get_position(), {0.f, 0.f});
+  expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
 }
 
 TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
-  mTank.set_current_speed(10.0f);
-  mTank.rotate_tower(Rotation::Clockwise);
-  mTank.update();
-  mTank.rotate_tower(Rotation::Counterclockwise);
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(mAngle)));
+  mTankSUT.set_rotation(mAngle);
 
-  expect_vec2f_eq(mTank.get_position(), {0.f, -10.f});
-}
-
-TEST_F(TankTest, RotateBody_ShouldAffectMoving) {
-  mTank.set_current_speed(10.0f);
-  mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.update();
-  mTank.set_current_speed(-10.0f);
-  mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.update();
-  mTank.set_current_speed(10.0f);
-  mTank.rotate_body(Rotation::Counterclockwise);
-  mTank.update();
-
-  const auto [x, y] = mTank.get_position();
-  EXPECT_PRED_FORMAT2(testing::FloatLE, x, 0.f);
-  EXPECT_PRED_FORMAT2(testing::FloatLE, -10.f, y);
+  mTankSUT.rotate_tower(Rotation::Clockwise);
+  mTankSUT.rotate_tower(Rotation::Clockwise);
+  mTankSUT.update();
 }
