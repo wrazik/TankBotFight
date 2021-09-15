@@ -22,7 +22,9 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture,
+  auto& tracks_t = mStore.get_texture("tracksSmall.png");
+  tracks_t.setSmooth(true);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_t,
                    std::make_unique<SquareRootEngine>(70, 5));
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));

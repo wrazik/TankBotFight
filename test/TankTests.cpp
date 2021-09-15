@@ -27,6 +27,7 @@ struct TankTest : ::testing::Test {
   sf::Texture mBody{create_dummy_texture()};
   sf::Texture mTower{create_dummy_texture()};
   sf::Texture mShot{create_dummy_texture()};
+  sf::Texture mTracks{create_dummy_texture()};
   std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
@@ -37,11 +38,11 @@ struct TankTest : ::testing::Test {
   int mAngle{90};
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+    return Tank(0, 0, mBody, mTower, mShot, mTracks, std::move(engine));
   }
 
   Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+    return Tank(0, 0, mBody, mTower, mShot, mTracks, std::move(engine));
   }
 };
 

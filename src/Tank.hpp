@@ -1,9 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <chrono>
 #include <memory>
-
+#include <deque>
+#include <tuple>
 #include "TextureStore.hpp"
 
 enum class Rotation { None, Clockwise, Counterclockwise };
@@ -20,6 +22,7 @@ class TankPart {
   void set_rotation(const int angle);
   void draw(sf::RenderWindow& window, const float x, const float y);
   float get_rotation() const;
+  sf::Sprite& get_sprite();
   void update();
 
  private:
@@ -30,7 +33,7 @@ class TankPart {
 class Tank {
  public:
   Tank() = delete;
-  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
+  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot, sf::Texture& tracks,
        std::unique_ptr<Engine>&& engine);
   Tank(const Tank&);
   Tank(Tank&&) = default;
@@ -55,9 +58,13 @@ class Tank {
   inline constexpr static float M_SPEED = 0.01f;
   void update_shot();
   void update_position();
+  void update_track_animations();
   void draw_shot(sf::RenderWindow& draw);
+  void draw_tracks(sf::RenderWindow& draw);
 
   sf::Vector2f mPos;
+  // we do not want duplicates in deque
+  std::deque<std::tuple<sf::Vector2f, float, sf::Rect<int>>> mTracksAnimations{};
   float mCurrentSpeed = 0.0f;
   std::chrono::system_clock::time_point mShotStart;
   bool mDrawShot = false;
@@ -65,5 +72,6 @@ class Tank {
   TankPart mBody;
   TankPart mTower;
   TankPart mShot;
+  TankPart mTracks;
   std::unique_ptr<Engine> mEngine;
 };
