@@ -22,6 +22,7 @@ add_executable(run_tests
   TextureStoreTests.cpp
   SquareRootEngineTests.cpp
   TestUtility.cpp
+  UtilityTests.cpp
 )
 
 target_include_directories(run_tests PRIVATE
