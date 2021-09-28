@@ -23,6 +23,7 @@ add_executable(run_tests
   SquareRootEngineTests.cpp
   TestUtility.cpp
   UtilityTests.cpp
+  TracesHandlerTests.cpp
 )
 
 target_include_directories(run_tests PRIVATE

@@ -101,8 +101,6 @@ void Tank::set_rotation(const int angle) {
 sf::Vector2f Tank::get_position() { return mPos; }
 
 void Tank::update() {
-  update_track_animations();
-
   mBody.update();
   mTower.update();
   mShot.update();
@@ -132,7 +130,6 @@ void Tank::update_track_animations() {
   } else {
     // update existing texture height
     // update animation starting position
-
   }
 }
 
@@ -158,22 +155,11 @@ void Tank::shot() {
 float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
 
 void Tank::draw(sf::RenderWindow &window) {
-  // sf::Vector2f positionDelta{};
-  // for (int i = 1; i < mPositionSnapshots.size(); i++) {
-  //   positionDelta += abs(mPositionSnapshots[i - 1].first - mPos);
-  //   // direction change
-  //   if (mPositionSnapshots[i - 1].second != mPositionSnapshots[i].second) {
-  //     positionDelta = abs(mPositionSnapshots[i - 1].first - mPos);
-  //   }
-  //   mTracks.setRotation(angle);
-  //   // window.draw(mTracks);
-  // }
   mBody.draw(window, mPos.x, mPos.y);
   mTower.draw(window, mPos.x, mPos.y);
   if (mDrawShot) {
     draw_shot(window);
   }
-  draw_tracks(window);
 }
 
 void Tank::draw_shot(sf::RenderWindow &window) {
@@ -186,35 +172,4 @@ void Tank::draw_shot(sf::RenderWindow &window) {
   mShot.draw(window, shotAnimationPosition.x, shotAnimationPosition.y);
 }
 
-void Tank::draw_tracks(sf::RenderWindow &window) {
-  // auto getTracksAnimations = [this]() {
-  //   std::tuple<sf::Vector2f, float, sf::Rect<int>> posAngleRect{};
-  //   std::vector<std::tuple<sf::Vector2f, float, sf::Rect<int>>> tracksAnimations{};
-  //   auto start = this->mPositionSnapshots.begin();
-  //   while (start != this->mPositionSnapshots.end()) {
-  //     const auto end = std::adjacent_find(
-  //         start, this->mPositionSnapshots.end(),
-  //         [](const auto &lhs, const auto &rhs) { return lhs.second != rhs.second; });
-  //     auto &[startPos, startAngle] = *start;
-  //     const float distance = hypot(startPos - end->first);
-  //     const auto &[x, y, width, height] = this->mTracks.get_sprite().getTextureRect();
-  //     for (int i = 0; i < distance / height; ++i) {
-  //       // dodajemy elementy ale przesuwamy pozycje
-  //       tracksAnimations.emplace_back(
-  //           std::make_tuple(startPos, start->second, sf::Rect{x, y, width, height}));
-  //       startPos = get_pos(startPos, height, startAngle);
-  //     }
-  //     tracksAnimations.emplace_back(std::make_tuple(
-  //         startPos, startAngle, sf::Rect{x, y, width, static_cast<int>(distance) % height}));
-
-  //     start = end;
-  //   }
-
-  //   return std::vector{posAngleRect};
-  // };
-  for (const auto &[pos, angle, rect] : mTracksAnimations) {
-    mTracks.set_rotation(angle);
-    mTracks.get_sprite().setTextureRect(rect);
-    mTracks.draw(window, pos.x, pos.y);
-  }
-}
+void Tank::draw_tracks(sf::RenderWindow &window) {}
