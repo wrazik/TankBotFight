@@ -6,10 +6,11 @@
 class TracesHandler {
   sf::Texture& mTracks;
   std::deque<sf::Sprite> mTraces{};
-  sf::Vector2f mStartingPosition{};
+  sf::Sprite& mTankSprite;
+  sf::Vector2f mLastTankPos{};
 
  public:
-  TracesHandler(sf::Texture& tracks, const sf::Vector2f& pos);
-  void update(const sf::Vector2f& move);
+  TracesHandler(sf::Texture& tracks, sf::Sprite& tankSprite);
+  void update();
   const std::deque<sf::Sprite>& getTraces();
 };
