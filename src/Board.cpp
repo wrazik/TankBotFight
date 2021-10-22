@@ -22,9 +22,9 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto& tracks_t = mStore.get_texture("tracksSmall.png");
-  tracks_t.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_t,
+  auto& tracks_texture = mStore.get_texture("tracksSmall.png");
+  tracks_texture.setSmooth(true);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_texture,
                    std::make_unique<SquareRootEngine>(70, 5));
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));
@@ -39,7 +39,12 @@ void Board::fire_missle(const int angle, const float x, const float y) {
 
 void Board::run() {
   KeyboardController keyboard_controller(mTanks[0], *this);
-
+  auto& tracks_texture = mStore.get_texture("tracksSmall.png");
+  tracks_texture.setSmooth(true);
+  sf::Sprite tracks(tracks_texture);
+  tracks.setPosition(100.f, 100.f);
+  tracks.setRotation(180.f);
+  int texHeight = 30;
   while (mWindow.isOpen()) {
     sf::Event event;
     while (mWindow.pollEvent(event)) {
@@ -49,6 +54,9 @@ void Board::run() {
 
       if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
         mWindow.close();
+      }
+      if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::J) {
+        texHeight = (texHeight + 1) % 52;
       }
       keyboard_controller.update(event);
     }
@@ -64,6 +72,8 @@ void Board::run() {
     for (auto& missle : mMissles) {
       missle.draw(mWindow);
     }
+    tracks.setTextureRect({0, 0, 37, texHeight});
+    mWindow.draw(tracks);
     display_speed();
     remove_missles();
     mWindow.display();

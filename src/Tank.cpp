@@ -9,12 +9,14 @@
 #include "Engine.hpp"
 #include "Size.hpp"
 #include "TextureStore.hpp"
+#include "TracesHandler.hpp"
 #include "utility.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
   mSprite.setOrigin(width / 2.f, height / 2.f);
+  std::cout << "TANKPART::TANKPART SPRITE ADDRESS: " << &mSprite << "\n";
 }
 
 void TankPart::rotate(const Rotation r) { mRotation = r; }
@@ -24,6 +26,8 @@ void TankPart::set_rotation(const int angle) { mSprite.setRotation(angle); }
 float TankPart::get_rotation() const { return mSprite.getRotation(); }
 
 sf::Sprite &TankPart::get_sprite() { return mSprite; }
+
+const sf::Sprite &TankPart::get_sprite() const { return mSprite; }
 
 void TankPart::update() {
   switch (mRotation) {
@@ -50,20 +54,46 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
       mTower(tower),
       mShot(shot),
       mTracks(tracks),
-      mEngine(std::move(engine)) {
+      mEngine(std::move(engine)),
+      mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos)) {
+  std::cout << "TANK::TANK BODY SPRITE ADDRESS: " << &mBody.get_sprite() << "\n";
+  std::cout << "TANK::TANK TANK ADDRESS: " << this << "\n";
   mTower.set_rotation(180);
   mShot.set_rotation(180);
 }
 
 Tank::Tank(const Tank &rhs)
     : mPos(rhs.mPos),
+      mCurrentSpeed(rhs.mCurrentSpeed),
+      mShotStart(rhs.mShotStart),
+      mDrawShot(rhs.mDrawShot),
       mBody(rhs.mBody),
       mTower(rhs.mTower),
       mShot(rhs.mShot),
       mTracks(rhs.mTracks),
-      mEngine(rhs.mEngine->copy()) {}
+      mEngine(rhs.mEngine->copy()),
+      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos)) {
+  std::cout << "TANK copy constructor\n";
+}
+
+Tank::Tank(Tank &&rhs)
+    : mPos(std::move(rhs.mPos)),
+      mCurrentSpeed(std::move(rhs.mCurrentSpeed)),
+      mShotStart(std::move(rhs.mShotStart)),
+      mDrawShot(std::move(rhs.mDrawShot)),
+      mBody(std::move(rhs.mBody)),
+      mTower(std::move(rhs.mTower)),
+      mShot(std::move(rhs.mShot)),
+      mTracks(std::move(rhs.mTracks)),
+      mEngine(std::move(rhs.mEngine)),
+      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos)) {
+        std::cout << "TANK::TANK MOVE CTOR BODY ADDRESS: " << &mBody.get_sprite() << "\n";
+        std::cout << "TANK::TANK MOVE CTOR TANK ADDRESS: " << this << "\n";
+      }
 
 Tank &Tank::operator=(const Tank &rhs) {
+  std::cout << "TANK copy operator=\n";
+
   if (this == &rhs) {
     return *this;
   }
@@ -76,6 +106,24 @@ Tank &Tank::operator=(const Tank &rhs) {
   mShot = rhs.mShot;
   mTracks = rhs.mTracks;
   mEngine = rhs.mEngine->copy();
+  mTracesHandler = std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
+  return *this;
+}
+
+Tank &Tank::operator=(Tank &&rhs) {
+  if (this == &rhs) {
+    return *this;
+  }
+  mPos = std::move(rhs.mPos);
+  mCurrentSpeed = std::move(rhs.mCurrentSpeed);
+  mShotStart = std::move(rhs.mShotStart);
+  mDrawShot = std::move(rhs.mDrawShot);
+  mBody = std::move(rhs.mBody);
+  mTower = std::move(rhs.mTower);
+  mShot = std::move(rhs.mShot);
+  mTracks = std::move(rhs.mTracks);
+  mEngine = std::move(rhs.mEngine);
+  mTracesHandler = std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
   return *this;
 }
 
@@ -105,36 +153,19 @@ void Tank::update() {
   mTower.update();
   mShot.update();
   mEngine->update();
-
   update_position();
+  // std::cout << "TANK::UPDATE TANK POSITION: ";
+  // print_point(mBody.get_sprite().getPosition());
+  mTracesHandler->update();
+
   update_shot();
-}
-
-void Tank::update_track_animations() {
-  auto add_new_animation = [this](const sf::IntRect &texture_rect) {
-    mTracksAnimations.emplace_back(std::make_tuple(mPos, mBody.get_rotation(), texture_rect));
-  };
-
-  const auto &[x, y, width, height] = mTracks.get_sprite().getTextureRect();
-  const float distance = hypot(mEngine->get_position_delta(to_radians(mBody.get_rotation())));
-  if (mTracksAnimations.empty()) {
-    add_new_animation(sf::Rect{x, y, width, static_cast<int>(distance)});
-    return;
-  }
-  const auto &[newestPos, newestAngle, newestRect] = mTracksAnimations.back();
-  if (mBody.get_rotation() != newestAngle) {
-    add_new_animation(sf::Rect{x, y, width, static_cast<int>(distance)});
-  } else if (newestRect.height + distance > height) {
-    std::get<2>(mTracksAnimations.back()) = sf::Rect{x, y, width, height};
-    add_new_animation(sf::Rect{x, y, width, static_cast<int>(distance) % height});
-  } else {
-    // update existing texture height
-    // update animation starting position
-  }
 }
 
 void Tank::update_position() {
   mPos += mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  mBody.get_sprite().setPosition(mPos);
+  mTower.get_sprite().setPosition(mPos);
+  mShot.get_sprite().setPosition(mPos);
 }
 
 void Tank::update_shot() {
@@ -160,6 +191,7 @@ void Tank::draw(sf::RenderWindow &window) {
   if (mDrawShot) {
     draw_shot(window);
   }
+  draw_tracks(window);
 }
 
 void Tank::draw_shot(sf::RenderWindow &window) {
@@ -172,4 +204,8 @@ void Tank::draw_shot(sf::RenderWindow &window) {
   mShot.draw(window, shotAnimationPosition.x, shotAnimationPosition.y);
 }
 
-void Tank::draw_tracks(sf::RenderWindow &window) {}
+void Tank::draw_tracks(sf::RenderWindow &window) {
+  for (const auto &sprite : mTracesHandler->getTraces()) {
+    window.draw(sprite);
+  }
+}
