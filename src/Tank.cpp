@@ -58,8 +58,11 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
       mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos)) {
   std::cout << "TANK::TANK BODY SPRITE ADDRESS: " << &mBody.get_sprite() << "\n";
   std::cout << "TANK::TANK TANK ADDRESS: " << this << "\n";
-  mTower.set_rotation(180);
-  mShot.set_rotation(180);
+  set_rotation(180);
+  mBody.get_sprite().setPosition(mPos);
+  mTower.get_sprite().setPosition(mPos);
+  mShot.get_sprite().setPosition(mPos);
+
 }
 
 Tank::Tank(const Tank &rhs)
@@ -153,6 +156,7 @@ void Tank::update() {
   mTower.update();
   mShot.update();
   mEngine->update();
+  // we have a position update; however tank elements are not yet updated
   update_position();
   // std::cout << "TANK::UPDATE TANK POSITION: ";
   // print_point(mBody.get_sprite().getPosition());
@@ -162,7 +166,9 @@ void Tank::update() {
 }
 
 void Tank::update_position() {
-  mPos += mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  const auto& delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  mPos += delta;
+  
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
   mShot.get_sprite().setPosition(mPos);

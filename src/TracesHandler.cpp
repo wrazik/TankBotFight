@@ -23,14 +23,14 @@ sf::Vector2f getMiddleBotTransform(const sf::Sprite& sprite, const float additio
   return sprite.getTransform().transformPoint({width / 2, height + additional_value});
 }
 
-bool TracesHandler::is_move_zero() const {
-  return equal(mTankSprite.getPosition(), mLastTankPos);
-}
+bool TracesHandler::is_move_zero() const { return equal(mTankSprite.getPosition(), mLastTankPos); }
 
-TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tankSprite, const sf::Vector2f& startingPosition)
-    : mTracksTexture(texture), mTankSprite(tankSprite), mLastTankPos(startingPosition), mMaxTextureHeight(mTracksTexture.getSize().y - 4) {
-    }
-
+TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tankSprite,
+                             const sf::Vector2f& startingPosition)
+    : mTracksTexture(texture),
+      mTankSprite(tankSprite),
+      mLastTankPos(startingPosition),
+      mMaxTextureHeight(mTracksTexture.getSize().y - 4) {}
 
 int TracesHandler::get_texture_height(const float move_distance) {
   mTextureHeight += move_distance;
@@ -40,11 +40,12 @@ int TracesHandler::get_texture_height(const float move_distance) {
 }
 
 bool TracesHandler::is_moving_forward(const sf::Vector2f& move) const {
-  return equal(get_angle(move), mTankSprite.getRotation()); 
+  return equal(get_angle(move), mTankSprite.getRotation(), 1.0);
 }
 
 void TracesHandler::update() {
   if (is_move_zero()) {
+    mLastTankPos = mTankSprite.getPosition();
     return;
   }
   // print_point(move);
@@ -64,16 +65,19 @@ void TracesHandler::update() {
   }
   sprite.setRotation(moveAngle);
   // this depends whether tank moves forward or backward
+  std::cout << "body rotation: " << mTankSprite.getRotation() << "\n";
+  std::cout << "move angle: " << get_angle(move) << "\n";
   if (is_moving_forward(move)) {
     sprite.setPosition(getMiddleBotTransform(mTankSprite, moveDistance));
   } else {
     std::cout << "is not moving forward\n";
     sprite.setPosition(getMiddleTopTransform(mTankSprite, -moveDistance));
   }
+  std::cout << "-------------------\n";
   setSpriteTextureHeight(sprite, texture_height);
-  //default; should be done if none of the conditions is true!
-  //the same angle; increase the sprite height accordingly
-  if (!mTraces.empty() && equal(mTraces.back().getRotation(), moveAngle)) {
+  // default; should be done if none of the conditions is true!
+  // the same angle; increase the sprite height accordingly
+  if (!mTraces.empty() && equal(mTraces.back().getRotation(), moveAngle, 1.0)) {
     // std::cout << "the same angle\n";
     sf::Sprite& trace = mTraces.back();
     const auto traceRect = trace.getTextureRect();
@@ -82,14 +86,18 @@ void TracesHandler::update() {
       int newTrackHeight = texture_height - (mMaxTextureHeight - traceRect.height);
       setSpriteTextureHeight(trace, mMaxTextureHeight);
       setSpriteTextureHeight(sprite, newTrackHeight);
-      sprite.setPosition(getMiddleBotTransform(mTankSprite, newTrackHeight));
+      if (is_moving_forward(move)) {
+        sprite.setPosition(getMiddleBotTransform(mTankSprite, newTrackHeight));
+      } else {
+        sprite.setPosition(getMiddleTopTransform(mTankSprite, -newTrackHeight));
+      }
     } else {
       increaseSpriteHeight(trace, texture_height);
-        DISTANCE_TRAVELLED += moveDistance;
-        TOTAL_TEXTURE_HEIGHT += texture_height;
-        // std::cout << "total distance: " << DISTANCE_TRAVELLED << "\n";
-        // std::cout << "texture height: " << TOTAL_TEXTURE_HEIGHT << "\n";
-        // std::cout << "----------------------------------\n";
+      DISTANCE_TRAVELLED += moveDistance;
+      TOTAL_TEXTURE_HEIGHT += texture_height;
+      // std::cout << "total distance: " << DISTANCE_TRAVELLED << "\n";
+      // std::cout << "texture height: " << TOTAL_TEXTURE_HEIGHT << "\n";
+      // std::cout << "----------------------------------\n";
       return;
     }
   }
