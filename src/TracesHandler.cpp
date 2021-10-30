@@ -23,6 +23,8 @@ sf::Vector2f getMiddleBotTransform(const sf::Sprite& sprite, const float additio
   return sprite.getTransform().transformPoint({width / 2, height + additional_value});
 }
 
+float TracesHandler::get_max_texture_height() const { return mMaxTextureHeight; }
+
 bool TracesHandler::is_move_zero() const { return equal(mTankSprite.getPosition(), mLastTankPos); }
 
 TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tankSprite,
@@ -48,10 +50,6 @@ void TracesHandler::update() {
     mLastTankPos = mTankSprite.getPosition();
     return;
   }
-  // print_point(move);
-  // if (mTraces.size() > tracesCount) {
-  //   mTraces.pop_front();
-  // }
   const auto& move = mTankSprite.getPosition() - mLastTankPos;
   mLastTankPos = mTankSprite.getPosition();
   const float moveDistance = hypot(move);
@@ -64,24 +62,15 @@ void TracesHandler::update() {
     moveAngle = 360.f + moveAngle;
   }
   sprite.setRotation(moveAngle);
-  // this depends whether tank moves forward or backward
-  std::cout << "body rotation: " << mTankSprite.getRotation() << "\n";
-  std::cout << "move angle: " << get_angle(move) << "\n";
   if (is_moving_forward(move)) {
     sprite.setPosition(getMiddleBotTransform(mTankSprite, moveDistance));
   } else {
-    std::cout << "is not moving forward\n";
     sprite.setPosition(getMiddleTopTransform(mTankSprite, -moveDistance));
   }
-  std::cout << "-------------------\n";
   setSpriteTextureHeight(sprite, texture_height);
-  // default; should be done if none of the conditions is true!
-  // the same angle; increase the sprite height accordingly
   if (!mTraces.empty() && equal(mTraces.back().getRotation(), moveAngle, 1.0)) {
-    // std::cout << "the same angle\n";
     sf::Sprite& trace = mTraces.back();
     const auto traceRect = trace.getTextureRect();
-    // if current move distance would overrun max texture height
     if (texture_height + traceRect.height > mMaxTextureHeight) {
       int newTrackHeight = texture_height - (mMaxTextureHeight - traceRect.height);
       setSpriteTextureHeight(trace, mMaxTextureHeight);
@@ -95,9 +84,6 @@ void TracesHandler::update() {
       increaseSpriteHeight(trace, texture_height);
       DISTANCE_TRAVELLED += moveDistance;
       TOTAL_TEXTURE_HEIGHT += texture_height;
-      // std::cout << "total distance: " << DISTANCE_TRAVELLED << "\n";
-      // std::cout << "texture height: " << TOTAL_TEXTURE_HEIGHT << "\n";
-      // std::cout << "----------------------------------\n";
       return;
     }
   }

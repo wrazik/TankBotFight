@@ -9,8 +9,6 @@
 #include "gmock/gmock.h"
 #include "utility.hpp"
 
-
-
 struct EngineMock : Engine {
   MOCK_METHOD(void, set_gear, (Gear), (override));
   MOCK_METHOD(float, get_current_speed, (), (const, override));

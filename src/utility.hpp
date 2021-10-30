@@ -2,6 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <iostream>
+
 #include "Size.hpp"
 
 constexpr inline double to_radians(double degrees) { return pi / 180.f * degrees; }
@@ -37,4 +38,3 @@ inline float get_angle(const sf::Vector2f& vec) {
   }
   return degrees;
 }
-

@@ -62,7 +62,6 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
   mShot.get_sprite().setPosition(mPos);
-
 }
 
 Tank::Tank(const Tank &rhs)
@@ -75,7 +74,8 @@ Tank::Tank(const Tank &rhs)
       mShot(rhs.mShot),
       mTracks(rhs.mTracks),
       mEngine(rhs.mEngine->copy()),
-      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos)) {
+      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(),
+                                                     mBody.get_sprite(), mPos)) {
   std::cout << "TANK copy constructor\n";
 }
 
@@ -89,10 +89,11 @@ Tank::Tank(Tank &&rhs)
       mShot(std::move(rhs.mShot)),
       mTracks(std::move(rhs.mTracks)),
       mEngine(std::move(rhs.mEngine)),
-      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos)) {
-        std::cout << "TANK::TANK MOVE CTOR BODY ADDRESS: " << &mBody.get_sprite() << "\n";
-        std::cout << "TANK::TANK MOVE CTOR TANK ADDRESS: " << this << "\n";
-      }
+      mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(),
+                                                     mBody.get_sprite(), mPos)) {
+  std::cout << "TANK::TANK MOVE CTOR BODY ADDRESS: " << &mBody.get_sprite() << "\n";
+  std::cout << "TANK::TANK MOVE CTOR TANK ADDRESS: " << this << "\n";
+}
 
 Tank &Tank::operator=(const Tank &rhs) {
   std::cout << "TANK copy operator=\n";
@@ -109,7 +110,8 @@ Tank &Tank::operator=(const Tank &rhs) {
   mShot = rhs.mShot;
   mTracks = rhs.mTracks;
   mEngine = rhs.mEngine->copy();
-  mTracesHandler = std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
+  mTracesHandler =
+      std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
   return *this;
 }
 
@@ -126,7 +128,8 @@ Tank &Tank::operator=(Tank &&rhs) {
   mShot = std::move(rhs.mShot);
   mTracks = std::move(rhs.mTracks);
   mEngine = std::move(rhs.mEngine);
-  mTracesHandler = std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
+  mTracesHandler =
+      std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(), mBody.get_sprite(), mPos);
   return *this;
 }
 
@@ -166,9 +169,9 @@ void Tank::update() {
 }
 
 void Tank::update_position() {
-  const auto& delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  const auto &delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
   mPos += delta;
-  
+
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
   mShot.get_sprite().setPosition(mPos);

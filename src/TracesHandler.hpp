@@ -17,8 +17,10 @@ class TracesHandler {
   int get_texture_height(const float);
   bool is_move_zero() const;
   bool is_moving_forward(const sf::Vector2f&) const;
+
  public:
-  TracesHandler(const sf::Texture& tracks, sf::Sprite& tankSprite, const sf::Vector2f& startingPosition);
+  TracesHandler(const sf::Texture& tracks, sf::Sprite& tankSprite,
+                const sf::Vector2f& startingPosition);
   TracesHandler(const TracesHandler&) = delete;
   TracesHandler(TracesHandler&&) = delete;
   TracesHandler& operator=(const TracesHandler&) = delete;
@@ -26,4 +28,5 @@ class TracesHandler {
   ~TracesHandler() = default;
   void update();
   const std::deque<sf::Sprite>& getTraces() const;
+  float get_max_texture_height() const;
 };

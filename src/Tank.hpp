@@ -3,9 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <chrono>
-#include <memory>
 #include <deque>
+#include <memory>
 #include <tuple>
+
 #include "TextureStore.hpp"
 #include "TracesHandler.hpp"
 
@@ -36,8 +37,8 @@ class TankPart {
 class Tank {
  public:
   Tank() = delete;
-  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot, sf::Texture& tracks,
-       std::unique_ptr<Engine>&& engine);
+  Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
+       sf::Texture& tracks, std::unique_ptr<Engine>&& engine);
   Tank(const Tank&);
   Tank(Tank&&);
   Tank& operator=(const Tank&);
