@@ -16,7 +16,6 @@ TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
   mSprite.setOrigin(width / 2.f, height / 2.f);
-  std::cout << "TANKPART::TANKPART SPRITE ADDRESS: " << &mSprite << "\n";
 }
 
 void TankPart::rotate(const Rotation r) { mRotation = r; }
@@ -56,8 +55,6 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
       mTracks(tracks),
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos)) {
-  std::cout << "TANK::TANK BODY SPRITE ADDRESS: " << &mBody.get_sprite() << "\n";
-  std::cout << "TANK::TANK TANK ADDRESS: " << this << "\n";
   set_rotation(180);
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
@@ -75,9 +72,7 @@ Tank::Tank(const Tank &rhs)
       mTracks(rhs.mTracks),
       mEngine(rhs.mEngine->copy()),
       mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(),
-                                                     mBody.get_sprite(), mPos)) {
-  std::cout << "TANK copy constructor\n";
-}
+                                                     mBody.get_sprite(), mPos)) {}
 
 Tank::Tank(Tank &&rhs)
     : mPos(std::move(rhs.mPos)),
@@ -90,14 +85,9 @@ Tank::Tank(Tank &&rhs)
       mTracks(std::move(rhs.mTracks)),
       mEngine(std::move(rhs.mEngine)),
       mTracesHandler(std::make_unique<TracesHandler>(*mTracks.get_sprite().getTexture(),
-                                                     mBody.get_sprite(), mPos)) {
-  std::cout << "TANK::TANK MOVE CTOR BODY ADDRESS: " << &mBody.get_sprite() << "\n";
-  std::cout << "TANK::TANK MOVE CTOR TANK ADDRESS: " << this << "\n";
-}
+                                                     mBody.get_sprite(), mPos)) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
-  std::cout << "TANK copy operator=\n";
-
   if (this == &rhs) {
     return *this;
   }
@@ -133,6 +123,8 @@ Tank &Tank::operator=(Tank &&rhs) {
   return *this;
 }
 
+Tank::~Tank() = default;
+
 void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
 void Tank::rotate_body(Rotation r) {
@@ -159,12 +151,8 @@ void Tank::update() {
   mTower.update();
   mShot.update();
   mEngine->update();
-  // we have a position update; however tank elements are not yet updated
   update_position();
-  // std::cout << "TANK::UPDATE TANK POSITION: ";
-  // print_point(mBody.get_sprite().getPosition());
   mTracesHandler->update();
-
   update_shot();
 }
 
@@ -214,7 +202,7 @@ void Tank::draw_shot(sf::RenderWindow &window) {
 }
 
 void Tank::draw_tracks(sf::RenderWindow &window) {
-  for (const auto &sprite : mTracesHandler->getTraces()) {
+  for (const auto &sprite : mTracesHandler->get_traces()) {
     window.draw(sprite);
   }
 }

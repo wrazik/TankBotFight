@@ -8,7 +8,6 @@
 #include <tuple>
 
 #include "TextureStore.hpp"
-#include "TracesHandler.hpp"
 
 enum class Rotation { None, Clockwise, Counterclockwise };
 inline constexpr int shotAnimationDistance = 30;
@@ -19,7 +18,7 @@ class Engine;
 enum class Gear;
 class TankPart {
  public:
-  TankPart(sf::Texture& texture);
+  explicit TankPart(sf::Texture& texture);
 
   void rotate(const Rotation r);
   void set_rotation(const int angle);
@@ -43,7 +42,7 @@ class Tank {
   Tank(Tank&&);
   Tank& operator=(const Tank&);
   Tank& operator=(Tank&&);
-  ~Tank() = default;
+  ~Tank();
 
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);

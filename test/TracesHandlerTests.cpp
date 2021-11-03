@@ -41,7 +41,7 @@ TEST_P(TracesHandlerRotationTest, GivenMove_ThenTraceShouldHaveOppositeRotation)
 
   mTankSprite.move(move);
   mHandler.update();
-  const auto& actual_traces = mHandler.getTraces();
+  const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
   EXPECT_NEAR(expected_rotation, get_trace_rotation(actual_traces, 0), precision);
@@ -63,7 +63,7 @@ TEST_P(TracesHandlerTextureHeightTest, GivenMove_ThenTraceShouldHaveHeightEqualT
 
   mTankSprite.move(move);
   mHandler.update();
-  const auto& actual_traces = mHandler.getTraces();
+  const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
   EXPECT_NEAR(expected_height, get_trace_height(actual_traces, 0), precision);
@@ -79,7 +79,7 @@ INSTANTIATE_TEST_CASE_P(TextureHeightTestsWithManyValues, TracesHandlerTextureHe
 class TracesHandlerTest : public BaseFixture, public ::testing::Test {};
 
 TEST_F(TracesHandlerTest, GivenFreshTracesHandler_ThenTracesShouldBeEmpty) {
-  auto actual_traces = mHandler.getTraces();
+  auto actual_traces = mHandler.get_traces();
 
   EXPECT_TRUE(actual_traces.empty());
 }
@@ -95,7 +95,7 @@ TEST_F(TracesHandlerTest,
   mTankSprite.move(move2);
   mHandler.update();
 
-  const auto& actual_traces = mHandler.getTraces();
+  const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
   EXPECT_EQ(expected_height, get_trace_height(actual_traces, 0));
@@ -117,7 +117,7 @@ TEST_F(TracesHandlerTest,
   mTankSprite.move(move3);
   mHandler.update();
 
-  const auto& actual_traces = mHandler.getTraces();
+  const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(3, actual_traces.size());
   EXPECT_EQ(expected_height1, get_trace_height(actual_traces, 0));
@@ -138,7 +138,7 @@ TEST_F(TracesHandlerTest,
   mTankSprite.move(move2);
   mHandler.update();
 
-  const auto& actual_traces = mHandler.getTraces();
+  const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(2, actual_traces.size());
   EXPECT_EQ(expected_height1, get_trace_height(actual_traces, 0));

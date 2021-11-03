@@ -9,6 +9,7 @@ constexpr inline double to_radians(double degrees) { return pi / 180.f * degrees
 constexpr inline double to_degrees(double radians) { return radians / pi * 180; }
 inline sf::Vector2f fabs(const sf::Vector2f& vec) { return {std::fabs(vec.x), std::fabs(vec.y)}; }
 inline float hypot(const sf::Vector2f& vec) { return std::hypot(vec.x, vec.y); }
+
 inline bool equal(float lhs, float rhs, float precision = 0.001f) {
   return std::fabs(lhs - rhs) < precision;
 }
