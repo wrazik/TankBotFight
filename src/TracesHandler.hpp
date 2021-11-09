@@ -3,22 +3,24 @@
 #include <SFML/System/Vector2.hpp>
 #include <deque>
 
+#include "Trace.hpp"
+
 class TracesHandler {
   const sf::Texture& mTracksTexture;
   sf::Sprite& mTankSprite;
-  std::deque<sf::Sprite> mTraces{};
+  std::deque<Trace> mTraces{};
+  std::deque<short> mTracesAge{};
   sf::Vector2f mLastTankPos{};
-  float mMaxTextureHeight{};
-  float mTextureHeight{};
+  int mMaxTextureHeight{};
 
-  bool is_move_zero() const;
-  int get_current_move_texture_height(const float);
+  void update_traces_age();
+  void decay_traces();
+  void add_trace(const Trace& sp);
+  void remove_trace();
   bool is_move_angle_changed(const sf::Vector2f& move) const;
-  float get_opposite_angle(const sf::Vector2f& move) const;
-  sf::Sprite get_sprite(const sf::Vector2f& move, const int sprite_height) const;
+  float get_opposite_angle(const float angle) const;
+  Trace make_trace(const sf::Vector2f& move) const;
   bool is_moving_forward(const sf::Vector2f&) const;
-  bool new_height_exceeds_max_height(const int sprite_height) const;
-  int get_new_trace_height(const int sprite_height) const;
 
  public:
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tankSprite,
@@ -29,7 +31,7 @@ class TracesHandler {
   TracesHandler& operator=(TracesHandler&&) = delete;
   ~TracesHandler() = default;
 
-  const std::deque<sf::Sprite>& get_traces() const;
+  std::deque<Trace> get_traces() const;
   float get_max_texture_height() const;
   void update();
 };
