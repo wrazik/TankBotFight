@@ -2,10 +2,6 @@
 
 #include "utility.hpp"
 
-constexpr short AGE_THRESHOLD = 70;
-constexpr float TRACE_DECAY_RATE = 0.1f;
-
-
 sf::Vector2f get_middle_top_transform(const sf::Sprite& sprite,
                                       const float additional_value = 0.f) {
   const auto& [left, top, width, height] = sprite.getLocalBounds();
@@ -19,16 +15,25 @@ sf::Vector2f get_middle_bot_transform(const sf::Sprite& sprite,
       {left + width / 2.f, top + height + additional_value});
 }
 
-TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tankSprite,
-                             const sf::Vector2f& startingPosition)
+TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tank_sprite,
+                             const sf::Vector2f& start_pos, const int max_trace_age,
+                             const float decay_rate)
     : mTracksTexture(texture),
-      mTankSprite(tankSprite),
-      mLastTankPos(startingPosition),
-      mMaxTextureHeight(mTracksTexture.getSize().y) {}
+      mTankSprite(tank_sprite),
+      mLastTankPos(start_pos),
+      mMaxTextureHeight(mTracksTexture.getSize().y),
+      mMaxTraceAge(max_trace_age),
+      mTraceDecayRate(decay_rate) {}
 
 float TracesHandler::get_max_texture_height() const { return mMaxTextureHeight; }
 
 std::deque<Trace> TracesHandler::get_traces() const { return mTraces; }
+
+const sf::Texture& TracesHandler::get_trace_texture() const { return mTracksTexture; }
+
+int TracesHandler::get_max_trace_age() const { return mMaxTraceAge; }
+
+float TracesHandler::get_trace_decay_rate() const { return mTraceDecayRate; }
 
 void TracesHandler::update() {
   const auto& move = mTankSprite.getPosition() - mLastTankPos;
@@ -47,7 +52,7 @@ void TracesHandler::update() {
 
 void TracesHandler::update_traces_age() {
   for (short& age : mTracesAge) {
-    if (age < 70) {
+    if (age < mMaxTraceAge) {
       age++;
     }
   }
@@ -57,10 +62,10 @@ void TracesHandler::decay_traces() {
   if (mTracesAge.size() <= 0) {
     return;
   }
-  if (mTracesAge.front() >= AGE_THRESHOLD) {
+  if (mTracesAge.front() >= mMaxTraceAge) {
     const float trace_height = mTraces.front().get_height();
-    const float decrease_by = std::min(TRACE_DECAY_RATE * mMaxTextureHeight, trace_height);
-    if (decrease_by < TRACE_DECAY_RATE * mMaxTextureHeight) {
+    const float decrease_by = std::min(mTraceDecayRate * mMaxTextureHeight, trace_height);
+    if (decrease_by < mTraceDecayRate * mMaxTextureHeight) {
       remove_trace();
       return;
     }

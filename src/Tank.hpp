@@ -37,7 +37,8 @@ class Tank {
  public:
   Tank() = delete;
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
-       sf::Texture& tracks, std::unique_ptr<Engine>&& engine);
+       sf::Texture& tracks, std::unique_ptr<Engine>&& engine, const int max_trace_age = 50,
+       const float trace_decay_rate = 0.1f);
   Tank(const Tank&);
   Tank(Tank&&);
   Tank& operator=(const Tank&);
@@ -72,7 +73,6 @@ class Tank {
   TankPart mBody;
   TankPart mTower;
   TankPart mShot;
-  TankPart mTracks;
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
 };

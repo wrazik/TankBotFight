@@ -12,6 +12,8 @@ class TracesHandler {
   std::deque<short> mTracesAge{};
   sf::Vector2f mLastTankPos{};
   int mMaxTextureHeight{};
+  int mMaxTraceAge{};
+  float mTraceDecayRate{};
 
   void update_traces_age();
   void decay_traces();
@@ -23,8 +25,8 @@ class TracesHandler {
   bool is_moving_forward(const sf::Vector2f&) const;
 
  public:
-  TracesHandler(const sf::Texture& tracks, sf::Sprite& tankSprite,
-                const sf::Vector2f& startingPosition);
+  TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
+                const int max_trace_age, const float decay_rate);
   TracesHandler(const TracesHandler&) = delete;
   TracesHandler(TracesHandler&&) = delete;
   TracesHandler& operator=(const TracesHandler&) = delete;
@@ -33,5 +35,8 @@ class TracesHandler {
 
   std::deque<Trace> get_traces() const;
   float get_max_texture_height() const;
+  const sf::Texture& get_trace_texture() const;
+  int get_max_trace_age() const;
+  float get_trace_decay_rate() const;
   void update();
 };

@@ -1,4 +1,5 @@
 #include "Trace.hpp"
+
 #include <cmath>
 
 Trace::Trace(const sf::Texture& tex, const sf::Vector2f& pos, const float angle,
@@ -38,12 +39,10 @@ void Trace::decrease_height(const float amount) {
 }
 
 float Trace::get_height() const {
-    return std::fabs((mVertices[0].position - mVertices[2].position).y);
+  return std::fabs((mVertices[0].position - mVertices[2].position).y);
 }
 
-float Trace::get_rotation() const {
-    return mRotation;
-}
+float Trace::get_rotation() const { return mRotation; }
 
 void Trace::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   states.texture = &mTexture;
