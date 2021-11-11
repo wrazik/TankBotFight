@@ -6,6 +6,7 @@
 #include "SquareRootEngine.hpp"
 #include "Tank.hpp"
 #include "TestUtility.hpp"
+#include "TracesHandler.hpp"
 #include "gmock/gmock.h"
 #include "utility.hpp"
 
@@ -32,11 +33,13 @@ struct TankTest : ::testing::Test {
   int mAngle{90};
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine));
+    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine),
+                TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f});
   }
 
   Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
-    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine));
+    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine),
+                TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f});
   }
 };
 

@@ -5,6 +5,11 @@
 
 #include "Trace.hpp"
 
+struct TracesHandlerConfig {
+  int mMaxTraceAge;
+  float mDecayRate;
+};
+
 class TracesHandler {
   const sf::Texture& mTracksTexture;
   sf::Sprite& mTankSprite;
@@ -12,8 +17,7 @@ class TracesHandler {
   std::deque<short> mTracesAge{};
   sf::Vector2f mLastTankPos{};
   int mMaxTextureHeight{};
-  int mMaxTraceAge{};
-  float mTraceDecayRate{};
+  TracesHandlerConfig mConfig{};
 
   void update_traces_age();
   void decay_traces();
@@ -27,16 +31,16 @@ class TracesHandler {
  public:
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
                 const int max_trace_age, const float decay_rate);
+  TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
+                const TracesHandlerConfig& config);
   TracesHandler(const TracesHandler&) = delete;
   TracesHandler(TracesHandler&&) = delete;
   TracesHandler& operator=(const TracesHandler&) = delete;
   TracesHandler& operator=(TracesHandler&&) = delete;
   ~TracesHandler() = default;
 
-  std::deque<Trace> get_traces() const;
-  float get_max_texture_height() const;
+  const std::deque<Trace>& get_traces() const;
   const sf::Texture& get_trace_texture() const;
-  int get_max_trace_age() const;
-  float get_trace_decay_rate() const;
+  TracesHandlerConfig get_config() const;
   void update();
 };

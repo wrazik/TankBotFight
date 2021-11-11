@@ -6,6 +6,8 @@
 #include "KeyboardController.hpp"
 #include "Random.hpp"
 #include "Size.hpp"
+#include "SquareRootEngine.hpp"
+#include "TracesHandler.hpp"
 
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
   mWindow.setFramerateLimit(30);
@@ -26,7 +28,8 @@ void Board::register_tank() {
   tracks_texture.setSmooth(true);
   tracks_texture.setRepeated(true);
   auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_texture,
-                   std::make_unique<SquareRootEngine>(70, 5));
+                   std::make_unique<SquareRootEngine>(70, 5),
+                   TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");

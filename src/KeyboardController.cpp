@@ -4,6 +4,7 @@
 
 #include "Board.hpp"
 #include "Tank.hpp"
+#include "Engine.hpp"
 
 KeyboardController::KeyboardController(Tank& tank, Board& board) : mTank(tank), mBoard(board) {
   mLastShot = std::chrono::system_clock::now();

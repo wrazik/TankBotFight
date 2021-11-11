@@ -47,15 +47,15 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
 }
 
 Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           sf::Texture &tracks, std::unique_ptr<Engine> &&engine, const int max_trace_age,
-           const float trace_decay_rate)
+           sf::Texture &tracks, std::unique_ptr<Engine> &&engine,
+           const TracesHandlerConfig &traces_handler_config)
     : mPos({x, y}),
       mBody(body),
       mTower(tower),
       mShot(shot),
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos,
-                                                     max_trace_age, trace_decay_rate)) {
+                                                     traces_handler_config)) {
   set_rotation(180);
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
@@ -71,9 +71,9 @@ Tank::Tank(const Tank &rhs)
       mTower(rhs.mTower),
       mShot(rhs.mShot),
       mEngine(rhs.mEngine->copy()),
-      mTracesHandler(std::make_unique<TracesHandler>(
-          rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos,
-          rhs.mTracesHandler->get_max_trace_age(), rhs.mTracesHandler->get_trace_decay_rate())) {}
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
+                                                     mBody.get_sprite(), mPos,
+                                                     rhs.mTracesHandler->get_config())) {}
 
 Tank::Tank(Tank &&rhs)
     : mPos(std::move(rhs.mPos)),
@@ -84,9 +84,9 @@ Tank::Tank(Tank &&rhs)
       mTower(std::move(rhs.mTower)),
       mShot(std::move(rhs.mShot)),
       mEngine(std::move(rhs.mEngine)),
-      mTracesHandler(std::make_unique<TracesHandler>(
-          rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos,
-          rhs.mTracesHandler->get_max_trace_age(), rhs.mTracesHandler->get_trace_decay_rate())) {}
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
+                                                     mBody.get_sprite(), mPos,
+                                                     rhs.mTracesHandler->get_config())) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
   if (this == &rhs) {
@@ -100,9 +100,9 @@ Tank &Tank::operator=(const Tank &rhs) {
   mTower = rhs.mTower;
   mShot = rhs.mShot;
   mEngine = rhs.mEngine->copy();
-  mTracesHandler = std::make_unique<TracesHandler>(
-      rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos,
-      rhs.mTracesHandler->get_max_trace_age(), rhs.mTracesHandler->get_trace_decay_rate());
+  mTracesHandler =
+      std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
+                                      mPos, rhs.mTracesHandler->get_config());
   return *this;
 }
 
@@ -118,9 +118,9 @@ Tank &Tank::operator=(Tank &&rhs) {
   mTower = std::move(rhs.mTower);
   mShot = std::move(rhs.mShot);
   mEngine = std::move(rhs.mEngine);
-  mTracesHandler = std::make_unique<TracesHandler>(
-      rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos,
-      rhs.mTracesHandler->get_max_trace_age(), rhs.mTracesHandler->get_trace_decay_rate());
+  mTracesHandler =
+      std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
+                                      mPos, rhs.mTracesHandler->get_config());
   return *this;
 }
 

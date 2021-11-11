@@ -14,6 +14,7 @@ inline constexpr int shotAnimationDistance = 30;
 inline constexpr std::chrono::milliseconds shotAnimationDuration = std::chrono::milliseconds(100);
 
 class TracesHandler;
+struct TracesHandlerConfig;
 class Engine;
 enum class Gear;
 class TankPart {
@@ -37,8 +38,8 @@ class Tank {
  public:
   Tank() = delete;
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
-       sf::Texture& tracks, std::unique_ptr<Engine>&& engine, const int max_trace_age = 50,
-       const float trace_decay_rate = 0.1f);
+       sf::Texture& tracks, std::unique_ptr<Engine>&& engine,
+       const TracesHandlerConfig& traces_handler_config);
   Tank(const Tank&);
   Tank(Tank&&);
   Tank& operator=(const Tank&);
