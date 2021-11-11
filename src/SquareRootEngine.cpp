@@ -7,7 +7,7 @@
 #include "Size.hpp"
 #include "utility.hpp"
 
-SquareRootEngine::SquareRootEngine(const int step_count, const int max_speed)
+SquareRootEngine::SquareRootEngine(const int step_count, const float max_speed)
     : mStepCount(step_count), mMaxSpeed(max_speed) {}
 
 std::unique_ptr<Engine> SquareRootEngine::copy() const {
