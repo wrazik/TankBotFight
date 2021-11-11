@@ -9,7 +9,7 @@ void expect_vec2f_eq(const sf::Vector2f& lhs, const sf::Vector2f& rhs) {
   EXPECT_NEAR(y1, y2, 0.0001);
 }
 
-std::unique_ptr<sf::Texture> create_dummy_texture(uint width, uint height) {
+std::unique_ptr<sf::Texture> create_dummy_texture(unsigned int width, unsigned int height) {
   auto dummy = std::make_unique<sf::Texture>();
   dummy->create(width, height);
   return dummy;
