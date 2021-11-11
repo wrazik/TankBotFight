@@ -152,8 +152,7 @@ TEST_F(TracesHandlerTest,
   ASSERT_NEAR(expected_height4, actual_height4, precision);
 }
 
-TEST_F(TracesHandlerTest,
-       WhenTraceHeightIsEqualOrLowerThanDecayValue_ThenRemoveTrace) {
+TEST_F(TracesHandlerTest, WhenTraceHeightIsEqualOrLowerThanDecayValue_ThenRemoveTrace) {
   sf::Vector2f move1{2.f, 0.f};
   const int expected_size1 = 1;
   const int expected_size2 = 0;
