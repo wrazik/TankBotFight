@@ -23,8 +23,8 @@ float get_trace_height(const std::deque<Trace>& traces, int idx) {
 
 class BaseFixture {
  protected:
-  uint mWidth{10};
-  uint mHeight{20};
+  unsigned int mWidth{10};
+  unsigned int mHeight{20};
   sf::Vector2f mStartPosition{0.f, 0.f};
   std::unique_ptr<sf::Texture> mTexture{create_dummy_texture(mWidth, mHeight)};
   int mMaxTracesAge{10};
