@@ -28,7 +28,7 @@ void Board::register_tank() {
   tracks_texture.setSmooth(true);
   tracks_texture.setRepeated(true);
   auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_texture,
-                   std::make_unique<SquareRootEngine>(70, 5),
+                   std::make_unique<SquareRootEngine>(70, 5.f),
                    TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));

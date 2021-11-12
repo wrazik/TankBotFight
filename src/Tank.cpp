@@ -1,10 +1,6 @@
 #include "Tank.hpp"
 
-#include <SFML/Graphics/Rect.hpp>
-#include <algorithm>
 #include <cmath>
-#include <numeric>
-#include <tuple>
 
 #include "Engine.hpp"
 #include "Size.hpp"

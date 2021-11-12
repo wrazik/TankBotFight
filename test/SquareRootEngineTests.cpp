@@ -14,7 +14,7 @@ constexpr auto getSpeedDelta(auto speed_before, auto speed_after) {
 struct SquareRootEngineTest : ::testing::Test {
   double mPrecision{0.0001};
   int mStepCount{1};
-  int mMaxSpeed{5};
+  float mMaxSpeed{5};
   float mSpeed{1.f};
   float mZero{0.f};
   float mAngle{0.f};
