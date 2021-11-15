@@ -5,6 +5,7 @@
 #include "Engine.hpp"
 #include "Size.hpp"
 #include "TextureStore.hpp"
+#include "TracesHandler.hpp"
 #include "utility.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
@@ -18,6 +19,10 @@ void TankPart::rotate(const Rotation r) { mRotation = r; }
 void TankPart::set_rotation(const int angle) { mSprite.setRotation(angle); }
 
 float TankPart::get_rotation() const { return mSprite.getRotation(); }
+
+sf::Sprite &TankPart::get_sprite() { return mSprite; }
+
+const sf::Sprite &TankPart::get_sprite() const { return mSprite; }
 
 void TankPart::update() {
   switch (mRotation) {
@@ -38,18 +43,46 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
 }
 
 Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           std::unique_ptr<Engine> &&engine)
-    : mPos({x, y}), mBody(body), mTower(tower), mShot(shot), mEngine(std::move(engine)) {
-  mTower.set_rotation(180);
-  mShot.set_rotation(180);
+           sf::Texture &tracks, std::unique_ptr<Engine> &&engine,
+           const TracesHandlerConfig &traces_handler_config)
+    : mPos({x, y}),
+      mBody(body),
+      mTower(tower),
+      mShot(shot),
+      mEngine(std::move(engine)),
+      mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos,
+                                                     traces_handler_config)) {
+  set_rotation(180);
+  mBody.get_sprite().setPosition(mPos);
+  mTower.get_sprite().setPosition(mPos);
+  mShot.get_sprite().setPosition(mPos);
 }
 
 Tank::Tank(const Tank &rhs)
     : mPos(rhs.mPos),
+      mCurrentSpeed(rhs.mCurrentSpeed),
+      mShotStart(rhs.mShotStart),
+      mDrawShot(rhs.mDrawShot),
       mBody(rhs.mBody),
       mTower(rhs.mTower),
       mShot(rhs.mShot),
-      mEngine(rhs.mEngine->copy()) {}
+      mEngine(rhs.mEngine->copy()),
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
+                                                     mBody.get_sprite(), mPos,
+                                                     rhs.mTracesHandler->get_config())) {}
+
+Tank::Tank(Tank &&rhs)
+    : mPos(std::move(rhs.mPos)),
+      mCurrentSpeed(std::move(rhs.mCurrentSpeed)),
+      mShotStart(std::move(rhs.mShotStart)),
+      mDrawShot(std::move(rhs.mDrawShot)),
+      mBody(std::move(rhs.mBody)),
+      mTower(std::move(rhs.mTower)),
+      mShot(std::move(rhs.mShot)),
+      mEngine(std::move(rhs.mEngine)),
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
+                                                     mBody.get_sprite(), mPos,
+                                                     rhs.mTracesHandler->get_config())) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
   if (this == &rhs) {
@@ -63,8 +96,31 @@ Tank &Tank::operator=(const Tank &rhs) {
   mTower = rhs.mTower;
   mShot = rhs.mShot;
   mEngine = rhs.mEngine->copy();
+  mTracesHandler =
+      std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
+                                      mPos, rhs.mTracesHandler->get_config());
   return *this;
 }
+
+Tank &Tank::operator=(Tank &&rhs) {
+  if (this == &rhs) {
+    return *this;
+  }
+  mPos = std::move(rhs.mPos);
+  mCurrentSpeed = std::move(rhs.mCurrentSpeed);
+  mShotStart = std::move(rhs.mShotStart);
+  mDrawShot = std::move(rhs.mDrawShot);
+  mBody = std::move(rhs.mBody);
+  mTower = std::move(rhs.mTower);
+  mShot = std::move(rhs.mShot);
+  mEngine = std::move(rhs.mEngine);
+  mTracesHandler =
+      std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
+                                      mPos, rhs.mTracesHandler->get_config());
+  return *this;
+}
+
+Tank::~Tank() = default;
 
 void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
@@ -88,16 +144,19 @@ void Tank::update() {
   mTower.update();
   mShot.update();
   mEngine->update();
-
   update_position();
+  mTracesHandler->update();
   update_shot();
 }
 
 void Tank::update_position() {
-  mPos += mEngine->get_position_delta(to_radians(mBody.get_rotation()));
-}
+  const auto &delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  mPos += delta;
 
-float Tank::get_current_speed() { return mEngine->get_current_speed(); }
+  mBody.get_sprite().setPosition(mPos);
+  mTower.get_sprite().setPosition(mPos);
+  mShot.get_sprite().setPosition(mPos);
+}
 
 void Tank::update_shot() {
   auto now = std::chrono::system_clock::now();
@@ -106,6 +165,8 @@ void Tank::update_shot() {
     mDrawShot = false;
   }
 }
+
+float Tank::get_current_speed() { return mEngine->get_current_speed(); }
 
 void Tank::shot() {
   mShotStart = std::chrono::system_clock::now();
@@ -120,6 +181,7 @@ void Tank::draw(sf::RenderWindow &window) {
   if (mDrawShot) {
     draw_shot(window);
   }
+  draw_tracks(window);
 }
 
 void Tank::draw_shot(sf::RenderWindow &window) {
@@ -130,4 +192,10 @@ void Tank::draw_shot(sf::RenderWindow &window) {
   };
   auto shotAnimationPosition = getShotAnimationPosition(mTower.get_rotation());
   mShot.draw(window, shotAnimationPosition.x, shotAnimationPosition.y);
+}
+
+void Tank::draw_tracks(sf::RenderWindow &window) {
+  for (const auto &trace : mTracesHandler->get_traces()) {
+    window.draw(trace);
+  }
 }

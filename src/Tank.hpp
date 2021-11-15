@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <chrono>
 #include <memory>
 
@@ -10,16 +11,20 @@ enum class Rotation { None, Clockwise, Counterclockwise };
 inline constexpr int shotAnimationDistance = 30;
 inline constexpr std::chrono::milliseconds shotAnimationDuration = std::chrono::milliseconds(100);
 
+class TracesHandler;
+struct TracesHandlerConfig;
 class Engine;
 enum class Gear;
 class TankPart {
  public:
-  TankPart(sf::Texture& texture);
+  explicit TankPart(sf::Texture& texture);
 
   void rotate(const Rotation r);
   void set_rotation(const int angle);
   void draw(sf::RenderWindow& window, const float x, const float y);
   float get_rotation() const;
+  sf::Sprite& get_sprite();
+  const sf::Sprite& get_sprite() const;
   void update();
 
  private:
@@ -31,12 +36,13 @@ class Tank {
  public:
   Tank() = delete;
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
-       std::unique_ptr<Engine>&& engine);
+       sf::Texture& tracks, std::unique_ptr<Engine>&& engine,
+       const TracesHandlerConfig& traces_handler_config);
   Tank(const Tank&);
-  Tank(Tank&&) = default;
+  Tank(Tank&&);
   Tank& operator=(const Tank&);
-  Tank& operator=(Tank&&) = default;
-  ~Tank() = default;
+  Tank& operator=(Tank&&);
+  ~Tank();
 
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
@@ -56,6 +62,7 @@ class Tank {
   void update_shot();
   void update_position();
   void draw_shot(sf::RenderWindow& draw);
+  void draw_tracks(sf::RenderWindow& draw);
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
@@ -66,4 +73,5 @@ class Tank {
   TankPart mTower;
   TankPart mShot;
   std::unique_ptr<Engine> mEngine;
+  std::unique_ptr<TracesHandler> mTracesHandler;
 };

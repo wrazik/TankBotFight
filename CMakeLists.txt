@@ -21,6 +21,8 @@ add_library(tank_bot_fight_lib STATIC
     src/Obstacle.cpp
     src/Random.cpp
     src/SquareRootEngine.cpp
+    src/TracesHandler.cpp
+    src/Trace.cpp
 )
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)

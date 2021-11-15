@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Board.hpp"
+#include "Engine.hpp"
 #include "Tank.hpp"
 
 KeyboardController::KeyboardController(Tank& tank, Board& board) : mTank(tank), mBoard(board) {

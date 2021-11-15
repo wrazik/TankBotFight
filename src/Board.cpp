@@ -6,6 +6,8 @@
 #include "KeyboardController.hpp"
 #include "Random.hpp"
 #include "Size.hpp"
+#include "SquareRootEngine.hpp"
+#include "TracesHandler.hpp"
 
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
   mWindow.setFramerateLimit(30);
@@ -22,8 +24,12 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture,
-                   std::make_unique<SquareRootEngine>(70, 5));
+  auto& tracks_texture = mStore.get_texture("tracksSmall.png", {0, 0, 37, 48});
+  tracks_texture.setSmooth(true);
+  tracks_texture.setRepeated(true);
+  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_texture,
+                   std::make_unique<SquareRootEngine>(70, 5.f),
+                   TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
   tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
@@ -37,7 +43,6 @@ void Board::fire_missle(const int angle, const float x, const float y) {
 
 void Board::run() {
   KeyboardController keyboard_controller(mTanks[0], *this);
-
   while (mWindow.isOpen()) {
     sf::Event event;
     while (mWindow.pollEvent(event)) {

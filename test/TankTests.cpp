@@ -6,14 +6,9 @@
 #include "SquareRootEngine.hpp"
 #include "Tank.hpp"
 #include "TestUtility.hpp"
+#include "TracesHandler.hpp"
 #include "gmock/gmock.h"
 #include "utility.hpp"
-
-static sf::Texture create_dummy_texture() {
-  sf::Texture dummy;
-  dummy.create(5, 5);
-  return dummy;
-}
 
 struct EngineMock : Engine {
   MOCK_METHOD(void, set_gear, (Gear), (override));
@@ -24,9 +19,10 @@ struct EngineMock : Engine {
 };
 
 struct TankTest : ::testing::Test {
-  sf::Texture mBody{create_dummy_texture()};
-  sf::Texture mTower{create_dummy_texture()};
-  sf::Texture mShot{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mBody{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mTower{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
   std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
@@ -37,11 +33,13 @@ struct TankTest : ::testing::Test {
   int mAngle{90};
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine),
+                TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f});
   }
 
   Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
-    return Tank(0, 0, mBody, mTower, mShot, std::move(engine));
+    return Tank(0, 0, *mBody, *mTower, *mShot, *mTracks, std::move(engine),
+                TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f});
   }
 };
 

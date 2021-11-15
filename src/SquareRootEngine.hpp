@@ -4,7 +4,7 @@
 
 class SquareRootEngine : public Engine {
  public:
-  SquareRootEngine(const int step_count, const int max_speed);
+  SquareRootEngine(const int step_count, const float max_speed);
   void set_gear(const Gear gear) override;
   float get_current_speed() const override;
   sf::Vector2f get_position_delta(const float rotation_radians) override;
