@@ -18,7 +18,7 @@ Client will communicate with platform with platform via sockets.
 Currently we have moving & shooting tank, background with customly generated roads. No network yet, no collisions yet.
 
 
-https://user-images.githubusercontent.com/6102580/132492151-9a1b2057-5ddf-46e5-9a37-08de3bba44d1.mp4
+https://user-images.githubusercontent.com/6102580/141752043-4d35d34a-1e36-4264-9967-169acfb3823b.mp4
 
 
 # How to run
@@ -27,6 +27,9 @@ You have to remember about two things:
 - Graphical files are stored in git-lfs
 - Package manager is stored as github submodule
 - Dependencies are installed via vcpkg
+
+
+
 
 ## Downloading the repo
 
