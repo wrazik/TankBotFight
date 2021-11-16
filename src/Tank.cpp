@@ -2,10 +2,8 @@
 
 #include <cmath>
 
-#include "Engine.hpp"
 #include "Size.hpp"
 #include "TextureStore.hpp"
-#include "TracesHandler.hpp"
 #include "utility.hpp"
 
 TankPart::TankPart(sf::Texture &texture) {
@@ -119,8 +117,6 @@ Tank &Tank::operator=(Tank &&rhs) {
                                       mPos, rhs.mTracesHandler->get_config());
   return *this;
 }
-
-Tank::~Tank() = default;
 
 void Tank::set_gear(Gear gear) { mEngine->set_gear(gear); }
 
