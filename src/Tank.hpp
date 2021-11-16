@@ -5,16 +5,14 @@
 #include <chrono>
 #include <memory>
 
+#include "Engine.hpp"
 #include "TextureStore.hpp"
+#include "TracesHandler.hpp"
 
 enum class Rotation { None, Clockwise, Counterclockwise };
 inline constexpr int shotAnimationDistance = 30;
 inline constexpr std::chrono::milliseconds shotAnimationDuration = std::chrono::milliseconds(100);
 
-class TracesHandler;
-struct TracesHandlerConfig;
-class Engine;
-enum class Gear;
 class TankPart {
  public:
   explicit TankPart(sf::Texture& texture);
@@ -37,12 +35,12 @@ class Tank {
   Tank() = delete;
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
        sf::Texture& tracks, std::unique_ptr<Engine>&& engine,
-       const TracesHandlerConfig& traces_handler_config);
+       const TracesHandlerConfig& traces_handler_config = TracesHandlerConfig{});
   Tank(const Tank&);
   Tank(Tank&&);
   Tank& operator=(const Tank&);
   Tank& operator=(Tank&&);
-  ~Tank();
+  ~Tank() = default;
 
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);

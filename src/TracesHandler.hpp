@@ -6,16 +6,16 @@
 #include "Trace.hpp"
 
 struct TracesHandlerConfig {
-  int mMaxTraceAge;
-  float mDecayRate;
+  int mMaxTraceAge{50};
+  float mDecayRate{0.1f};
 };
 
 class TracesHandler {
   const sf::Texture& mTracksTexture;
   sf::Sprite& mTankSprite;
-  std::deque<Trace> mTraces{};
-  std::deque<short> mTracesAge{};
-  sf::Vector2f mLastTankPos{};
+  std::deque<Trace> mTraces;
+  std::deque<short> mTracesAge;
+  sf::Vector2f mLastTankPos;
   int mMaxTextureHeight{};
   TracesHandlerConfig mConfig{};
 
@@ -32,7 +32,7 @@ class TracesHandler {
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
                 const int max_trace_age, const float decay_rate);
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
-                const TracesHandlerConfig& config);
+                const TracesHandlerConfig& config = TracesHandlerConfig{});
   TracesHandler(const TracesHandler&) = delete;
   TracesHandler(TracesHandler&&) = delete;
   TracesHandler& operator=(const TracesHandler&) = delete;

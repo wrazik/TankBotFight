@@ -18,7 +18,7 @@ inline bool equal(const sf::Vector2f& lhs, const sf::Vector2f& rhs, float precis
   return equal(lhs.x, rhs.x, precision) && equal(lhs.y, rhs.y, precision);
 }
 
-inline void printRect(const auto& rect) {
+inline void print_rect(const auto& rect) {
   const auto& [x, y, width, height] = rect;
   std::cout << "(x, y): (" << x << ", " << y << ") - (w x h): (" << width << " x " << height
             << ")\n";
