@@ -46,7 +46,7 @@ TEST_P(TracesHandlerRotationTest, GivenMove_ThenTraceShouldHaveOppositeRotation)
   const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
-  EXPECT_NEAR(expected_rotation, get_trace_rotation(actual_traces, 0), precision);
+  EXPECT_NEAR(expected_rotation, get_trace_rotation(actual_traces, 0), PRECISION);
 }
 
 INSTANTIATE_TEST_CASE_P(RotationTestsWithManyValues, TracesHandlerRotationTest,
@@ -68,7 +68,7 @@ TEST_P(TracesHandlerTextureHeightTest, GivenMove_ThenTraceShouldHaveHeightEqualT
   const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
-  EXPECT_NEAR(expected_height, get_trace_height(actual_traces, 0), precision);
+  EXPECT_NEAR(expected_height, get_trace_height(actual_traces, 0), PRECISION);
 }
 
 INSTANTIATE_TEST_CASE_P(TextureHeightTestsWithManyValues, TracesHandlerTextureHeightTest,
@@ -99,7 +99,7 @@ TEST_F(TracesHandlerTest, GivenMovesWithSameAngle_ThenTraceShouldHaveHeightEqual
   const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(1, actual_traces.size());
-  ASSERT_NEAR(expected_height, get_trace_height(actual_traces, 0), precision);
+  ASSERT_NEAR(expected_height, get_trace_height(actual_traces, 0), PRECISION);
 }
 
 TEST_F(TracesHandlerTest,
@@ -121,9 +121,9 @@ TEST_F(TracesHandlerTest,
   const auto& actual_traces = mHandler.get_traces();
 
   ASSERT_EQ(3, actual_traces.size());
-  ASSERT_NEAR(expected_height1, get_trace_height(actual_traces, 0), precision);
-  ASSERT_NEAR(expected_height2, get_trace_height(actual_traces, 1), precision);
-  ASSERT_NEAR(expected_height3, get_trace_height(actual_traces, 2), precision);
+  ASSERT_NEAR(expected_height1, get_trace_height(actual_traces, 0), PRECISION);
+  ASSERT_NEAR(expected_height2, get_trace_height(actual_traces, 1), PRECISION);
+  ASSERT_NEAR(expected_height3, get_trace_height(actual_traces, 2), PRECISION);
 }
 
 TEST_F(TracesHandlerTest,
@@ -146,10 +146,10 @@ TEST_F(TracesHandlerTest,
   const float actual_height4 = get_trace_height(actual_traces, 0);
 
   ASSERT_EQ(1, actual_traces.size());
-  ASSERT_NEAR(expected_height1, actual_height1, precision);
-  ASSERT_NEAR(expected_height2, actual_height2, precision);
-  ASSERT_NEAR(expected_height3, actual_height3, precision);
-  ASSERT_NEAR(expected_height4, actual_height4, precision);
+  ASSERT_NEAR(expected_height1, actual_height1, PRECISION);
+  ASSERT_NEAR(expected_height2, actual_height2, PRECISION);
+  ASSERT_NEAR(expected_height3, actual_height3, PRECISION);
+  ASSERT_NEAR(expected_height4, actual_height4, PRECISION);
 }
 
 TEST_F(TracesHandlerTest, WhenTraceHeightIsEqualOrLowerThanDecayValue_ThenRemoveTrace) {

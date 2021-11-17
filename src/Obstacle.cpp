@@ -11,15 +11,15 @@
 #include <stdexcept>
 
 Obstacle::Obstacle(int x, int y) {
-  if (!txt.loadFromFile("../res/przeszkoda-obedience.jpg")) {
+  if (!mTxt.loadFromFile("../res/przeszkoda-obedience.jpg")) {
     throw std::runtime_error("Cannot read graphic file!");
   }
-  sprite.setTexture(txt);
-  sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+  mSprite.setTexture(mTxt);
+  mSprite.setOrigin(mSprite.getGlobalBounds().width / 2, mSprite.getGlobalBounds().height / 2);
 
-  sprite.setPosition(static_cast<float>(x), static_cast<float>(y));
+  mSprite.setPosition(static_cast<float>(x), static_cast<float>(y));
 
-  sprite.scale(0.1f, 0.1f);
+  mSprite.scale(0.1f, 0.1f);
 }
 
-sf::Sprite Obstacle::getSprite() { return sprite; }
+sf::Sprite Obstacle::get_sprite() { return mSprite; }
