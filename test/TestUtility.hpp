@@ -4,7 +4,7 @@
 #include <memory>
 #include <range/v3/view/iota.hpp>
 
-inline constexpr double precision{0.0001};
+inline constexpr double PRECISION{0.0001};
 void expect_vec2f_eq(const sf::Vector2f& lhs, const sf::Vector2f& rhs);
 std::unique_ptr<sf::Texture> create_dummy_texture(unsigned int = 5, unsigned int = 5);
 

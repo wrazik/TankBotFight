@@ -6,9 +6,9 @@ class Obstacle {
  public:
   Obstacle(int x, int y);
 
-  sf::Sprite getSprite();
+  sf::Sprite get_sprite();
 
  private:
-  sf::Texture txt;
-  sf::Sprite sprite;
+  sf::Texture mTxt;
+  sf::Sprite mSprite;
 };

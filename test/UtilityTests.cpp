@@ -6,12 +6,12 @@
 #include "utility.hpp"
 
 struct GetAngleTestParam {
-  std::string testName{};
-  sf::Vector2f vector{};
-  float expectedDegrees{};
+  std::string mTestName{};
+  sf::Vector2f mVector{};
+  float mExpectedDegrees{};
 
   friend std::ostream& operator<<(std::ostream& os, const GetAngleTestParam& p) {
-    os << p.testName;
+    os << p.mTestName;
     return os;
   }
 };
@@ -21,9 +21,9 @@ class GetAngleTests : public ::testing::TestWithParam<GetAngleTestParam> {};
 TEST_P(GetAngleTests, TestingGetAngleWithManyParameters) {
   auto param = GetParam();
 
-  auto actualDegrees = get_angle(param.vector);
+  auto actual_degrees = get_angle(param.mVector);
 
-  EXPECT_NEAR(param.expectedDegrees, actualDegrees, precision);
+  EXPECT_NEAR(param.mExpectedDegrees, actual_degrees, PRECISION);
 }
 
 INSTANTIATE_TEST_CASE_P(
@@ -47,11 +47,11 @@ INSTANTIATE_TEST_CASE_P(
 
 TEST(GetAngleTest, GetAngleShouldComplementGetPositionDelta) {
   SquareRootEngine engine(1, 2);
-  float expectedAngleRadians = pi / 4;
+  float expected_angle_radians = PI / 4;
   engine.set_gear(Gear::Drive);
   engine.update();
 
-  auto actualAngleDegrees = get_angle(engine.get_position_delta(expectedAngleRadians));
+  auto actual_angle_degrees = get_angle(engine.get_position_delta(expected_angle_radians));
 
-  EXPECT_NEAR(actualAngleDegrees, to_degrees(expectedAngleRadians), precision);
+  EXPECT_NEAR(actual_angle_degrees, to_degrees(expected_angle_radians), PRECISION);
 }

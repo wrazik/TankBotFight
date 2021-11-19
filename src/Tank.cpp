@@ -157,7 +157,7 @@ void Tank::update_position() {
 void Tank::update_shot() {
   auto now = std::chrono::system_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mShotStart);
-  if (elapsed > shotAnimationDuration) {
+  if (elapsed > SHOT_ANIMATION_DURATION) {
     mDrawShot = false;
   }
 }
@@ -181,13 +181,13 @@ void Tank::draw(sf::RenderWindow &window) {
 }
 
 void Tank::draw_shot(sf::RenderWindow &window) {
-  auto getShotAnimationPosition = [x = mPos.x, y = mPos.y](float towerRotation) {
+  auto get_shot_animation_pos = [x = mPos.x, y = mPos.y](float tower_rotation) {
     return sf::Vector2f{
-        x + shotAnimationDistance * static_cast<float>(cos(to_radians(towerRotation - 90))),
-        y + shotAnimationDistance * static_cast<float>(sin(to_radians(towerRotation - 90)))};
+        x + SHOT_ANIMATION_DISTANCE * static_cast<float>(cos(to_radians(tower_rotation - 90))),
+        y + SHOT_ANIMATION_DISTANCE * static_cast<float>(sin(to_radians(tower_rotation - 90)))};
   };
-  auto shotAnimationPosition = getShotAnimationPosition(mTower.get_rotation());
-  mShot.draw(window, shotAnimationPosition.x, shotAnimationPosition.y);
+  const auto shot_animation_pos = get_shot_animation_pos(mTower.get_rotation());
+  mShot.draw(window, shot_animation_pos.x, shot_animation_pos.y);
 }
 
 void Tank::draw_tracks(sf::RenderWindow &window) {

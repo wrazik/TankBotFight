@@ -7,7 +7,7 @@
 #include "TestUtility.hpp"
 #include "utility.hpp"
 
-constexpr auto getSpeedDelta(auto speed_before, auto speed_after) {
+constexpr auto get_speed_delta(auto speed_before, auto speed_after) {
   return speed_after - speed_before;
 }
 
@@ -20,12 +20,12 @@ struct SquareRootEngineTest : ::testing::Test {
   float mAngle{0.f};
   SquareRootEngine mEngineSUT{mStepCount, mMaxSpeed};
 
-  void assertSpeedDelta(const auto expected_speed_delta, const int count) {
+  void assert_speed_delta(const auto expected_speed_delta, const int count) {
     for (int i : ranges::iota_view(0, count)) {
-      const auto speedBefore = mEngineSUT.get_current_speed();
+      const auto speed_before = mEngineSUT.get_current_speed();
       mEngineSUT.update();
-      EXPECT_NEAR(expected_speed_delta, getSpeedDelta(speedBefore, mEngineSUT.get_current_speed()),
-                  mPrecision);
+      EXPECT_NEAR(expected_speed_delta,
+                  get_speed_delta(speed_before, mEngineSUT.get_current_speed()), mPrecision);
     }
   }
 };
@@ -79,13 +79,13 @@ TEST_F(SquareRootEngineTest,
        Given2StepCountAndDriveGearAndMaxSpeed1ThenGetCurrentSpeedShouldReturn07071) {
   mStepCount = 2;
   mMaxSpeed = 1;
-  const float expectedSpeed = 0.7071f;
+  const float expected_speed = 0.7071f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
 
-  EXPECT_NEAR(expectedSpeed, mEngineSUT.get_current_speed(), mPrecision);
+  EXPECT_NEAR(expected_speed, mEngineSUT.get_current_speed(), mPrecision);
 }
 
 TEST_F(SquareRootEngineTest,
@@ -103,26 +103,26 @@ TEST_F(SquareRootEngineTest,
        Given5StepCountAndMaxSpeed3And1UpdateThenGetCurrentSpeedShouldReturn13416) {
   mStepCount = 5;
   mMaxSpeed = 3.f;
-  const float expectedSpeed = 1.3416f;
+  const float expected_speed = 1.3416f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
 
-  EXPECT_NEAR(expectedSpeed, mEngineSUT.get_current_speed(), mPrecision);
+  EXPECT_NEAR(expected_speed, mEngineSUT.get_current_speed(), mPrecision);
 }
 
 TEST_F(SquareRootEngineTest,
        Given5StepCountAndMaxSpeed3And2UpdatesThenGetCurrentSpeedShouldReturn18973) {
   mStepCount = 5;
   mMaxSpeed = 3.f;
-  const float expectedSpeed = 1.8973f;
+  const float expected_speed = 1.8973f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
 
   update_many(mEngineSUT, 2);
 
-  EXPECT_NEAR(expectedSpeed, mEngineSUT.get_current_speed(), mPrecision);
+  EXPECT_NEAR(expected_speed, mEngineSUT.get_current_speed(), mPrecision);
 }
 
 TEST_F(SquareRootEngineTest, GivenTankMovingForwardWhenGearSetToNeutralThenSpeedShouldDecrease) {
@@ -130,13 +130,13 @@ TEST_F(SquareRootEngineTest, GivenTankMovingForwardWhenGearSetToNeutralThenSpeed
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
   mEngineSUT.update();
-  const auto speedBefore = mEngineSUT.get_current_speed();
+  const auto speed_before = mEngineSUT.get_current_speed();
 
   mEngineSUT.set_gear(Gear::Neutral);
   mEngineSUT.update();
-  const auto speedAfter = mEngineSUT.get_current_speed();
+  const auto speed_after = mEngineSUT.get_current_speed();
 
-  EXPECT_TRUE(speedAfter < speedBefore);
+  EXPECT_TRUE(speed_after < speed_before);
 }
 
 TEST_F(SquareRootEngineTest, GivenTankMovingBackwardWhenGearSetToNeutralThenSpeedShouldIncrease) {
@@ -144,13 +144,13 @@ TEST_F(SquareRootEngineTest, GivenTankMovingBackwardWhenGearSetToNeutralThenSpee
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Reverse);
   mEngineSUT.update();
-  const auto speedBefore = mEngineSUT.get_current_speed();
+  const auto speed_before = mEngineSUT.get_current_speed();
 
   mEngineSUT.set_gear(Gear::Neutral);
   mEngineSUT.update();
-  const auto speedAfter = mEngineSUT.get_current_speed();
+  const auto speed_after = mEngineSUT.get_current_speed();
 
-  EXPECT_TRUE(speedAfter > speedBefore);
+  EXPECT_TRUE(speed_after > speed_before);
 }
 
 TEST_F(SquareRootEngineTest,
@@ -185,14 +185,14 @@ TEST_F(
     GivenMaxSpeed10AndStepCount10WhenTankMovingForwardAndGearSetToNeutralThenGetCurrentSpeedShouldDecreaseBy1) {
   mStepCount = 10;
   mMaxSpeed = 10;
-  const auto expectedSpeedDelta = -1.f;
+  const auto expected_speed_delta = -1.f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
 
   mEngineSUT.set_gear(Gear::Neutral);
 
-  assertSpeedDelta(expectedSpeedDelta, mStepCount);
+  assert_speed_delta(expected_speed_delta, mStepCount);
 }
 
 TEST_F(
@@ -200,14 +200,14 @@ TEST_F(
     GivenMaxSpeed10AndStepCount10WhenTankMovingBackwardAndGearSetToNeutralThenSpeedShouldIncreaseBy1) {
   mStepCount = 10;
   mMaxSpeed = 10;
-  const auto expectedSpeedDelta = 1.f;
+  const auto expected_speed_delta = 1.f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, mStepCount);
 
   mEngineSUT.set_gear(Gear::Neutral);
 
-  assertSpeedDelta(expectedSpeedDelta, mStepCount);
+  assert_speed_delta(expected_speed_delta, mStepCount);
 }
 
 TEST_F(
@@ -215,14 +215,14 @@ TEST_F(
     GivenMaxSpeed10AndStepCount5WhenTankMovingBackwardAndGearSetToNeutralThenSpeedShouldDecreaseBy2) {
   mStepCount = 5;
   mMaxSpeed = 10;
-  const auto expectedSpeedDelta = -2.f;
+  const auto expected_speed_delta = -2.f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
 
   mEngineSUT.set_gear(Gear::Neutral);
 
-  assertSpeedDelta(expectedSpeedDelta, mStepCount);
+  assert_speed_delta(expected_speed_delta, mStepCount);
 }
 
 TEST_F(
@@ -260,13 +260,13 @@ TEST_F(
     GivenTankMovingForwardAndMaxSpeed10AndStepCount10WhenGearSetToReverseThenSpeedShouldDecreaseBy3DownTo0) {
   mStepCount = 10;
   mMaxSpeed = 10;
-  const auto expectedSpeedDelta = -3.f;
+  const auto expected_speed_delta = -3.f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
   mEngineSUT.set_gear(Gear::Reverse);
 
-  assertSpeedDelta(expectedSpeedDelta, 3);
+  assert_speed_delta(expected_speed_delta, 3);
 
   mEngineSUT.update();
   EXPECT_NEAR(mZero, mEngineSUT.get_current_speed(), mPrecision);
@@ -277,13 +277,13 @@ TEST_F(
     GivenTankMovingBackwardAndMaxSpeed10AndStepCount10WhenGearSetToDriveThenSpeedShouldIncreaseBy3UpTo0) {
   mStepCount = 10;
   mMaxSpeed = 10;
-  const auto expectedSpeedDelta = 3.f;
+  const auto expected_speed_delta = 3.f;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, mStepCount);
   mEngineSUT.set_gear(Gear::Drive);
 
-  assertSpeedDelta(expectedSpeedDelta, 3);
+  assert_speed_delta(expected_speed_delta, 3);
 
   mEngineSUT.update();
   EXPECT_NEAR(mZero, mEngineSUT.get_current_speed(), mPrecision);
@@ -296,21 +296,21 @@ TEST_F(SquareRootEngineTest, GivenCurrentSpeed0ThenGetPositionDeltaShouldReturnE
 
 TEST_F(SquareRootEngineTest,
        GivenSameAngleAndSpeedWhenMultipleUpdatesThenGetPositionDeltaShouldReturnSameVector) {
-  const sf::Vector2f expectedVector = {0.f, -5.f};
+  const sf::Vector2f expected_vector = {0.f, -5.f};
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
-  expect_vec2f_eq(expectedVector, mEngineSUT.get_position_delta(mZero));
+  expect_vec2f_eq(expected_vector, mEngineSUT.get_position_delta(mZero));
 
   mEngineSUT.update();
-  expect_vec2f_eq(expectedVector, mEngineSUT.get_position_delta(mZero));
+  expect_vec2f_eq(expected_vector, mEngineSUT.get_position_delta(mZero));
 
   mEngineSUT.update();
-  expect_vec2f_eq(expectedVector, mEngineSUT.get_position_delta(mZero));
+  expect_vec2f_eq(expected_vector, mEngineSUT.get_position_delta(mZero));
 }
 
 TEST_F(SquareRootEngineTest, Given90AngleAndDriveGearThenGetPositionDeltaShouldReturnMoveRight) {
-  mAngle = pi / 2;
+  mAngle = PI / 2;
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
@@ -319,7 +319,7 @@ TEST_F(SquareRootEngineTest, Given90AngleAndDriveGearThenGetPositionDeltaShouldR
 }
 
 TEST_F(SquareRootEngineTest, Given180AngleAndDriveGearThenGetPositionDeltaShouldReturnMoveDown) {
-  mAngle = pi;
+  mAngle = PI;
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
@@ -328,7 +328,7 @@ TEST_F(SquareRootEngineTest, Given180AngleAndDriveGearThenGetPositionDeltaShould
 }
 
 TEST_F(SquareRootEngineTest, Given180AngleAndReverseGearThenGetPositionDeltaShouldReturnMoveUp) {
-  mAngle = pi;
+  mAngle = PI;
   mEngineSUT.set_gear(Gear::Reverse);
 
   mEngineSUT.update();
@@ -337,7 +337,7 @@ TEST_F(SquareRootEngineTest, Given180AngleAndReverseGearThenGetPositionDeltaShou
 }
 
 TEST_F(SquareRootEngineTest, Given270AngleAndDriveGearThenGetPositionDeltaShouldReturnMoveLeft) {
-  mAngle = pi + pi / 2;
+  mAngle = PI + PI / 2;
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
@@ -346,7 +346,7 @@ TEST_F(SquareRootEngineTest, Given270AngleAndDriveGearThenGetPositionDeltaShould
 }
 
 TEST_F(SquareRootEngineTest, Given270AngleAndReverseGearThenGetPositionDeltaShouldReturnMoveRight) {
-  mAngle = pi + pi / 2;
+  mAngle = PI + PI / 2;
   mEngineSUT.set_gear(Gear::Reverse);
 
   mEngineSUT.update();
@@ -357,7 +357,7 @@ TEST_F(SquareRootEngineTest, Given270AngleAndReverseGearThenGetPositionDeltaShou
 TEST_F(SquareRootEngineTest, GivenDynamicSpeedThenGetPositionDeltaShouldOnlyReturnDelta) {
   mStepCount = 2;
   mMaxSpeed = 1;
-  mAngle = pi / 2;
+  mAngle = PI / 2;
   mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
   mEngineSUT.set_gear(Gear::Drive);
 

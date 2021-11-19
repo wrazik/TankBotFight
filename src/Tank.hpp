@@ -10,8 +10,8 @@
 #include "TracesHandler.hpp"
 
 enum class Rotation { None, Clockwise, Counterclockwise };
-inline constexpr int shotAnimationDistance = 30;
-inline constexpr std::chrono::milliseconds shotAnimationDuration = std::chrono::milliseconds(100);
+inline constexpr int SHOT_ANIMATION_DISTANCE = 30;
+inline constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milliseconds(100);
 
 class TankPart {
  public:

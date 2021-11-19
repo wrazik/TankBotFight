@@ -88,7 +88,7 @@ float SquareRootEngine::get_speed_delta() const {
 float SquareRootEngine::freeride() const { return mMaxSpeed / mStepCount; }
 
 sf::Vector2f SquareRootEngine::get_position_delta(const float rotation_radians) {
-  mPositionDelta.x = mCurrentSpeed * std::cos(rotation_radians - pi / 2);
-  mPositionDelta.y = mCurrentSpeed * std::sin(rotation_radians - pi / 2);
+  mPositionDelta.x = mCurrentSpeed * std::cos(rotation_radians - PI / 2);
+  mPositionDelta.y = mCurrentSpeed * std::sin(rotation_radians - PI / 2);
   return mPositionDelta;
 }

@@ -73,8 +73,16 @@ make
 # Contributing
 We need help! If you have time & want to help - take a look at "Issues". 
 
-All PRs should contain tests. 
-
-To format the code, please use clang-format (configuration file is attached to the repo)
+Please keep in mind that:
+- All PRs should contain tests. 
+- To format the code, please use clang-format (configuration file is attached to the repo)
+- Naming convention must be kept consistent:
+  - class/struct/enum names: PascalCase 
+  - class members: mCamelCase 
+  - class methods: snake_case 
+  - free functions: snake_case 
+  - function parameters: snake_case 
+  - local variables: snake_case 
+  - global constants: UPPER_SNAKE_CASE
 
 

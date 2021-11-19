@@ -8,4 +8,4 @@ inline constexpr int GROUND_HEIGHT = 64;
 inline constexpr int FIELDS_WIDTH = WIDTH / GROUND_WIDTH;
 inline constexpr int FIELDS_HEIGHT = HEIGHT / GROUND_HEIGHT;
 
-inline constexpr double pi = 3.14159265358979311600;
+inline constexpr double PI = 3.14159265358979311600;

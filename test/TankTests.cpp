@@ -51,23 +51,23 @@ TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithA
 }
 
 TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
-  const sf::Vector2f expectedPosition = {0.f, 10.f};
-  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expectedPosition));
+  const sf::Vector2f expected_position = {0.f, 10.f};
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillOnce(testing::Return(expected_position));
 
   mTankSUT.update();
 
-  expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
+  expect_vec2f_eq(expected_position, mTankSUT.get_position());
 }
 
 TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum) {
-  const sf::Vector2f singleMove = {3.f, -7.f};
-  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(singleMove));
-  const int updateCount = 3;
-  const sf::Vector2f expectedPosition = {9.f, -21.f};
+  const sf::Vector2f single_move = {3.f, -7.f};
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(single_move));
+  const int update_count = 3;
+  const sf::Vector2f expected_position = {9.f, -21.f};
 
-  update_many(mTankSUT, updateCount);
+  update_many(mTankSUT, update_count);
 
-  expect_vec2f_eq(expectedPosition, mTankSUT.get_position());
+  expect_vec2f_eq(expected_position, mTankSUT.get_position());
 }
 
 TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
