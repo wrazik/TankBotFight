@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 #include <iostream>
@@ -38,4 +39,18 @@ inline float get_angle(const sf::Vector2f& vec) {
     return 360 + degrees;
   }
   return degrees;
+}
+
+inline bool is_sprite_x_in_board(const float x, const sf::Sprite& sp) {
+  const float sp_left_x_offset = fabs(sp.getOrigin().x - sp.getLocalBounds().left);
+  const float sp_right_x_offset =
+      fabs(sp.getOrigin().x - (sp.getLocalBounds().left + sp.getLocalBounds().width));
+  return x > sp_left_x_offset && x < WIDTH - sp_right_x_offset;
+}
+
+inline bool is_sprite_y_in_board(const float y, const sf::Sprite& sp) {
+  const float sp_top_y_offset = fabs(sp.getOrigin().y - sp.getLocalBounds().top);
+  const float sp_bot_y_offset =
+      fabs(sp.getOrigin().y - (sp.getLocalBounds().top + sp.getLocalBounds().height));
+  return y > sp_top_y_offset && y < HEIGHT - sp_bot_y_offset;
 }
