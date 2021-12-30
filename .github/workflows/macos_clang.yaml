@@ -25,11 +25,10 @@ jobs:
         run: git lfs checkout
 
       - name: Install vcpkg packages
-        # vcpkg does not compile with macos-clang, use default gcc :|
+        # vcpkg binary can only be compiled using gcc for now (bootstrap step)
         run: |
-          ./vcpkg/bootstrap-vcpkg.sh
-          ./vcpkg/vcpkg install
-
+         ./vcpkg/bootstrap-vcpkg.sh
+         
       - name: Create Build Environment
         run: cmake -E make_directory ${{runner.workspace}}/build
 
@@ -40,11 +39,17 @@ jobs:
           CXX: /usr/local/opt/llvm/bin/clang++
         working-directory: ${{runner.workspace}}/build
         run: |
-          clang --version
-          clang++ --version
+          ${CC} --version
+          ${CXX} --version
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: cmake --build . --config $BUILD_TYPE
+        env:
+          CC: /usr/local/opt/llvm/bin/clang
+          CXX: /usr/local/opt/llvm/bin/clang++
+        run: |
+          ${CC} --version
+          ${CXX} --version
+          cmake --build . --config $BUILD_TYPE
