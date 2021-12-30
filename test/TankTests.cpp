@@ -60,10 +60,10 @@ TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
 }
 
 TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum) {
-  const sf::Vector2f single_move = {3.f, -7.f};
+  const sf::Vector2f single_move = {3.f, 5.f};
   EXPECT_CALL(*mEngineNiceMock, get_position_delta).WillRepeatedly(testing::Return(single_move));
   const int update_count = 3;
-  const sf::Vector2f expected_position = {9.f, -21.f};
+  const sf::Vector2f expected_position = {9.f, 15.f};
 
   update_many(mTankSUT, update_count);
 
@@ -77,4 +77,26 @@ TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
   mTankSUT.rotate_tower(Rotation::Clockwise);
   mTankSUT.rotate_tower(Rotation::Clockwise);
   mTankSUT.update();
+}
+
+TEST_F(TankTest, WhenTankMoves_ThenItShouldNotMoveOutOfTheBoard) {
+  mAngle = 315.f;
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(mAngle)))
+      .WillRepeatedly(testing::Return(sf::Vector2f{-5.f, -5.f}));
+  mTankSUT.set_rotation(mAngle);
+  mTankSUT.set_gear(Gear::Drive);
+
+  update_many(mTankSUT, 100);
+
+  expect_vec2f_eq({0.f, 0.f}, mTankSUT.get_position());
+}
+
+TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis) {
+  EXPECT_CALL(*mEngineNiceMock, get_position_delta(testing::_))
+      .WillRepeatedly(testing::Return(sf::Vector2f{-5.f, 5.f}));
+  mTankSUT.set_gear(Gear::Drive);
+
+  update_many(mTankSUT, 100);
+
+  expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
 }

@@ -147,8 +147,13 @@ void Tank::update() {
 
 void Tank::update_position() {
   const auto &delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
-  mPos += delta;
-
+  const auto new_pos = mPos + delta;
+  if (is_sprite_x_in_board(new_pos.x, mBody.get_sprite())) {
+    mPos.x = new_pos.x;
+  }
+  if (is_sprite_y_in_board(new_pos.y, mBody.get_sprite())) {
+    mPos.y = new_pos.y;
+  }
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
   mShot.get_sprite().setPosition(mPos);
