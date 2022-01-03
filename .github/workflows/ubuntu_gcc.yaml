@@ -30,7 +30,6 @@ jobs:
         echo "deb http://mirrors.kernel.org/ubuntu $(lsb_release -cs) main universe" | sudo tee /etc/apt/sources.list.d/gcc-11.list 
         sudo apt-get update
         sudo apt-get install -y gcc-11 g++-11 libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev clang-tidy-$CLANG_TIDY_VERSION
-        ls /usr/bin | grep clang-tidy
 
     - name: Check formatting
       run: |
@@ -66,7 +65,6 @@ jobs:
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: |
-       file /usr/bin/run-clang-tidy-13.py
        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DENABLE_CLANG_TIDY=ON -DCLANG_TIDY_VERSION=$CLANG_TIDY_VERSION
 
 

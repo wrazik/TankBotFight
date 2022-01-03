@@ -7,16 +7,8 @@ function(add_tidy_target TIDY_VERSION)
   cmake_parse_arguments(add_tidy_target "${options}" "${oneValueArgs}"
                         "${multiValueArgs}" ${ARGN})
 
-  find_program(CLANG_TIDY_BIN clang-tidy-${TIDY_VERSION} REQUIRED PATHS /usr/bin)
-  find_program(RUN_CLANG_TIDY_BIN NAMES run-clang-tidy-${TIDY_VERSION}.py run-clang-tidy-${TIDY_VERSION} REQUIRED PATHS /usr/bin)
-
-  if(CLANG_TIDY_BIN STREQUAL "CLANG_TIDY_BIN-NOTFOUND")
-    message(FATAL_ERROR "unable to locate clang-tidy-${TIDY_VERSION}")
-  endif()
-
-  if(RUN_CLANG_TIDY_BIN STREQUAL "RUN_CLANG_TIDY_BIN-NOTFOUND")
-    message(FATAL_ERROR "unable to locate run-clang-tidy-${TIDY_VERSION}.py")
-  endif()
+  find_program(CLANG_TIDY_BIN clang-tidy-${TIDY_VERSION} REQUIRED)
+  find_program(RUN_CLANG_TIDY_BIN NAMES run-clang-tidy-${TIDY_VERSION}.py run-clang-tidy-${TIDY_VERSION} REQUIRED)
 
   list(
     APPEND
