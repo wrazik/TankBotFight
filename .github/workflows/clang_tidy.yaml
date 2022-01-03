@@ -25,13 +25,17 @@ jobs:
       - name: Install vcpkg packages
         run: |
          ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Install clang-tidy
+        run: |
+         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+         sudo add-apt-repository "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-${CLANG_TIDY_VERSION} main"
+         sudo apt-get update
+         sudo apt-get install -y clang-tidy-$CLANG_TIDY_VERSION
          
       - name: Create Build Environment
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - # Fingerprint: 6084 F3CF 814B 57C1 CF12 EFD5 15CF 4D18 AF4F 7421 
-          sudo apt-get update
-          sudo apt-cache search clang-tidy
 
       - name: Configure CMake
         shell: bash
