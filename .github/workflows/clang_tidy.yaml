@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -23,18 +23,18 @@ jobs:
         run: git lfs checkout
 
       - name: Install vcpkg packages
-        # vcpkg binary can only be compiled using gcc for now (bootstrap step)
         run: |
          ./vcpkg/bootstrap-vcpkg.sh
          
       - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+        run: |
+          cmake -E make_directory ${{runner.workspace}}/build
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - # Fingerprint: 6084 F3CF 814B 57C1 CF12 EFD5 15CF 4D18 AF4F 7421 
+          sudo apt-get update
+          sudo apt-get install -y clang-tidy-13
 
       - name: Configure CMake
         shell: bash
-        env:
-          CC: /usr/local/opt/llvm/bin/clang
-          CXX: /usr/local/opt/llvm/bin/clang++
         working-directory: ${{runner.workspace}}/build
         run: |
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DENABLE_CLANG_TIDY=ON -DCLANG_TIDY_VERSION=$CLANG_TIDY_VERSION
@@ -42,8 +42,5 @@ jobs:
       - name: Run clang tidy
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        env:
-          CC: /usr/local/opt/llvm/bin/clang
-          CXX: /usr/local/opt/llvm/bin/clang++
         run: |
           cmake --build . --target tidy
