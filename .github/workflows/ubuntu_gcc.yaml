@@ -30,6 +30,7 @@ jobs:
         echo "deb http://mirrors.kernel.org/ubuntu $(lsb_release -cs) main universe" | sudo tee /etc/apt/sources.list.d/gcc-11.list 
         sudo apt-get update
         sudo apt-get install -y gcc-11 g++-11 libx11-dev libxrandr-dev libxi-dev libudev-dev libgl1-mesa-dev clang-tidy-$CLANG_TIDY_VERSION
+        ls /usr/bin | grep clang-tidy
 
     - name: Check formatting
       run: |
