@@ -8,7 +8,7 @@ function(add_tidy_target TIDY_VERSION)
                         "${multiValueArgs}" ${ARGN})
 
   find_program(CLANG_TIDY_BIN clang-tidy-${TIDY_VERSION} REQUIRED PATHS /usr/bin)
-  find_program(RUN_CLANG_TIDY_BIN run-clang-tidy-${TIDY_VERSION}.py REQUIRED PATHS /usr/bin)
+  find_program(RUN_CLANG_TIDY_BIN NAMES run-clang-tidy-${TIDY_VERSION}.py run-clang-tidy-${TIDY_VERSION} REQUIRED PATHS /usr/bin)
 
   if(CLANG_TIDY_BIN STREQUAL "CLANG_TIDY_BIN-NOTFOUND")
     message(FATAL_ERROR "unable to locate clang-tidy-${TIDY_VERSION}")
