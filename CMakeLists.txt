@@ -4,47 +4,65 @@ set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake")
 project(TankBotFight)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(CTest)
+include(clang-tidy)
 
-add_library(tank_bot_fight_lib STATIC
-    src/background/Background.cpp
-    src/background/BackgroundTextureName.cpp
-    src/background/Ground.cpp
-    src/background/RoadGenerator.cpp
-    src/background/SurfaceGenerator.cpp
-    src/Board.cpp
-    src/KeyboardController.cpp
-    src/Missle.cpp
-    src/Tank.cpp
-    src/TextureStore.cpp
-    src/Obstacle.cpp
-    src/Random.cpp
-    src/SquareRootEngine.cpp
-    src/TracesHandler.cpp
-    src/Trace.cpp
-)
+option(ENABLE_CLANG_TIDY "Enables 'make tidy' command to run clang-tidy checks"
+       OFF)
+set(CLANG_TIDY_VERSION
+    "12"
+    CACHE STRING "Clang tidy version to run checks")
+
+if(ENABLE_CLANG_TIDY)
+  add_tidy_target(${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
+                  ${CMAKE_SOURCE_DIR}/src/background/*)
+endif()
+
+add_library(
+  tank_bot_fight_lib STATIC
+  src/background/Background.cpp
+  src/background/BackgroundTextureName.cpp
+  src/background/Ground.cpp
+  src/background/RoadGenerator.cpp
+  src/background/SurfaceGenerator.cpp
+  src/Board.cpp
+  src/KeyboardController.cpp
+  src/Missle.cpp
+  src/Tank.cpp
+  src/TextureStore.cpp
+  src/Obstacle.cpp
+  src/Random.cpp
+  src/SquareRootEngine.cpp
+  src/TracesHandler.cpp
+  src/Trace.cpp)
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 
-add_executable(tank_bot_fight 
-    src/main.cpp
-)
+add_executable(tank_bot_fight src/main.cpp)
 
 if(MSVC)
-    target_compile_options(tank_bot_fight PRIVATE /W3 /WX $<$<CONFIG:Release>:/O2>)
+  target_compile_options(tank_bot_fight PRIVATE /W3 /WX
+                                                $<$<CONFIG:Release>:/O2>)
 else()
-    target_compile_options(tank_bot_fight PRIVATE -Wall -pedantic -Werror -Wextra -O3)
+  target_compile_options(tank_bot_fight PRIVATE -Wall -pedantic -Werror -Wextra
+                                                -O3)
 endif()
 
 target_include_directories(tank_bot_fight PRIVATE src)
 
-find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
+find_package(
+  SFML 2.5.1
+  COMPONENTS graphics
+  REQUIRED)
 find_package(range-v3 REQUIRED)
 
 if(UNIX AND NOT APPLE)
-    # workaround for missing opengl dependency in SFML CMake (https://github.com/microsoft/vcpkg/issues/10949)
-    set(EXTRA_LIBS GL)
+  # workaround for missing opengl dependency in SFML CMake
+  # (https://github.com/microsoft/vcpkg/issues/10949)
+  set(EXTRA_LIBS GL)
 endif()
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS})
