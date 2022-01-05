@@ -17,8 +17,6 @@ class Background {
   using GroundTypeVec = std::vector<std::vector<GroundType>>;
   using GroundVec = std::vector<std::vector<Ground>>;
 
-  std::string get_texture_name(const GroundTypeVec& v, int x, int y);
-
   TextureStore& mTextureStore;
   GroundVec mGround;
 };

@@ -16,7 +16,7 @@ function(add_tidy_target TIDY_VERSION)
     -clang-tidy-binary
     ${CLANG_TIDY_BIN}
     -header-filter=.*
-    -checks=clang-diagnostic-*,clang-analyzer-*,bugprone-*,cert-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*
+    -checks=clang-diagnostic-*,clang-analyzer-*,bugprone-*,cert-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type
     -p=${CMAKE_BINARY_DIR}
     ${add_tidy_target_FILES}
     )

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-int random_range(const int begin, const int end);
+int random_range(int begin, int end);
 
 template <typename T, typename... Args>
 T one_of(T first, Args... rest) {

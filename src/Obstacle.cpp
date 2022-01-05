@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 
+
 Obstacle::Obstacle(int x, int y) {
   if (!mTxt.loadFromFile("../res/przeszkoda-obedience.jpg")) {
     throw std::runtime_error("Cannot read graphic file!");
@@ -19,7 +20,8 @@ Obstacle::Obstacle(int x, int y) {
 
   mSprite.setPosition(static_cast<float>(x), static_cast<float>(y));
 
-  mSprite.scale(0.1f, 0.1f);
+  constexpr float SCALE_FACTOR = 0.1f;
+  mSprite.scale(SCALE_FACTOR, SCALE_FACTOR);
 }
 
 sf::Sprite Obstacle::get_sprite() { return mSprite; }

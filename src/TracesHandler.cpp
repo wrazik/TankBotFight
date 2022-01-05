@@ -15,18 +15,18 @@ sf::Vector2f get_middle_bot_transform(const sf::Sprite& sprite,
       {left + width / 2.f, top + height + additional_value});
 }
 
-TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tank_sprite,
+TracesHandler::TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite,
                              const sf::Vector2f& start_pos, const TracesHandlerConfig& config)
-    : mTracksTexture(texture),
+    : mTracksTexture(tracks),
       mTankSprite(tank_sprite),
       mLastTankPos(start_pos),
       mMaxTextureHeight(mTracksTexture.getSize().y),
       mConfig(config) {}
 
-TracesHandler::TracesHandler(const sf::Texture& texture, sf::Sprite& tank_sprite,
+TracesHandler::TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite,
                              const sf::Vector2f& start_pos, const int max_trace_age,
                              const float decay_rate)
-    : TracesHandler(texture, tank_sprite, start_pos,
+    : TracesHandler(tracks, tank_sprite, start_pos,
                     TracesHandlerConfig{.mMaxTraceAge = max_trace_age, .mDecayRate = decay_rate}) {}
 
 const std::deque<Trace>& TracesHandler::get_traces() const { return mTraces; }
@@ -59,7 +59,7 @@ void TracesHandler::update_traces_age() {
 }
 
 void TracesHandler::decay_traces() {
-  if (mTracesAge.size() <= 0) {
+  if (mTracesAge.empty()) {
     return;
   }
   if (mTracesAge.front() >= mConfig.mMaxTraceAge) {
@@ -86,14 +86,6 @@ void TracesHandler::remove_trace() {
 bool TracesHandler::is_move_angle_changed(const sf::Vector2f& move) const {
   return !mTraces.empty() &&
          !equal(mTraces.back().get_rotation(), get_opposite_angle(get_angle(move)), 1.0);
-}
-
-float TracesHandler::get_opposite_angle(const float angle) const {
-  float opposite_angle = angle - 180.f;
-  if (opposite_angle < 0.f) {
-    opposite_angle = 360.f + opposite_angle;
-  }
-  return opposite_angle;
 }
 
 Trace TracesHandler::make_trace(const sf::Vector2f& move) const {

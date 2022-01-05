@@ -22,7 +22,7 @@ Background::Background(TextureStore& store) : mTextureStore(store), mGround(FIEL
 
   for (int i = 0; i < FIELDS_HEIGHT; ++i) {
     for (int j = 0; j < FIELDS_WIDTH; ++j) {
-      mGround[i].emplace_back(mTextureStore.get_texture(get_texture_name(grounds, i, j)));
+      mGround[i].emplace_back(mTextureStore.get_texture(BackgroundTextureName::get(grounds, i, j)));
     }
   }
 }
@@ -33,8 +33,4 @@ void Background::draw(sf::RenderWindow& window) {
       mGround[i][j].draw(window, j * GROUND_HEIGHT, i * GROUND_WIDTH);
     }
   }
-}
-
-std::string Background::get_texture_name(const GroundTypeVec& v, int x, int y) {
-  return BackgroundTextureName::get(v, x, y);
 }

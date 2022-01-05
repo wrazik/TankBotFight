@@ -13,6 +13,7 @@ class KeyboardController {
   void update(const sf::Event& event);
 
  private:
+  void handle_shot();
   Tank& mTank;
   Board& mBoard;
   std::chrono::milliseconds mLastDelay{0};
