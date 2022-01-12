@@ -10,7 +10,6 @@
 
 #include <stdexcept>
 
-
 Obstacle::Obstacle(int x, int y) {
   if (!mTxt.loadFromFile("../res/przeszkoda-obedience.jpg")) {
     throw std::runtime_error("Cannot read graphic file!");

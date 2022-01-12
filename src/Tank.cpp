@@ -194,8 +194,10 @@ void Tank::draw(sf::RenderWindow &window) {
 void Tank::draw_shot(sf::RenderWindow &window) {
   auto get_shot_animation_pos = [x = mPos.x, y = mPos.y](float tower_rotation) {
     return sf::Vector2f{
-        x + SHOT_ANIMATION_DISTANCE * static_cast<float>(cos(to_radians(tower_rotation - ROTATION_OFFSET))),
-        y + SHOT_ANIMATION_DISTANCE * static_cast<float>(sin(to_radians(tower_rotation - ROTATION_OFFSET)))};
+        x + SHOT_ANIMATION_DISTANCE *
+                static_cast<float>(cos(to_radians(tower_rotation - ROTATION_OFFSET))),
+        y + SHOT_ANIMATION_DISTANCE *
+                static_cast<float>(sin(to_radians(tower_rotation - ROTATION_OFFSET)))};
   };
   const auto shot_animation_pos = get_shot_animation_pos(mTower.get_rotation());
   mShot.draw(window, shot_animation_pos.x, shot_animation_pos.y);

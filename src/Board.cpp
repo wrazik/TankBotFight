@@ -9,7 +9,6 @@
 #include "SquareRootEngine.hpp"
 #include "TracesHandler.hpp"
 
-
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
   mWindow.setFramerateLimit(30);
 }
