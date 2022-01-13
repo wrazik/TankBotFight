@@ -97,4 +97,4 @@ jobs:
           -header-filter=.*
           -checks=clang-diagnostic-*,clang-analyzer-*,bugprone-*,cert-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,hicpp-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type
           -p=.
-          ${{runner.workspace}}/src/ ${{runner.workspace}}/src/background/
+          ${{runner.workspace}}/src/* ${{runner.workspace}}/src/background/*
