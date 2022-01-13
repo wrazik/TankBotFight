@@ -15,6 +15,11 @@ Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackgro
 
 void Board::register_tank() {
   using namespace std::string_literals;
+  const sf::IntRect TRACKS_TEXTURE_RECT = {0, 0, 37, 48};
+  constexpr float TANK_X = WIDTH / 2.0f;
+  constexpr float TANK_Y = 50.f;
+  constexpr int STEP_COUNT = 70;
+  constexpr float MAX_SPEED = 5.f;
   auto& body_texture = mStore.get_texture(one_of("tankBody_red.png"s, "tankBody_dark.png"s,
                                                  "tankBody_blue.png"s, "tankBody_green.png"s));
   body_texture.setSmooth(true);
@@ -24,13 +29,12 @@ void Board::register_tank() {
   tower_texture.setSmooth(true);
   auto& shot_texture = mStore.get_texture("shotOrange.png");
   shot_texture.setSmooth(true);
-  auto& tracks_texture = mStore.get_texture("tracksSmall.png", {0, 0, 37, 48});
+  auto& tracks_texture = mStore.get_texture("tracksSmall.png", TRACKS_TEXTURE_RECT);
   tracks_texture.setSmooth(true);
   tracks_texture.setRepeated(true);
-  auto tank = Tank(WIDTH / 2.0f, 50.0f, body_texture, tower_texture, shot_texture, tracks_texture,
-                   std::make_unique<SquareRootEngine>(70, 5.f),
+  auto tank = Tank(TANK_X, TANK_Y, body_texture, tower_texture, shot_texture, tracks_texture,
+                   std::make_unique<SquareRootEngine>(STEP_COUNT, MAX_SPEED),
                    TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
-  tank.set_rotation(180);
   mTanks.emplace_back(std::move(tank));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);

@@ -14,7 +14,7 @@ struct GroundType {
 class Ground {
  public:
   Ground(sf::Texture& texture);
-  void draw(sf::RenderWindow& window, const int x, const int y);
+  void draw(sf::RenderWindow& window, int x, int y);
 
  private:
   sf::Sprite mSprite;

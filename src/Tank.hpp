@@ -10,8 +10,6 @@
 #include "TracesHandler.hpp"
 
 enum class Rotation { None, Clockwise, Counterclockwise };
-inline constexpr int SHOT_ANIMATION_DISTANCE = 30;
-inline constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milliseconds(100);
 
 class TankPart {
  public:
@@ -47,7 +45,7 @@ class Tank {
   void set_rotation(const int angle);
 
   void set_gear(Gear gear);
-  void draw(sf::RenderWindow& draw);
+  void draw(sf::RenderWindow&);
   void update();
   void shot();
 
@@ -59,8 +57,8 @@ class Tank {
   inline constexpr static float M_SPEED = 0.01f;
   void update_shot();
   void update_position();
-  void draw_shot(sf::RenderWindow& draw);
-  void draw_tracks(sf::RenderWindow& draw);
+  void draw_shot(sf::RenderWindow&);
+  void draw_tracks(sf::RenderWindow&);
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;

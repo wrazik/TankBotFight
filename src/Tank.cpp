@@ -6,6 +6,12 @@
 #include "TextureStore.hpp"
 #include "utility.hpp"
 
+constexpr int TANK_INITIAL_ROTATION = 180;
+constexpr int ROTATION_OFFSET = 90;
+constexpr int TANK_PART_ROTATE = 10;
+constexpr int SHOT_ANIMATION_DISTANCE = 30;
+constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milliseconds(100);
+
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
@@ -25,10 +31,10 @@ const sf::Sprite &TankPart::get_sprite() const { return mSprite; }
 void TankPart::update() {
   switch (mRotation) {
     case Rotation::Clockwise:
-      mSprite.rotate(10);
+      mSprite.rotate(TANK_PART_ROTATE);
       break;
     case Rotation::Counterclockwise:
-      mSprite.rotate(-10);
+      mSprite.rotate(-TANK_PART_ROTATE);
       break;
     case Rotation::None:
       break;
@@ -50,7 +56,7 @@ Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture 
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos,
                                                      traces_handler_config)) {
-  set_rotation(180);
+  set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
   mTower.get_sprite().setPosition(mPos);
   mShot.get_sprite().setPosition(mPos);
@@ -188,8 +194,10 @@ void Tank::draw(sf::RenderWindow &window) {
 void Tank::draw_shot(sf::RenderWindow &window) {
   auto get_shot_animation_pos = [x = mPos.x, y = mPos.y](float tower_rotation) {
     return sf::Vector2f{
-        x + SHOT_ANIMATION_DISTANCE * static_cast<float>(cos(to_radians(tower_rotation - 90))),
-        y + SHOT_ANIMATION_DISTANCE * static_cast<float>(sin(to_radians(tower_rotation - 90)))};
+        x + SHOT_ANIMATION_DISTANCE *
+                static_cast<float>(cos(to_radians(tower_rotation - ROTATION_OFFSET))),
+        y + SHOT_ANIMATION_DISTANCE *
+                static_cast<float>(sin(to_radians(tower_rotation - ROTATION_OFFSET)))};
   };
   const auto shot_animation_pos = get_shot_animation_pos(mTower.get_rotation());
   mShot.draw(window, shot_animation_pos.x, shot_animation_pos.y);

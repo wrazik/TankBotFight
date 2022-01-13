@@ -12,7 +12,7 @@ class TextureStore {
   TextureStore& operator=(TextureStore&&) = delete;
   ~TextureStore() = default;
 
-  sf::Texture& get_texture(const std::string& file, const sf::IntRect& = sf::IntRect{});
+  sf::Texture& get_texture(const std::string& path, const sf::IntRect& = sf::IntRect{});
 
  private:
   std::unordered_map<std::string, sf::Texture> mStore;

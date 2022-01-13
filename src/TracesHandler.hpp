@@ -21,10 +21,9 @@ class TracesHandler {
 
   void update_traces_age();
   void decay_traces();
-  void add_trace(const Trace& sp);
+  void add_trace(const Trace&);
   void remove_trace();
   bool is_move_angle_changed(const sf::Vector2f& move) const;
-  float get_opposite_angle(const float angle) const;
   Trace make_trace(const sf::Vector2f& move) const;
   bool is_moving_forward(const sf::Vector2f&) const;
 

@@ -54,3 +54,11 @@ inline bool is_sprite_y_in_board(const float y, const sf::Sprite& sp) {
       fabs(sp.getOrigin().y - (sp.getLocalBounds().top + sp.getLocalBounds().height));
   return y > sp_top_y_offset && y < HEIGHT - sp_bot_y_offset;
 }
+
+inline float get_opposite_angle(const float angle) {
+  float opposite_angle = angle - 180.f;
+  if (opposite_angle < 0.f) {
+    opposite_angle = 360.f + opposite_angle;
+  }
+  return opposite_angle;
+}
