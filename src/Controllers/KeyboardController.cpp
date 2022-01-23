@@ -16,8 +16,7 @@ void KeyboardController::handle_shot() {
   constexpr auto SHOT_COOLDOWN = std::chrono::milliseconds{500};
   if (elapsed >= SHOT_COOLDOWN) {
     mLastShot = now;
-    mBoard.fire_missle(mTank.get_tower_rotation(), mTank.get_position().x, mTank.get_position().y);
-    mTank.shot();
+    mBoard.fire_missle(mTank);
   }
 }
 

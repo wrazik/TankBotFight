@@ -29,9 +29,11 @@ add_library(
   src/background/RoadGenerator.cpp
   src/background/SurfaceGenerator.cpp
   src/Board.cpp
-  src/KeyboardController.cpp
+  src/Controllers/KeyboardController.cpp
+  src/Controllers/DummyController.cpp
   src/Missle.cpp
   src/Tank.cpp
+  src/TankFactory.cpp
   src/TextureStore.cpp
   src/Obstacle.cpp
   src/Random.cpp
