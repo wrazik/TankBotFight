@@ -30,7 +30,6 @@ class TankPart {
 
 class Tank {
  public:
-  Tank() = delete;
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
        sf::Texture& tracks, std::unique_ptr<Engine>&& engine,
        const TracesHandlerConfig& traces_handler_config = TracesHandlerConfig{});

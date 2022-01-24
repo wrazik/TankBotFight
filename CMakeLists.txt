@@ -18,7 +18,7 @@ set(CLANG_TIDY_VERSION
 
 if(ENABLE_CLANG_TIDY)
   add_tidy_target(${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
-                  ${CMAKE_SOURCE_DIR}/src/background/*)
+                  ${CMAKE_SOURCE_DIR}/src/background/* ${CMAKE_SOURCE_DIR}/src/Controllers/*)
 endif()
 
 add_library(
@@ -29,9 +29,11 @@ add_library(
   src/background/RoadGenerator.cpp
   src/background/SurfaceGenerator.cpp
   src/Board.cpp
-  src/KeyboardController.cpp
+  src/Controllers/KeyboardController.cpp
+  src/Controllers/DummyController.cpp
   src/Missle.cpp
   src/Tank.cpp
+  src/TankFactory.cpp
   src/TextureStore.cpp
   src/Obstacle.cpp
   src/Random.cpp
