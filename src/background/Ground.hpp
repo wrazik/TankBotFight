@@ -13,7 +13,7 @@ struct GroundType {
 
 class Ground {
  public:
-  Ground(sf::Texture& texture);
+  explicit Ground(sf::Texture& texture);
   void draw(sf::RenderWindow& window, int x, int y);
 
  private:

@@ -21,25 +21,25 @@ class TracesHandler {
 
   void update_traces_age();
   void decay_traces();
-  void add_trace(const Trace&);
+  void add_trace(const Trace& trace);
   void remove_trace();
   bool is_move_angle_changed(const sf::Vector2f& move) const;
   Trace make_trace(const sf::Vector2f& move) const;
-  bool is_moving_forward(const sf::Vector2f&) const;
+  bool is_moving_forward(const sf::Vector2f& move) const;
 
  public:
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
-                const int max_trace_age, const float decay_rate);
+                int max_trace_age, float decay_rate);
   TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite, const sf::Vector2f& start_pos,
                 const TracesHandlerConfig& config = TracesHandlerConfig{});
   TracesHandler(const TracesHandler&) = delete;
-  TracesHandler(TracesHandler&&) = delete;
+  TracesHandler(TracesHandler&&) noexcept = delete;
   TracesHandler& operator=(const TracesHandler&) = delete;
-  TracesHandler& operator=(TracesHandler&&) = delete;
+  TracesHandler& operator=(TracesHandler&&) noexcept = delete;
   ~TracesHandler() = default;
 
-  const std::deque<Trace>& get_traces() const;
-  const sf::Texture& get_trace_texture() const;
-  TracesHandlerConfig get_config() const;
+  [[nodiscard]] const std::deque<Trace>& get_traces() const;
+  [[nodiscard]] const sf::Texture& get_trace_texture() const;
+  [[nodiscard]] TracesHandlerConfig get_config() const;
   void update();
 };

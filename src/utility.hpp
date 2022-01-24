@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
+#include <gsl/gsl>
 #include <iostream>
 
 #include "Size.hpp"
@@ -34,7 +35,7 @@ inline float get_angle(const sf::Vector2f& vec) {
   if (equal(vec.x, 0.f) && equal(vec.y, 0.f)) {
     return 0.f;
   }
-  auto degrees = to_degrees(atan2(vec.y, vec.x)) + 90;
+  auto degrees = gsl::narrow_cast<float>(to_degrees(atan2(vec.y, vec.x))) + 90;
   if (degrees < 0) {
     return 360 + degrees;
   }
@@ -42,15 +43,15 @@ inline float get_angle(const sf::Vector2f& vec) {
 }
 
 inline bool is_sprite_x_in_board(const float x, const sf::Sprite& sp) {
-  const float sp_left_x_offset = fabs(sp.getOrigin().x - sp.getLocalBounds().left);
-  const float sp_right_x_offset =
+  const auto sp_left_x_offset = fabs(sp.getOrigin().x - sp.getLocalBounds().left);
+  const auto sp_right_x_offset =
       fabs(sp.getOrigin().x - (sp.getLocalBounds().left + sp.getLocalBounds().width));
   return x > sp_left_x_offset && x < WIDTH - sp_right_x_offset;
 }
 
 inline bool is_sprite_y_in_board(const float y, const sf::Sprite& sp) {
-  const float sp_top_y_offset = fabs(sp.getOrigin().y - sp.getLocalBounds().top);
-  const float sp_bot_y_offset =
+  const auto sp_top_y_offset = fabs(sp.getOrigin().y - sp.getLocalBounds().top);
+  const auto sp_bot_y_offset =
       fabs(sp.getOrigin().y - (sp.getLocalBounds().top + sp.getLocalBounds().height));
   return y > sp_top_y_offset && y < HEIGHT - sp_bot_y_offset;
 }

@@ -9,10 +9,9 @@ class Trace : public sf::Drawable {
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
  public:
-  Trace(const sf::Texture& tex, const sf::Vector2f& pos, const float angle,
-        const float start_height);
-  void increase_height(const float amount);
-  void decrease_height(const float amount);
-  float get_height() const;
-  float get_rotation() const;
+  Trace(const sf::Texture& tex, const sf::Vector2f& pos, float angle, float start_height);
+  void increase_height(float amount);
+  void decrease_height(float amount);
+  [[nodiscard]] float get_height() const;
+  [[nodiscard]] float get_rotation() const;
 };

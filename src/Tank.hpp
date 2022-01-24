@@ -15,9 +15,9 @@ class TankPart {
  public:
   explicit TankPart(sf::Texture& texture);
 
-  void rotate(const Rotation r);
-  void set_rotation(const int angle);
-  void draw(sf::RenderWindow& window, const float x, const float y);
+  void rotate(Rotation r);
+  void set_rotation(float angle);
+  void draw(sf::RenderWindow& window, float x, float y);
   float get_rotation() const;
   sf::Sprite& get_sprite();
   const sf::Sprite& get_sprite() const;
@@ -33,18 +33,18 @@ class Tank {
   Tank(float x, float y, sf::Texture& body, sf::Texture& tower, sf::Texture& shot,
        sf::Texture& tracks, std::unique_ptr<Engine>&& engine,
        const TracesHandlerConfig& traces_handler_config = TracesHandlerConfig{});
-  Tank(const Tank&);
-  Tank(Tank&&);
-  Tank& operator=(const Tank&);
-  Tank& operator=(Tank&&);
+  Tank(const Tank& rhs);
+  Tank(Tank&& rhs) noexcept;
+  Tank& operator=(const Tank& rhs);
+  Tank& operator=(Tank&& rhs) noexcept;
   ~Tank() = default;
 
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
-  void set_rotation(const int angle);
+  void set_rotation(int angle);
 
   void set_gear(Gear gear);
-  void draw(sf::RenderWindow&);
+  void draw(sf::RenderWindow& window);
   void update();
   void shot();
 
@@ -56,8 +56,8 @@ class Tank {
   inline constexpr static float M_SPEED = 0.01f;
   void update_shot();
   void update_position();
-  void draw_shot(sf::RenderWindow&);
-  void draw_tracks(sf::RenderWindow&);
+  void draw_shot(sf::RenderWindow& window);
+  void draw_tracks(sf::RenderWindow& window);
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;

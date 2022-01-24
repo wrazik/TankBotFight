@@ -1,6 +1,7 @@
 #include "Tank.hpp"
 
 #include <cmath>
+#include <gsl/gsl>
 
 #include "Size.hpp"
 #include "TextureStore.hpp"
@@ -15,12 +16,12 @@ constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milli
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
-  mSprite.setOrigin(width / 2.f, height / 2.f);
+  mSprite.setOrigin(gsl::narrow<float>(width) / 2.f, gsl::narrow<float>(height) / 2.f);
 }
 
 void TankPart::rotate(const Rotation r) { mRotation = r; }
 
-void TankPart::set_rotation(const int angle) { mSprite.setRotation(angle); }
+void TankPart::set_rotation(const float angle) { mSprite.setRotation(angle); }
 
 float TankPart::get_rotation() const { return mSprite.getRotation(); }
 
@@ -75,7 +76,7 @@ Tank::Tank(const Tank &rhs)
                                                      mBody.get_sprite(), mPos,
                                                      rhs.mTracesHandler->get_config())) {}
 
-Tank::Tank(Tank &&rhs)
+Tank::Tank(Tank &&rhs) noexcept
     : mPos(std::move(rhs.mPos)),
       mCurrentSpeed(std::move(rhs.mCurrentSpeed)),
       mShotStart(std::move(rhs.mShotStart)),
@@ -106,7 +107,7 @@ Tank &Tank::operator=(const Tank &rhs) {
   return *this;
 }
 
-Tank &Tank::operator=(Tank &&rhs) {
+Tank &Tank::operator=(Tank &&rhs) noexcept {
   if (this == &rhs) {
     return *this;
   }
@@ -152,7 +153,8 @@ void Tank::update() {
 }
 
 void Tank::update_position() {
-  const auto &delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  const auto &delta =
+      mEngine->get_position_delta(gsl::narrow_cast<float>(to_radians(mBody.get_rotation())));
   const auto new_pos = mPos + delta;
   if (is_sprite_x_in_board(new_pos.x, mBody.get_sprite())) {
     mPos.x = new_pos.x;
