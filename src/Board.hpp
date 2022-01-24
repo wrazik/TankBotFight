@@ -18,6 +18,7 @@ class Board {
  private:
   void remove_missles();
   void display_speed();
+  void draw();
 
   TextureStore mStore;
   sf::RenderWindow mWindow;

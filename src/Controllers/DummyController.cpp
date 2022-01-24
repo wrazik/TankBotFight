@@ -9,14 +9,14 @@ DummyController::DummyController(Tank &tank, Board &board) : mTank(tank), mBoard
   mLastChange = std::chrono::system_clock::now();
 }
 
-void DummyController::update(const sf::Event &) {
+void DummyController::update() {
   const auto now = std::chrono::system_clock::now();
   const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastChange);
 
-  constexpr auto SWITCH_INTERVAL = std::chrono::seconds{0};
+  constexpr auto SWITCH_INTERVAL = std::chrono::milliseconds{200};
   if (elapsed > SWITCH_INTERVAL || mCurrentMove == DummyMove::Shot) {
-    mCurrentMove = one_of(DummyMove::Forward, DummyMove::Backward, DummyMove::Shot,
-                          DummyMove::TurnLeft, DummyMove::TurnRight);
+    mCurrentMove = one_of(DummyMove::Forward, DummyMove::Idle, DummyMove::Shot, DummyMove::TurnLeft,
+                          DummyMove::TurnRight);
     mLastChange = now;
   }
 
@@ -27,9 +27,6 @@ void DummyController::update(const sf::Event &) {
     case DummyMove::Forward:
       mTank.set_gear(Gear::Drive);
       break;
-    case DummyMove::Backward:
-      mTank.set_gear(Gear::Reverse);
-      break;
     case DummyMove::TurnLeft:
       mTank.rotate_body(Rotation::Clockwise);
       mTank.rotate_tower(Rotation::Clockwise);
@@ -37,6 +34,9 @@ void DummyController::update(const sf::Event &) {
     case DummyMove::TurnRight:
       mTank.rotate_body(Rotation::Counterclockwise);
       mTank.rotate_tower(Rotation::Counterclockwise);
+      break;
+    case DummyMove::Idle:
+      mTank.set_gear(Gear::Neutral);
       break;
     default:
       break;

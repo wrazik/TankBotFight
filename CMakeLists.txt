@@ -18,7 +18,7 @@ set(CLANG_TIDY_VERSION
 
 if(ENABLE_CLANG_TIDY)
   add_tidy_target(${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
-                  ${CMAKE_SOURCE_DIR}/src/background/*)
+                  ${CMAKE_SOURCE_DIR}/src/background/* ${CMAKE_SOURCE_DIR}/src/Controllers/*)
 endif()
 
 add_library(

@@ -1,8 +1,6 @@
 #pragma once
 #include <chrono>
 
-#include "IController.hpp"
-
 class Tank;
 class Board;
 
@@ -10,18 +8,18 @@ enum class DummyMove {
   Forward,
   TurnLeft,
   TurnRight,
-  Backward,
   Shot,
+  Idle,
 };
 
-class DummyController : public IController {
+class DummyController {
  public:
   DummyController(Tank& tank, Board& board);
-  void update(const sf::Event& event) override;
+  void update();
 
  private:
   Tank& mTank;
   Board& mBoard;
-  DummyMove mCurrentMove = DummyMove::Forward;
+  DummyMove mCurrentMove = DummyMove::Idle;
   std::chrono::time_point<std::chrono::system_clock> mLastChange;
 };

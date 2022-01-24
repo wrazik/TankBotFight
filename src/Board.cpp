@@ -37,10 +37,22 @@ void Board::fire_missle(Tank& tank) {
   tank.shot();
 }
 
+void Board::draw() {
+  mWindow.clear();
+  mBackground.draw(mWindow);
+  for (auto& tank : mTanks) {
+    tank.draw(mWindow);
+  }
+  for (auto& missle : mMissles) {
+    missle.draw(mWindow);
+  }
+  display_speed();
+  mWindow.display();
+}
+
 void Board::run() {
-  std::vector<std::unique_ptr<IController>> controllers;
-  controllers.push_back(std::make_unique<KeyboardController>(mTanks[0], *this));
-  controllers.push_back(std::make_unique<DummyController>(mTanks[1], *this));
+  KeyboardController keyboard_controller(mTanks[0], *this);
+  DummyController dummyController(mTanks[1], *this);
 
   while (mWindow.isOpen()) {
     sf::Event event;
@@ -52,25 +64,15 @@ void Board::run() {
       if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
         mWindow.close();
       }
-      for (auto& controller : controllers) {
-        controller->update(event);
-      }
+      keyboard_controller.update(event);
     }
 
     for (auto& tank : mTanks) {
       tank.update();
     }
-    mWindow.clear();
-    mBackground.draw(mWindow);
-    for (auto& tank : mTanks) {
-      tank.draw(mWindow);
-    }
-    for (auto& missle : mMissles) {
-      missle.draw(mWindow);
-    }
-    display_speed();
+    dummyController.update();
+    draw();
     remove_missles();
-    mWindow.display();
   }
 }
 

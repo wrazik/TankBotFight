@@ -1,18 +1,16 @@
 #pragma once
 #include <chrono>
 
-#include "IController.hpp"
-
 class Tank;
 class Board;
 namespace sf {
 class Event;
 }
 
-class KeyboardController : public IController {
+class KeyboardController {
  public:
   KeyboardController(Tank& tank, Board& board);
-  void update(const sf::Event& event) override;
+  void update(const sf::Event& event);
 
  private:
   void handle_shot();
