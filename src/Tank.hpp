@@ -38,7 +38,7 @@ struct TankTextures {
 
 class Tank {
  public:
-  Tank(float x, float y, TankTextures textures, std::unique_ptr<Engine>&& engine,
+  Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
        const TracesHandlerConfig& traces_handler_config = TracesHandlerConfig{});
   Tank(const Tank& rhs);
   Tank(Tank&& rhs) noexcept;

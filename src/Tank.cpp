@@ -47,7 +47,7 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
   window.draw(mSprite);
 }
 
-Tank::Tank(float x, float y, TankTextures textures, std::unique_ptr<Engine> &&engine,
+Tank::Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine> &&engine,
            const TracesHandlerConfig &traces_handler_config)
     : mPos({x, y}),
       mBody(textures.mBody),
