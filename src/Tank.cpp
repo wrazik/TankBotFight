@@ -47,15 +47,14 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
   window.draw(mSprite);
 }
 
-Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           sf::Texture &tracks, std::unique_ptr<Engine> &&engine,
+Tank::Tank(float x, float y, TankTextures textures, std::unique_ptr<Engine> &&engine,
            const TracesHandlerConfig &traces_handler_config)
     : mPos({x, y}),
-      mBody(body),
-      mTower(tower),
-      mShot(shot),
+      mBody(textures.mBody),
+      mTower(textures.mTower),
+      mShot(textures.mShot),
       mEngine(std::move(engine)),
-      mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos,
+      mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
                                                      traces_handler_config)) {
   set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
@@ -77,10 +76,10 @@ Tank::Tank(const Tank &rhs)
                                                      rhs.mTracesHandler->get_config())) {}
 
 Tank::Tank(Tank &&rhs) noexcept
-    : mPos(std::move(rhs.mPos)),
-      mCurrentSpeed(std::move(rhs.mCurrentSpeed)),
-      mShotStart(std::move(rhs.mShotStart)),
-      mDrawShot(std::move(rhs.mDrawShot)),
+    : mPos(rhs.mPos),
+      mCurrentSpeed(rhs.mCurrentSpeed),
+      mShotStart(rhs.mShotStart),
+      mDrawShot(rhs.mDrawShot),
       mBody(std::move(rhs.mBody)),
       mTower(std::move(rhs.mTower)),
       mShot(std::move(rhs.mShot)),
@@ -111,10 +110,10 @@ Tank &Tank::operator=(Tank &&rhs) noexcept {
   if (this == &rhs) {
     return *this;
   }
-  mPos = std::move(rhs.mPos);
-  mCurrentSpeed = std::move(rhs.mCurrentSpeed);
-  mShotStart = std::move(rhs.mShotStart);
-  mDrawShot = std::move(rhs.mDrawShot);
+  mPos = rhs.mPos;
+  mCurrentSpeed = rhs.mCurrentSpeed;
+  mShotStart = rhs.mShotStart;
+  mDrawShot = rhs.mDrawShot;
   mBody = std::move(rhs.mBody);
   mTower = std::move(rhs.mTower);
   mShot = std::move(rhs.mShot);
@@ -134,7 +133,7 @@ void Tank::rotate_tower(Rotation r) {
   mShot.rotate(r);
 }
 
-void Tank::set_rotation(const int angle) {
+void Tank::set_rotation(const float angle) {
   mTower.set_rotation(angle);
   mBody.set_rotation(angle);
   mShot.set_rotation(angle);

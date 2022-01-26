@@ -6,11 +6,11 @@
 
 #include "Size.hpp"
 
-Missle::Missle(sf::Texture& texture, const float angle, const float x, const float y)
-    : mPos({x, y}), mAngle(angle) {
+Missle::Missle(sf::Texture& texture, const MovementState& state)
+    : mPos({state.mX, state.mY}), mAngle(state.mAngle) {
   mSprite.setTexture(texture);
   mSprite.setPosition(mPos.x, mPos.y);
-  mSprite.setRotation(angle);
+  mSprite.setRotation(mAngle);
 }
 void Missle::draw(sf::RenderWindow& window) {
   update();

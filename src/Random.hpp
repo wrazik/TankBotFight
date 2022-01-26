@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 
-int random_range(int begin, int end);
+[[nodiscard]] int random_range(int begin, int end);
 
 template <typename T, typename... Args>
 T one_of(T first, Args... rest) {

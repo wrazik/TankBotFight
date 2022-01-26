@@ -1,14 +1,14 @@
 #include "Trace.hpp"
 
 #include <cmath>
+#include <gsl/gsl>
 
-Trace::Trace(const sf::Texture& tex, const sf::Vector2f& pos, const float angle,
-             const float start_height)
-    : mTexture(tex), mRotation(angle) {
-  const float width = mTexture.getSize().x;
+Trace::Trace(const sf::Texture& tex, const MovementState& state, const float start_height)
+    : mTexture(tex), mRotation(state.mAngle) {
+  const auto width = gsl::narrow<float>(mTexture.getSize().x);
   const auto origin = sf::Vector2f{width / 2, 0.f};
-  mTransform.translate(-origin).translate(pos);
-  mTransform.rotate(angle, origin);
+  mTransform.translate(-origin).translate(state.mX, state.mY);
+  mTransform.rotate(state.mAngle, origin);
 
   mVertices[0].position = {0.f, 0.f};
   mVertices[0].texCoords = {0.f, 0.f};

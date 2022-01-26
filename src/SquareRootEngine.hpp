@@ -2,9 +2,14 @@
 
 #include "Engine.hpp"
 
+struct SquareRootEngineConfig {
+  int mStepCount{70};
+  float mMaxSpeed{5.f};
+};
+
 class SquareRootEngine : public Engine {
  public:
-  SquareRootEngine(int step_count, float max_speed);
+  explicit SquareRootEngine(const SquareRootEngineConfig& config);
   void set_gear(Gear gear) override;
   [[nodiscard]] float get_current_speed() const override;
   [[nodiscard]] sf::Vector2f get_position_delta(float rotation_radians) override;

@@ -18,7 +18,8 @@ struct SquareRootEngineTest : ::testing::Test {
   float mSpeed{1.f};
   float mZero{0.f};
   float mAngle{0.f};
-  SquareRootEngine mEngineSUT{mStepCount, mMaxSpeed};
+  SquareRootEngine mEngineSUT{
+      SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
 
   void assert_speed_delta(const auto expected_speed_delta, const int count) {
     for (int i : ranges::iota_view(0, count)) {
@@ -80,7 +81,8 @@ TEST_F(SquareRootEngineTest,
   mStepCount = 2;
   mMaxSpeed = 1;
   const float expected_speed = 0.7071f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
@@ -91,7 +93,8 @@ TEST_F(SquareRootEngineTest,
 TEST_F(SquareRootEngineTest,
        Given3StepCountAnd3UpdatesAndDriveGearThenGetCurrentSpeedShouldReturnMaxSpeed) {
   mStepCount = 3;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
 
   update_many(mEngineSUT, mStepCount);
@@ -104,7 +107,8 @@ TEST_F(SquareRootEngineTest,
   mStepCount = 5;
   mMaxSpeed = 3.f;
   const float expected_speed = 1.3416f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();
@@ -117,7 +121,8 @@ TEST_F(SquareRootEngineTest,
   mStepCount = 5;
   mMaxSpeed = 3.f;
   const float expected_speed = 1.8973f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
 
   update_many(mEngineSUT, 2);
@@ -127,7 +132,8 @@ TEST_F(SquareRootEngineTest,
 
 TEST_F(SquareRootEngineTest, GivenTankMovingForwardWhenGearSetToNeutralThenSpeedShouldDecrease) {
   mStepCount = 2;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   mEngineSUT.update();
   const auto speed_before = mEngineSUT.get_current_speed();
@@ -141,7 +147,8 @@ TEST_F(SquareRootEngineTest, GivenTankMovingForwardWhenGearSetToNeutralThenSpeed
 
 TEST_F(SquareRootEngineTest, GivenTankMovingBackwardWhenGearSetToNeutralThenSpeedShouldIncrease) {
   mStepCount = 2;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Reverse);
   mEngineSUT.update();
   const auto speed_before = mEngineSUT.get_current_speed();
@@ -156,7 +163,8 @@ TEST_F(SquareRootEngineTest, GivenTankMovingBackwardWhenGearSetToNeutralThenSpee
 TEST_F(SquareRootEngineTest,
        Given2StepCountAndMaxSpeedWhenGearSetToNeutralAnd2UpdatesThenGetCurrentSpeedShouldReturn0) {
   mStepCount = 2;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
 
@@ -170,7 +178,8 @@ TEST_F(
     SquareRootEngineTest,
     Given2StepCountAndNegativeMaxSpeedWhenGearSetToNeutralAnd2UpdatesThenGetCurrentSpeedShouldReturn0) {
   mStepCount = 2;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, mStepCount);
 
@@ -186,7 +195,8 @@ TEST_F(
   mStepCount = 10;
   mMaxSpeed = 10;
   const auto expected_speed_delta = -1.f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
 
@@ -201,7 +211,8 @@ TEST_F(
   mStepCount = 10;
   mMaxSpeed = 10;
   const auto expected_speed_delta = 1.f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, mStepCount);
 
@@ -216,7 +227,8 @@ TEST_F(
   mStepCount = 5;
   mMaxSpeed = 10;
   const auto expected_speed_delta = -2.f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
 
@@ -230,7 +242,8 @@ TEST_F(
     GivenDriveGearMaxSpeed3AndStepCount5And3UpdatesWhenGearSetToNeutralAnd4UpdatesThenGetCurrentSpeedShouldReturn0) {
   mStepCount = 5;
   mMaxSpeed = 3;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, 3);
 
@@ -245,7 +258,8 @@ TEST_F(
     GivenReverseGearMaxSpeed3AndStepCount5And3UpdatesWhenGearSetToNeutralAnd4UpdatesThenGetCurrentSpeedShouldReturn0) {
   mStepCount = 5;
   mMaxSpeed = 3;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, 3);
 
@@ -261,7 +275,8 @@ TEST_F(
   mStepCount = 10;
   mMaxSpeed = 10;
   const auto expected_speed_delta = -3.f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
   update_many(mEngineSUT, mStepCount);
   mEngineSUT.set_gear(Gear::Reverse);
@@ -278,7 +293,8 @@ TEST_F(
   mStepCount = 10;
   mMaxSpeed = 10;
   const auto expected_speed_delta = 3.f;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Reverse);
   update_many(mEngineSUT, mStepCount);
   mEngineSUT.set_gear(Gear::Drive);
@@ -358,7 +374,8 @@ TEST_F(SquareRootEngineTest, GivenDynamicSpeedThenGetPositionDeltaShouldOnlyRetu
   mStepCount = 2;
   mMaxSpeed = 1;
   mAngle = PI / 2;
-  mEngineSUT = SquareRootEngine(mStepCount, mMaxSpeed);
+  mEngineSUT =
+      SquareRootEngine{SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed}};
   mEngineSUT.set_gear(Gear::Drive);
 
   mEngineSUT.update();

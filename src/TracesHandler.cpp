@@ -1,5 +1,7 @@
 #include "TracesHandler.hpp"
 
+#include <gsl/gsl>
+
 #include "utility.hpp"
 
 sf::Vector2f get_middle_top_transform(const sf::Sprite& sprite,
@@ -20,7 +22,7 @@ TracesHandler::TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite,
     : mTracksTexture(tracks),
       mTankSprite(tank_sprite),
       mLastTankPos(start_pos),
-      mMaxTextureHeight(mTracksTexture.getSize().y),
+      mMaxTextureHeight(gsl::narrow<int>(mTracksTexture.getSize().y)),
       mConfig(config) {}
 
 TracesHandler::TracesHandler(const sf::Texture& tracks, sf::Sprite& tank_sprite,
@@ -64,7 +66,7 @@ void TracesHandler::decay_traces() {
   }
   if (mTracesAge.front() >= mConfig.mMaxTraceAge) {
     const float trace_height = mTraces.front().get_height();
-    const float decrease_by = mConfig.mDecayRate * mMaxTextureHeight;
+    const float decrease_by = mConfig.mDecayRate * gsl::narrow<float>(mMaxTextureHeight);
     if (trace_height <= decrease_by) {
       remove_trace();
       return;
@@ -97,7 +99,7 @@ Trace TracesHandler::make_trace(const sf::Vector2f& move) const {
   } else {
     pos = get_middle_top_transform(mTankSprite, -move_distance);
   }
-  return Trace(mTracksTexture, pos, angle, move_distance);
+  return {mTracksTexture, MovementState{.mX = pos.x, .mY = pos.y, .mAngle = angle}, move_distance};
 }
 
 bool TracesHandler::is_moving_forward(const sf::Vector2f& move) const {
