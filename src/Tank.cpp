@@ -1,6 +1,7 @@
 #include "Tank.hpp"
 
 #include <cmath>
+#include <gsl/gsl>
 
 #include "Size.hpp"
 #include "TextureStore.hpp"
@@ -15,12 +16,12 @@ constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milli
 TankPart::TankPart(sf::Texture &texture) {
   mSprite.setTexture(texture);
   const auto [width, height] = texture.getSize();
-  mSprite.setOrigin(width / 2.f, height / 2.f);
+  mSprite.setOrigin(gsl::narrow<float>(width) / 2.f, gsl::narrow<float>(height) / 2.f);
 }
 
 void TankPart::rotate(const Rotation r) { mRotation = r; }
 
-void TankPart::set_rotation(const int angle) { mSprite.setRotation(angle); }
+void TankPart::set_rotation(const float angle) { mSprite.setRotation(angle); }
 
 float TankPart::get_rotation() const { return mSprite.getRotation(); }
 
@@ -46,15 +47,14 @@ void TankPart::draw(sf::RenderWindow &window, const float x, const float y) {
   window.draw(mSprite);
 }
 
-Tank::Tank(float x, float y, sf::Texture &body, sf::Texture &tower, sf::Texture &shot,
-           sf::Texture &tracks, std::unique_ptr<Engine> &&engine,
+Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engine> &&engine,
            const TracesHandlerConfig &traces_handler_config)
     : mPos({x, y}),
-      mBody(body),
-      mTower(tower),
-      mShot(shot),
+      mBody(textures.mBody),
+      mTower(textures.mTower),
+      mShot(textures.mShot),
       mEngine(std::move(engine)),
-      mTracesHandler(std::make_unique<TracesHandler>(tracks, mBody.get_sprite(), mPos,
+      mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
                                                      traces_handler_config)) {
   set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
@@ -75,11 +75,11 @@ Tank::Tank(const Tank &rhs)
                                                      mBody.get_sprite(), mPos,
                                                      rhs.mTracesHandler->get_config())) {}
 
-Tank::Tank(Tank &&rhs)
-    : mPos(std::move(rhs.mPos)),
-      mCurrentSpeed(std::move(rhs.mCurrentSpeed)),
-      mShotStart(std::move(rhs.mShotStart)),
-      mDrawShot(std::move(rhs.mDrawShot)),
+Tank::Tank(Tank &&rhs) noexcept
+    : mPos(rhs.mPos),
+      mCurrentSpeed(rhs.mCurrentSpeed),
+      mShotStart(rhs.mShotStart),
+      mDrawShot(rhs.mDrawShot),
       mBody(std::move(rhs.mBody)),
       mTower(std::move(rhs.mTower)),
       mShot(std::move(rhs.mShot)),
@@ -106,14 +106,14 @@ Tank &Tank::operator=(const Tank &rhs) {
   return *this;
 }
 
-Tank &Tank::operator=(Tank &&rhs) {
+Tank &Tank::operator=(Tank &&rhs) noexcept {
   if (this == &rhs) {
     return *this;
   }
-  mPos = std::move(rhs.mPos);
-  mCurrentSpeed = std::move(rhs.mCurrentSpeed);
-  mShotStart = std::move(rhs.mShotStart);
-  mDrawShot = std::move(rhs.mDrawShot);
+  mPos = rhs.mPos;
+  mCurrentSpeed = rhs.mCurrentSpeed;
+  mShotStart = rhs.mShotStart;
+  mDrawShot = rhs.mDrawShot;
   mBody = std::move(rhs.mBody);
   mTower = std::move(rhs.mTower);
   mShot = std::move(rhs.mShot);
@@ -133,7 +133,7 @@ void Tank::rotate_tower(Rotation r) {
   mShot.rotate(r);
 }
 
-void Tank::set_rotation(const int angle) {
+void Tank::set_rotation(const float angle) {
   mTower.set_rotation(angle);
   mBody.set_rotation(angle);
   mShot.set_rotation(angle);
@@ -152,7 +152,8 @@ void Tank::update() {
 }
 
 void Tank::update_position() {
-  const auto &delta = mEngine->get_position_delta(to_radians(mBody.get_rotation()));
+  const auto &delta =
+      mEngine->get_position_delta(gsl::narrow_cast<float>(to_radians(mBody.get_rotation())));
   const auto new_pos = mPos + delta;
   if (is_sprite_x_in_board(new_pos.x, mBody.get_sprite())) {
     mPos.x = new_pos.x;

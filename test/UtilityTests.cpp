@@ -46,7 +46,7 @@ INSTANTIATE_TEST_CASE_P(
                           330.f}));
 
 TEST(GetAngleTest, GetAngleShouldComplementGetPositionDelta) {
-  SquareRootEngine engine(1, 2);
+  SquareRootEngine engine{SquareRootEngineConfig{.mStepCount = 1, .mMaxSpeed = 2.f}};
   float expected_angle_radians = PI / 4;
   engine.set_gear(Gear::Drive);
   engine.update();

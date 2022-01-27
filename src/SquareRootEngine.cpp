@@ -2,16 +2,18 @@
 
 #include <algorithm>
 #include <cmath>
+#include <gsl/gsl>
 #include <stdexcept>
 
 #include "Size.hpp"
 #include "utility.hpp"
 
-SquareRootEngine::SquareRootEngine(const int step_count, const float max_speed)
-    : mStepCount(step_count), mMaxSpeed(max_speed) {}
+SquareRootEngine::SquareRootEngine(const SquareRootEngineConfig& config)
+    : mStepCount(config.mStepCount), mMaxSpeed(config.mMaxSpeed) {}
 
 std::unique_ptr<Engine> SquareRootEngine::copy() const {
-  return std::make_unique<SquareRootEngine>(mStepCount, mMaxSpeed);
+  return std::make_unique<SquareRootEngine>(
+      SquareRootEngineConfig{.mStepCount = mStepCount, .mMaxSpeed = mMaxSpeed});
 }
 
 void SquareRootEngine::set_gear(const Gear gear) {
@@ -25,7 +27,7 @@ int SquareRootEngine::get_step_for_current_speed() const {
   if (mCurrentSpeed == 0) {
     return 1;
   }
-  return std::pow(mCurrentSpeed * std::sqrt(mStepCount) / mMaxSpeed, 2);
+  return gsl::narrow_cast<int>(std::pow(mCurrentSpeed * std::sqrt(mStepCount) / mMaxSpeed, 2));
 }
 
 float SquareRootEngine::get_current_speed() const { return mCurrentSpeed; }
@@ -82,13 +84,14 @@ float SquareRootEngine::reduce_abs_speed_by(const float amount) const {
 }
 
 float SquareRootEngine::get_speed_delta() const {
-  return mMaxSpeed * (std::sqrt(mStep) / std::sqrt(mStepCount)) - std::abs(mCurrentSpeed);
+  return mMaxSpeed * gsl::narrow_cast<float>(std::sqrt(mStep) / std::sqrt(mStepCount)) -
+         std::abs(mCurrentSpeed);
 }
 
-float SquareRootEngine::freeride() const { return mMaxSpeed / mStepCount; }
+float SquareRootEngine::freeride() const { return mMaxSpeed / gsl::narrow<float>(mStepCount); }
 
 sf::Vector2f SquareRootEngine::get_position_delta(const float rotation_radians) {
-  mPositionDelta.x = mCurrentSpeed * std::cos(rotation_radians - PI / 2);
-  mPositionDelta.y = mCurrentSpeed * std::sin(rotation_radians - PI / 2);
+  mPositionDelta.x = mCurrentSpeed * gsl::narrow_cast<float>(std::cos(rotation_radians - PI / 2));
+  mPositionDelta.y = mCurrentSpeed * gsl::narrow_cast<float>(std::sin(rotation_radians - PI / 2));
   return mPositionDelta;
 }

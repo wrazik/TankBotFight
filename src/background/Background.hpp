@@ -8,7 +8,7 @@
 
 class Background {
  public:
-  Background(TextureStore& texture_store);
+  explicit Background(TextureStore& texture_store);
 
   void draw(sf::RenderWindow& mWindow);
 

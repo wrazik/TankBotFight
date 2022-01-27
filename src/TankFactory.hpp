@@ -1,8 +1,8 @@
 #pragma once
 #include <Tank.hpp>
-#include <TextureStore.hpp>
 
+class TextureStore;
 class TankFactory {
  public:
-  static Tank Random(TextureStore& store, float x, float y);
+  [[nodiscard]] static Tank Random(TextureStore& store, float x, float y);
 };

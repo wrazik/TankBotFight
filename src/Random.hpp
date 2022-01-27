@@ -1,11 +1,11 @@
 #pragma once
-#include <vector>
+#include <array>
 
-int random_range(int begin, int end);
+[[nodiscard]] int random_range(int begin, int end);
 
 template <typename T, typename... Args>
-T one_of(T first, Args... rest) {
-  T array[sizeof...(rest) + 1] = {first, rest...};
+[[nodiscard]] T one_of(T first, Args... rest) {
+  std::array<T, sizeof...(rest) + 1> array = {first, rest...};
 
-  return array[random_range(0, sizeof...(rest))];
+  return array[random_range(0, sizeof...(rest))];  // NOLINT
 }

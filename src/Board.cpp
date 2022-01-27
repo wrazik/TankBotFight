@@ -33,7 +33,7 @@ void Board::fire_missle(Tank& tank) {
   const auto angle = tank.get_tower_rotation();
   const auto [x, y] = tank.get_position();
   auto& missle_texture = mStore.get_texture("bulletDark3.png");
-  mMissles.emplace_back(missle_texture, angle, x, y);
+  mMissles.emplace_back(missle_texture, MovementState{.mX = x, .mY = y, .mAngle = angle});
   tank.shot();
 }
 
@@ -55,7 +55,7 @@ void Board::run() {
   DummyController dummyController(mTanks[1], *this);
 
   while (mWindow.isOpen()) {
-    sf::Event event;
+    sf::Event event{};
     while (mWindow.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         mWindow.close();

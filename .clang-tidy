@@ -236,7 +236,7 @@ CheckOptions:
   - key:             modernize-use-equals-default.IgnoreMacros
     value:           'true'
   - key:             cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
-    value:           'false'
+    value:           'true'
   - key:             cert-dcl37-c.AggressiveDependentMemberLookup
     value:           'false'
   - key:             modernize-use-emplace.SmartPointers
@@ -390,7 +390,7 @@ CheckOptions:
   - key:             cert-dcl51-cpp.Invert
     value:           'false'
   - key:             hicpp-special-member-functions.AllowSoleDefaultDtor
-    value:           'false'
+    value:           'true'
   - key:             cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
     value:           'true'
   - key:             modernize-make-unique.IgnoreMacros

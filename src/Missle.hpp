@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#include "MovementState.hpp"
 class Missle {
  public:
-  Missle(sf::Texture& texture, const int angle, const float x, const float y);
+  Missle(sf::Texture& texture, const MovementState& state);
   void draw(sf::RenderWindow& window);
   void update();
-  sf::Vector2f get_pos() const;
+  [[nodiscard]] sf::Vector2f get_pos() const;
 
  private:
   sf::Sprite mSprite;

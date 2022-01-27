@@ -6,7 +6,7 @@ class Obstacle {
  public:
   Obstacle(int x, int y);
 
-  sf::Sprite get_sprite();
+  [[nodiscard]] sf::Sprite get_sprite();
 
  private:
   sf::Texture mTxt;

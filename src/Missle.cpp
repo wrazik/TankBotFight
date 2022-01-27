@@ -2,14 +2,15 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <gsl/gsl>
 
 #include "Size.hpp"
 
-Missle::Missle(sf::Texture& texture, const int angle, const float x, const float y)
-    : mPos({x, y}), mAngle(angle) {
+Missle::Missle(sf::Texture& texture, const MovementState& state)
+    : mPos({state.mX, state.mY}), mAngle(state.mAngle) {
   mSprite.setTexture(texture);
   mSprite.setPosition(mPos.x, mPos.y);
-  mSprite.setRotation(angle);
+  mSprite.setRotation(mAngle);
 }
 void Missle::draw(sf::RenderWindow& window) {
   update();
@@ -23,6 +24,6 @@ void Missle::update() {
   const auto rotation_degree = mAngle - 90;
   const auto rotation_radians = PI / 180.f * rotation_degree;
 
-  mPos.x += mSpeed * std::cos(rotation_radians);
-  mPos.y += mSpeed * std::sin(rotation_radians);
+  mPos.x += mSpeed * gsl::narrow_cast<float>(std::cos(rotation_radians));
+  mPos.y += mSpeed * gsl::narrow_cast<float>(std::sin(rotation_radians));
 }
