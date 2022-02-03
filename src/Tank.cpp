@@ -141,6 +141,8 @@ void Tank::set_rotation(const float angle) {
 
 sf::Vector2f Tank::get_position() { return mPos; }
 
+sf::FloatRect Tank::get_body_rect() const { return mBody.get_sprite().getGlobalBounds(); }
+
 void Tank::update() {
   mBody.update();
   mTower.update();

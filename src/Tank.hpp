@@ -57,6 +57,7 @@ class Tank {
 
   [[nodiscard]] float get_tower_rotation() const;
   [[nodiscard]] sf::Vector2f get_position();
+  [[nodiscard]] sf::FloatRect get_body_rect() const;
   [[nodiscard]] float get_current_speed();
 
  private:

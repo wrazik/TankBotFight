@@ -1,7 +1,9 @@
 #pragma once
 #include <chrono>
+#include <memory>
 
-class Tank;
+#include "Tank.hpp"
+
 class Board;
 
 enum class DummyMove {
@@ -14,11 +16,11 @@ enum class DummyMove {
 
 class DummyController {
  public:
-  DummyController(Tank& tank, Board& board);
+  DummyController(const std::shared_ptr<Tank>& tank, Board& board);
   void update();
 
  private:
-  Tank& mTank;
+  std::weak_ptr<Tank> mTank;
   Board& mBoard;
   DummyMove mCurrentMove = DummyMove::Idle;
   std::chrono::time_point<std::chrono::system_clock> mLastChange;
