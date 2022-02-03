@@ -32,8 +32,10 @@ add_library(
   src/Controllers/KeyboardController.cpp
   src/Controllers/DummyController.cpp
   src/Missle.cpp
-  src/Tank.cpp
-  src/TankFactory.cpp
+  src/Tank/Tank.cpp
+  src/Tank/TankFactory.cpp
+  src/Tank/TankPart.cpp
+  src/Tank/TankTower.cpp
   src/TextureStore.cpp
   src/Obstacle.cpp
   src/Random.cpp

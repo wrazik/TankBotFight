@@ -18,11 +18,15 @@ Tank TankFactory::Random(TextureStore& store, float x, float y) {
   auto& tracks_texture = store.get_texture("tracksSmall.png", TRACKS_TEXTURE_RECT);
   tracks_texture.setSmooth(true);
   tracks_texture.setRepeated(true);
+  auto& missile_texture = store.get_texture("bulletDark3.png");
+  missile_texture.setSmooth(true);
+
   return {x, y,
           TankTextures{.mBody = body_texture,
                        .mTower = tower_texture,
                        .mShot = shot_texture,
-                       .mTracks = tracks_texture},
+                       .mTracks = tracks_texture,
+                       .mMissile = missile_texture},
           std::make_unique<SquareRootEngine>(
               SquareRootEngineConfig{.mStepCount = 70, .mMaxSpeed = 5.f}),
           TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f}};

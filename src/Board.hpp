@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Missle.hpp"
-#include "Tank.hpp"
+#include "Tank/Tank.hpp"
 #include "background/Background.hpp"
 
 class Board {
@@ -12,7 +12,7 @@ class Board {
   Board();
 
   void register_tank();
-  void fire_missle(Tank& tank);
+  void register_missile(const Missle& missile);
 
   void run();
 

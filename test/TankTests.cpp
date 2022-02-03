@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "SquareRootEngine.hpp"
-#include "Tank.hpp"
+#include "Tank/Tank.hpp"
 #include "TestUtility.hpp"
 #include "TracesHandler.hpp"
 #include "gmock/gmock.h"
@@ -23,6 +23,7 @@ struct TankTest : ::testing::Test {
   std::unique_ptr<sf::Texture> mTower{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mMissile{create_dummy_texture()};
   std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
@@ -34,13 +35,21 @@ struct TankTest : ::testing::Test {
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
     return {0, 0,
-            TankTextures{.mBody = *mBody, .mTower = *mTower, .mShot = *mShot, .mTracks = *mTracks},
+            TankTextures{.mBody = *mBody,
+                         .mTower = *mTower,
+                         .mShot = *mShot,
+                         .mTracks = *mTracks,
+                         .mMissile = *mMissile},
             std::move(engine), TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
   }
 
   Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
     return {0, 0,
-            TankTextures{.mBody = *mBody, .mTower = *mTower, .mShot = *mShot, .mTracks = *mTracks},
+            TankTextures{.mBody = *mBody,
+                         .mTower = *mTower,
+                         .mShot = *mShot,
+                         .mTracks = *mTracks,
+                         .mMissile = *mMissile},
             std::move(engine), TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
   }
 };

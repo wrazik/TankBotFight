@@ -8,7 +8,7 @@
 #include "Random.hpp"
 #include "Size.hpp"
 #include "SquareRootEngine.hpp"
-#include "TankFactory.hpp"
+#include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
@@ -29,13 +29,7 @@ void Board::register_tank() {
   mText.setFont(mFont);
 }
 
-void Board::fire_missle(Tank& tank) {
-  const auto angle = tank.get_tower_rotation();
-  const auto [x, y] = tank.get_position();
-  auto& missle_texture = mStore.get_texture("bulletDark3.png");
-  mMissles.emplace_back(missle_texture, MovementState{.mX = x, .mY = y, .mAngle = angle});
-  tank.shot();
-}
+void Board::register_missile(const Missle& missile) { mMissles.push_back(missile); }
 
 void Board::draw() {
   mWindow.clear();
@@ -93,11 +87,12 @@ void Board::remove_missles() {
 }
 
 // tanks gets shot by themselves!
-// there must be a way to decide whether the missle was shot by a particular tank...
+// there must be a way to decide whether the missle was shot by a particular tank... - NO! tanks
+// should never be able to catch up with the missle they shot missiles must be faster
 void Board::remove_tanks() {
   std::erase_if(mTanks, [this](const auto& tank) {
     const auto& body = tank->get_body_rect();
     return std::any_of(mMissles.cbegin(), mMissles.cend(),
-                       [&body](const auto& missle) { return body.contains(missle.get_pos()); });
+                       [&body](const auto& missile) { return body.contains(missile.get_pos()); });
   });
 }

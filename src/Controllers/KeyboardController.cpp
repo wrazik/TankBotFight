@@ -10,16 +10,12 @@ KeyboardController::KeyboardController(const std::shared_ptr<Tank>& tank, Board&
   mLastShot = std::chrono::system_clock::now();
 }
 
-void KeyboardController::handle_shot() {
-  if (mTank.expired()) {
-    return;
-  }
-  const auto now = std::chrono::system_clock::now();
-  const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastShot);
-  constexpr auto SHOT_COOLDOWN = std::chrono::milliseconds{500};
-  if (elapsed >= SHOT_COOLDOWN) {
-    mLastShot = now;
-    mBoard.fire_missle(*mTank.lock());
+void KeyboardController::handle_shot(const std::shared_ptr<Tank>& tank) {
+  const auto& missile =
+      tank->shot();  // it would control: cooldown, animation [draw function], in case cooldown is
+                     // right it would return missile with the right parameters
+  if (missile) {
+    mBoard.register_missile(missile.value());
   }
 }
 
@@ -49,7 +45,7 @@ void KeyboardController::update(const sf::Event& event) {
         tank->set_gear(Gear::Reverse);
         break;
       case sf::Keyboard::Space:
-        handle_shot();
+        handle_shot(tank);
         break;
       default:
         break;

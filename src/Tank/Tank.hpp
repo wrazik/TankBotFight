@@ -5,41 +5,28 @@
 #include <chrono>
 #include <functional>
 #include <memory>
+#include <optional>
 
 #include "Engine.hpp"
+#include "Missle.hpp"
+#include "Tank/TankPart.hpp"
+#include "Tank/TankTower.hpp"
 #include "TextureStore.hpp"
 #include "TracesHandler.hpp"
-
-enum class Rotation { None, Clockwise, Counterclockwise };
-
-class TankPart {
- public:
-  explicit TankPart(sf::Texture& texture);
-
-  void rotate(Rotation r);
-  void set_rotation(float angle);
-  void draw(sf::RenderWindow& window, float x, float y);
-  float get_rotation() const;
-  sf::Sprite& get_sprite();
-  const sf::Sprite& get_sprite() const;
-  void update();
-
- private:
-  sf::Sprite mSprite;
-  Rotation mRotation = Rotation::None;
-};
 
 struct TankTextures {
   std::reference_wrapper<sf::Texture> mBody;
   std::reference_wrapper<sf::Texture> mTower;
   std::reference_wrapper<sf::Texture> mShot;
   std::reference_wrapper<sf::Texture> mTracks;
+  std::reference_wrapper<sf::Texture> mMissile;
 };
 
 class Tank {
  public:
   Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
-       const TracesHandlerConfig& traces_handler_config = TracesHandlerConfig{});
+       const TracesHandlerConfig& traces_handler_config = {},
+       const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500});
   Tank(const Tank& rhs);
   Tank(Tank&& rhs) noexcept;
   Tank& operator=(const Tank& rhs);
@@ -53,7 +40,7 @@ class Tank {
   void set_gear(Gear gear);
   void draw(sf::RenderWindow& window);
   void update();
-  void shot();
+  std::optional<Missle> shot();
 
   [[nodiscard]] float get_tower_rotation() const;
   [[nodiscard]] sf::Vector2f get_position();
@@ -61,20 +48,14 @@ class Tank {
   [[nodiscard]] float get_current_speed();
 
  private:
-  inline constexpr static float M_SPEED = 0.01f;
-  void update_shot();
-  void update_position();
-  void draw_shot(sf::RenderWindow& window);
   void draw_tracks(sf::RenderWindow& window);
+  void update_position();
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
-  std::chrono::system_clock::time_point mShotStart;
-  bool mDrawShot = false;
 
   TankPart mBody;
-  TankPart mTower;
-  TankPart mShot;
+  TankTower mTower;
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
 };

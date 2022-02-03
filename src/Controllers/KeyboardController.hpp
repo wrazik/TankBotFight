@@ -2,7 +2,7 @@
 #include <chrono>
 #include <memory>
 
-#include "Tank.hpp"
+#include "Tank/Tank.hpp"
 
 class Board;
 namespace sf {
@@ -15,7 +15,7 @@ class KeyboardController {
   void update(const sf::Event& event);
 
  private:
-  void handle_shot();
+  void handle_shot(const std::shared_ptr<Tank>& tank);
   std::weak_ptr<Tank> mTank;
   Board& mBoard;
   std::chrono::time_point<std::chrono::system_clock> mLastShot;

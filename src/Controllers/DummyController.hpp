@@ -2,7 +2,7 @@
 #include <chrono>
 #include <memory>
 
-#include "Tank.hpp"
+#include "Tank/Tank.hpp"
 
 class Board;
 
