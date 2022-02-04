@@ -17,8 +17,10 @@ set(CLANG_TIDY_VERSION
     CACHE STRING "Clang tidy version to run checks")
 
 if(ENABLE_CLANG_TIDY)
-  add_tidy_target(${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
-                  ${CMAKE_SOURCE_DIR}/src/background/* ${CMAKE_SOURCE_DIR}/src/Controllers/*)
+  add_tidy_target(
+    ${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
+    ${CMAKE_SOURCE_DIR}/src/background/* ${CMAKE_SOURCE_DIR}/src/Controllers/*
+    ${CMAKE_SOURCE_DIR}/src/Tank/*)
 endif()
 
 add_library(
@@ -70,7 +72,8 @@ if(UNIX AND NOT APPLE)
   set(EXTRA_LIBS GL)
 endif()
 
-target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS} Microsoft.GSL::GSL)
+target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
+                                                Microsoft.GSL::GSL)
 target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics)
 
 add_subdirectory(test)

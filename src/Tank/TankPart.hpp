@@ -11,10 +11,11 @@ class TankPart {
   void rotate(Rotation r);
   void set_rotation(float angle);
   void draw(sf::RenderWindow& window);
-  float get_rotation() const;
-  sf::Sprite& get_sprite();
-  const sf::Sprite& get_sprite() const;
   void update();
+
+  [[nodiscard]] float get_rotation() const;
+  [[nodiscard]] sf::Sprite& get_sprite();
+  [[nodiscard]] const sf::Sprite& get_sprite() const;
 
  private:
   sf::Sprite mSprite;

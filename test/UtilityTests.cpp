@@ -55,3 +55,27 @@ TEST(GetAngleTest, GetAngleShouldComplementGetPositionDelta) {
 
   EXPECT_NEAR(actual_angle_degrees, to_degrees(expected_angle_radians), PRECISION);
 }
+
+TEST(FindAllTest, GivenNoElementsFoundInRange_WhenFindAllCalled_ThenReturnEmptyVector) {
+  std::vector<int> collection{1, 3, 5};
+  const auto& iters =
+      find_all(collection.cbegin(), collection.cend(), [](const int val) { return val % 2 == 0; });
+  const auto& elems = dereference_vec(iters);
+  expect_vec_eq(elems, std::vector<int>{});
+}
+
+TEST(FindAllTest, GivenOneElementFoundInRange_WhenFindAllCalled_ThenReturnOneIterator) {
+  std::vector<int> collection{1, 3, 5};
+  const auto& iters =
+      find_all(collection.cbegin(), collection.cend(), [](const int val) { return val == 5; });
+  const auto& elems = dereference_vec(iters);
+  expect_vec_eq(elems, std::vector<int>{5});
+}
+
+TEST(FindAllTest, GivenMultipleElementsFoundInRange_WhenFindAllCalled_ThenReturnAllIterators) {
+  std::vector<int> collection{1, 2, 3, 4, 5, 6};
+  const auto& iters =
+      find_all(collection.cbegin(), collection.cend(), [](const int val) { return val % 2 == 0; });
+  const auto& elems = dereference_vec(iters);
+  expect_vec_eq(elems, std::vector<int>{2, 4, 6});
+}

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <gsl/gsl>
 #include <iostream>
+#include <iterator>
 
 #include "Size.hpp"
 
@@ -65,4 +66,16 @@ inline void print_point(const auto& point) {
     opposite_angle = 360.f + opposite_angle;
   }
   return opposite_angle;
+}
+
+template <typename Iter, typename Pred>
+requires std::input_iterator<Iter>&& std::indirect_unary_predicate<Pred, Iter> std::vector<Iter>
+find_all(Iter cbegin, Iter cend, Pred pred) {
+  std::vector<Iter> elements{};
+  for (; cbegin != cend; ++cbegin) {
+    if (pred(*cbegin)) {
+      elements.push_back(cbegin);
+    }
+  }
+  return elements;
 }

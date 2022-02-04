@@ -6,18 +6,7 @@
 #include "Engine.hpp"
 
 KeyboardController::KeyboardController(const std::shared_ptr<Tank>& tank, Board& board)
-    : mTank(tank), mBoard(board) {
-  mLastShot = std::chrono::system_clock::now();
-}
-
-void KeyboardController::handle_shot(const std::shared_ptr<Tank>& tank) {
-  const auto& missile =
-      tank->shot();  // it would control: cooldown, animation [draw function], in case cooldown is
-                     // right it would return missile with the right parameters
-  if (missile) {
-    mBoard.register_missile(missile.value());
-  }
-}
+    : mTank(tank), mBoard(board) {}
 
 void KeyboardController::update(const sf::Event& event) {
   if (mTank.expired()) {
@@ -45,7 +34,9 @@ void KeyboardController::update(const sf::Event& event) {
         tank->set_gear(Gear::Reverse);
         break;
       case sf::Keyboard::Space:
-        handle_shot(tank);
+        if (const auto& missile = tank->shot()) {
+          mBoard.register_missile(missile.value());
+        }
         break;
       default:
         break;
