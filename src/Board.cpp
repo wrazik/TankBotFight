@@ -86,13 +86,22 @@ void Board::remove_missles() {
   });
 }
 
-// tanks gets shot by themselves!
-// there must be a way to decide whether the missle was shot by a particular tank... - NO! tanks
-// should never be able to catch up with the missle they shot missiles must be faster
 void Board::remove_tanks() {
-  std::erase_if(mTanks, [this](const auto& tank) {
+  std::vector<Missle> missiles_collided{};
+
+  std::erase_if(mTanks, [this, &missiles_collided](const auto& tank) {
     const auto& body = tank->get_body_rect();
-    return std::any_of(mMissles.cbegin(), mMissles.cend(),
-                       [&body](const auto& missile) { return body.contains(missile.get_pos()); });
+    const auto missile =
+        std::find_if(mMissles.cbegin(), mMissles.cend(),
+                     [&body](const auto& missile) { return body.contains(missile.get_pos()); });
+    if (missile != mMissles.cend()) {
+      missiles_collided.push_back(*missile);
+    }
+    return missile != mMissles.cend();
+  });
+
+  std::erase_if(mMissles, [&missiles_collided](const auto& missile) {
+    return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),
+                       [&missile](const auto& m) { return m == missile; });
   });
 }

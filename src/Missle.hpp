@@ -9,6 +9,8 @@ class Missle {
   void update();
   [[nodiscard]] sf::Vector2f get_pos() const;
 
+  bool operator==(const Missle& rhs) const;
+
  private:
   sf::Sprite mSprite;
   float mSpeed = 20.0f;
