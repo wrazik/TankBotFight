@@ -14,7 +14,6 @@ TankTower::TankTower(const TankTowerTextures& textures,
     : mTower(textures.mTower),
       mShotAnimation(textures.mShotAnimation),
       mMissileTexture(textures.mMissile),
-      mLastShot(std::chrono::system_clock::now()),
       mShotCooldown(shot_cooldown) {}
 
 void TankTower::set_position(const sf::Vector2f& pos) {

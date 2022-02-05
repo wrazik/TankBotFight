@@ -25,6 +25,7 @@ add_executable(run_tests
   UtilityTests.cpp
   TracesHandlerTests.cpp
   TankPartTests.cpp
+  TankTowerTests.cpp
 )
 
 target_include_directories(run_tests PRIVATE
