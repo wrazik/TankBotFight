@@ -16,14 +16,14 @@ class TankTowerTest : public ::testing::Test {
 
 TEST_F(TankTowerTest, Given0MsCooldown_WhenShotCalled_ThenMissileIsAlwaysReturned) {
   TankTower mTower{mTextures, std::chrono::milliseconds{0}};
-  EXPECT_TRUE(mTower.shot());
-  EXPECT_TRUE(mTower.shot());
-  EXPECT_TRUE(mTower.shot());
+  EXPECT_TRUE(mTower.shoot());
+  EXPECT_TRUE(mTower.shoot());
+  EXPECT_TRUE(mTower.shoot());
 }
 
 TEST_F(TankTowerTest, GivenNonZeroCooldown_WhenShotCalled_ThenMissileIsNotAlwaysReturned) {
   TankTower mTower{mTextures, std::chrono::milliseconds{500}};
-  EXPECT_TRUE(mTower.shot());
-  EXPECT_FALSE(mTower.shot());
-  EXPECT_FALSE(mTower.shot());
+  EXPECT_TRUE(mTower.shoot());
+  EXPECT_FALSE(mTower.shoot());
+  EXPECT_FALSE(mTower.shoot());
 }

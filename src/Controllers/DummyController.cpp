@@ -26,7 +26,7 @@ void DummyController::update() {
 
   switch (mCurrentMove) {
     case DummyMove::Shot:
-      if (const auto &missile = tank->shot()) {
+      if (const auto &missile = tank->shoot()) {
         mBoard.register_missile(missile.value());
       }
       break;

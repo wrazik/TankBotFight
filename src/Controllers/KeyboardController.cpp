@@ -34,7 +34,7 @@ void KeyboardController::update(const sf::Event& event) {
         tank->set_gear(Gear::Reverse);
         break;
       case sf::Keyboard::Space:
-        if (const auto& missile = tank->shot()) {
+        if (const auto& missile = tank->shoot()) {
           mBoard.register_missile(missile.value());
         }
         break;

@@ -41,7 +41,7 @@ class Tank {
   void draw(sf::RenderWindow& window);
   void update();
 
-  [[nodiscard]] std::optional<Missle> shot();
+  [[nodiscard]] std::optional<Missle> shoot();
   [[nodiscard]] float get_tower_rotation() const;
   [[nodiscard]] sf::Vector2f get_position();
   [[nodiscard]] sf::FloatRect get_body_rect() const;

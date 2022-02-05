@@ -24,7 +24,7 @@ class TankTower {
   void draw(sf::RenderWindow& window);
   void update();
 
-  [[nodiscard]] std::optional<Missle> shot();
+  [[nodiscard]] std::optional<Missle> shoot();
   [[nodiscard]] float get_rotation() const;
 
  private:

@@ -113,7 +113,7 @@ void Tank::update_position() {
   mTower.set_position(mPos);
 }
 
-std::optional<Missle> Tank::shot() { return mTower.shot(); }
+std::optional<Missle> Tank::shoot() { return mTower.shoot(); }
 
 float Tank::get_current_speed() { return mEngine->get_current_speed(); }
 

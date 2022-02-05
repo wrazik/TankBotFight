@@ -112,7 +112,7 @@ struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {
 TEST_P(TankShootingTest, GivenAnyRotation_WhenTankShoots_ThenTankBodyShouldNotContainMissile) {
   const auto rotation = GetParam();
   mTankSUT.set_rotation(rotation);
-  const auto& missile = mTankSUT.shot();
+  const auto& missile = mTankSUT.shoot();
 
   EXPECT_FALSE(mTankSUT.get_body_rect().contains(missile->get_pos()));
 }

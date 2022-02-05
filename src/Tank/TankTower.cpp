@@ -62,7 +62,7 @@ void TankTower::update_shot_time() {
   }
 }
 
-std::optional<Missle> TankTower::shot() {
+std::optional<Missle> TankTower::shoot() {
   auto now = std::chrono::system_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastShot);
   if (elapsed >= mShotCooldown) {
