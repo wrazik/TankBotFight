@@ -1,5 +1,3 @@
-from pytest import test
-
 def adding (x, y):
     return x + y
 
