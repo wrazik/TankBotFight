@@ -2,18 +2,14 @@
 
 #include <Board.hpp>
 #include <Random.hpp>
+#include <Tank/Tank.hpp>
 #include <iostream>
 
-DummyController::DummyController(const std::shared_ptr<Tank> &tank, Board &board)
-    : mTank(tank), mBoard(board) {
+DummyController::DummyController(Tank &tank, Board &board) : mTank(tank), mBoard(board) {
   mLastChange = std::chrono::system_clock::now();
 }
 
 void DummyController::update() {
-  if (mTank.expired()) {
-    return;
-  }
-  const auto &tank = mTank.lock();
   const auto now = std::chrono::system_clock::now();
   const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastChange);
 
@@ -26,23 +22,23 @@ void DummyController::update() {
 
   switch (mCurrentMove) {
     case DummyMove::Shot:
-      if (const auto &missile = tank->shoot()) {
+      if (const auto &missile = mTank.shoot()) {
         mBoard.register_missile(missile.value());
       }
       break;
     case DummyMove::Forward:
-      tank->set_gear(Gear::Drive);
+      mTank.set_gear(Gear::Drive);
       break;
     case DummyMove::TurnLeft:
-      tank->rotate_body(Rotation::Clockwise);
-      tank->rotate_tower(Rotation::Clockwise);
+      mTank.rotate_body(Rotation::Clockwise);
+      mTank.rotate_tower(Rotation::Clockwise);
       break;
     case DummyMove::TurnRight:
-      tank->rotate_body(Rotation::Counterclockwise);
-      tank->rotate_tower(Rotation::Counterclockwise);
+      mTank.rotate_body(Rotation::Counterclockwise);
+      mTank.rotate_tower(Rotation::Counterclockwise);
       break;
     case DummyMove::Idle:
-      tank->set_gear(Gear::Neutral);
+      mTank.set_gear(Gear::Neutral);
       break;
     default:
       break;

@@ -4,7 +4,6 @@
 #include <gsl/gsl>
 
 #include "Size.hpp"
-#include "TextureStore.hpp"
 #include "utility.hpp"
 
 constexpr int TANK_INITIAL_ROTATION = 180;
@@ -87,7 +86,7 @@ void Tank::set_rotation(const float angle) {
   mBody.set_rotation(angle);
 }
 
-sf::Vector2f Tank::get_position() { return mPos; }
+sf::Vector2f Tank::get_position() const { return mPos; }
 
 sf::FloatRect Tank::get_body_rect() const { return mBody.get_sprite().getGlobalBounds(); }
 
@@ -115,7 +114,7 @@ void Tank::update_position() {
 
 std::optional<Missle> Tank::shoot() { return mTower.shoot(); }
 
-float Tank::get_current_speed() { return mEngine->get_current_speed(); }
+float Tank::get_current_speed() const { return mEngine->get_current_speed(); }
 
 float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
 

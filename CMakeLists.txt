@@ -18,9 +18,13 @@ set(CLANG_TIDY_VERSION
 
 if(ENABLE_CLANG_TIDY)
   add_tidy_target(
-    ${CLANG_TIDY_VERSION} FILES ${CMAKE_SOURCE_DIR}/src/*
-    ${CMAKE_SOURCE_DIR}/src/background/* ${CMAKE_SOURCE_DIR}/src/Controllers/*
-    ${CMAKE_SOURCE_DIR}/src/Tank/*)
+    ${CLANG_TIDY_VERSION}
+    FILES
+    ${CMAKE_SOURCE_DIR}/src/*
+    ${CMAKE_SOURCE_DIR}/src/background/*
+    ${CMAKE_SOURCE_DIR}/src/Controllers/*
+    ${CMAKE_SOURCE_DIR}/src/Tank/*
+    ${CMAKE_SOURCE_DIR}/src/Players/*)
 endif()
 
 add_library(
@@ -43,7 +47,9 @@ add_library(
   src/Random.cpp
   src/SquareRootEngine.cpp
   src/TracesHandler.cpp
-  src/Trace.cpp)
+  src/Trace.cpp
+  src/Players/DummyPlayer.cpp
+  src/Players/KeyboardPlayer.cpp)
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 

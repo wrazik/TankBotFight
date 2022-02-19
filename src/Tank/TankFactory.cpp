@@ -2,8 +2,10 @@
 
 #include "Random.hpp"
 #include "SquareRootEngine.hpp"
+#include "Tank/Tank.hpp"
+#include "TextureStore.hpp"
 
-Tank TankFactory::Random(TextureStore& store, float x, float y) {
+std::unique_ptr<Tank> TankFactory::Random(TextureStore& store, const float x, const float y) {
   using namespace std::string_literals;
   const sf::IntRect TRACKS_TEXTURE_RECT = {0, 0, 37, 48};
   auto& body_texture = store.get_texture(one_of("tankBody_red.png"s, "tankBody_dark.png"s,
@@ -21,13 +23,13 @@ Tank TankFactory::Random(TextureStore& store, float x, float y) {
   auto& missile_texture = store.get_texture("bulletDark3.png");
   missile_texture.setSmooth(true);
 
-  return {x, y,
-          TankTextures{.mBody = body_texture,
-                       .mTower = tower_texture,
-                       .mShot = shot_texture,
-                       .mTracks = tracks_texture,
-                       .mMissile = missile_texture},
-          std::make_unique<SquareRootEngine>(
-              SquareRootEngineConfig{.mStepCount = 70, .mMaxSpeed = 5.f}),
-          TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f}};
+  return std::make_unique<Tank>(x, y,
+                                TankTextures{.mBody = body_texture,
+                                             .mTower = tower_texture,
+                                             .mShot = shot_texture,
+                                             .mTracks = tracks_texture,
+                                             .mMissile = missile_texture},
+                                std::make_unique<SquareRootEngine>(
+                                    SquareRootEngineConfig{.mStepCount = 70, .mMaxSpeed = 5.f}),
+                                TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
 }

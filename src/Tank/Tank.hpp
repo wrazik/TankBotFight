@@ -11,7 +11,6 @@
 #include "Missle.hpp"
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
-#include "TextureStore.hpp"
 #include "TracesHandler.hpp"
 
 struct TankTextures {
@@ -43,9 +42,9 @@ class Tank {
 
   [[nodiscard]] std::optional<Missle> shoot();
   [[nodiscard]] float get_tower_rotation() const;
-  [[nodiscard]] sf::Vector2f get_position();
+  [[nodiscard]] sf::Vector2f get_position() const;
   [[nodiscard]] sf::FloatRect get_body_rect() const;
-  [[nodiscard]] float get_current_speed();
+  [[nodiscard]] float get_current_speed() const;
 
  private:
   void draw_tracks(sf::RenderWindow& window);

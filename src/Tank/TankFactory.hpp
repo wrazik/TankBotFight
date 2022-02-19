@@ -1,8 +1,9 @@
 #pragma once
-#include <Tank/Tank.hpp>
+#include <memory>
 
 class TextureStore;
+class Tank;
 class TankFactory {
  public:
-  [[nodiscard]] static Tank Random(TextureStore& store, float x, float y);
+  [[nodiscard]] static std::unique_ptr<Tank> Random(TextureStore& store, float x, float y);
 };
