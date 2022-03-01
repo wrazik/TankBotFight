@@ -1,8 +1,7 @@
 #pragma once
-#include <chrono>
 
-class Tank;
 class Board;
+class Tank;
 namespace sf {
 class Event;
 }
@@ -13,8 +12,6 @@ class KeyboardController {
   void update(const sf::Event& event);
 
  private:
-  void handle_shot();
   Tank& mTank;
   Board& mBoard;
-  std::chrono::time_point<std::chrono::system_clock> mLastShot;
 };

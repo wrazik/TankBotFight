@@ -2,7 +2,7 @@
 
 #include <Board.hpp>
 #include <Random.hpp>
-#include <Tank.hpp>
+#include <Tank/Tank.hpp>
 #include <iostream>
 
 DummyController::DummyController(Tank &tank, Board &board) : mTank(tank), mBoard(board) {
@@ -22,7 +22,9 @@ void DummyController::update() {
 
   switch (mCurrentMove) {
     case DummyMove::Shot:
-      mBoard.fire_missle(mTank);
+      if (const auto &missile = mTank.shoot()) {
+        mBoard.register_missile(missile.value());
+      }
       break;
     case DummyMove::Forward:
       mTank.set_gear(Gear::Drive);

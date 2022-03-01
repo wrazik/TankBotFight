@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "SquareRootEngine.hpp"
-#include "Tank.hpp"
+#include "Tank/Tank.hpp"
 #include "TestUtility.hpp"
 #include "TracesHandler.hpp"
 #include "gmock/gmock.h"
@@ -18,31 +18,33 @@ struct EngineMock : Engine {
   MOCK_METHOD(void, update, (), (override));
 };
 
-struct TankTest : ::testing::Test {
+struct TankTestData {
   std::unique_ptr<sf::Texture> mBody{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTower{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mMissile{create_dummy_texture()};
+  TankTextures mTextures{.mBody = *mBody,
+                         .mTower = *mTower,
+                         .mShot = *mShot,
+                         .mTracks = *mTracks,
+                         .mMissile = *mMissile};
   std::unique_ptr<testing::NiceMock<EngineMock>> mEngine{
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
       std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
+
+  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
+    return {0, 0, mTextures, std::move(engine),
+            TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
+  }
+};
+
+struct TankTest : TankTestData, ::testing::Test {
   Tank mTankSUT{create_tank(std::move(mEngine))};
 
   float mSpeed{1.f};
   int mAngle{90};
-
-  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return {0, 0,
-            TankTextures{.mBody = *mBody, .mTower = *mTower, .mShot = *mShot, .mTracks = *mTracks},
-            std::move(engine), TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
-  }
-
-  Tank create_tank(std::unique_ptr<testing::StrictMock<EngineMock>>&& engine) {
-    return {0, 0,
-            TankTextures{.mBody = *mBody, .mTower = *mTower, .mShot = *mShot, .mTracks = *mTracks},
-            std::move(engine), TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
-  }
 };
 
 TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithAngleRotation) {
@@ -102,3 +104,19 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
 
   expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
 }
+
+struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {
+  Tank mTankSUT{create_tank(std::move(mEngine))};
+};
+
+TEST_P(TankShootingTest, GivenAnyRotation_WhenTankShoots_ThenTankBodyShouldNotContainMissile) {
+  const auto rotation = GetParam();
+  mTankSUT.set_rotation(rotation);
+  const auto& missile = mTankSUT.shoot();
+
+  EXPECT_FALSE(mTankSUT.get_body_rect().contains(missile->get_pos()));
+}
+
+INSTANTIATE_TEST_SUITE_P(TankShootingTestsWithManyValues, TankShootingTest,
+                         testing::Values(0.f, 30.f, 45.f, 60.f, 90.f, 135.f, 180.f, 225.f, 270.f,
+                                         315.f, 359.f));

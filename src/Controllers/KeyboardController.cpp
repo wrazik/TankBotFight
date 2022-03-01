@@ -4,21 +4,8 @@
 
 #include "Board.hpp"
 #include "Engine.hpp"
-#include "Tank.hpp"
 
-KeyboardController::KeyboardController(Tank& tank, Board& board) : mTank(tank), mBoard(board) {
-  mLastShot = std::chrono::system_clock::now();
-}
-
-void KeyboardController::handle_shot() {
-  const auto now = std::chrono::system_clock::now();
-  const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastShot);
-  constexpr auto SHOT_COOLDOWN = std::chrono::milliseconds{500};
-  if (elapsed >= SHOT_COOLDOWN) {
-    mLastShot = now;
-    mBoard.fire_missle(mTank);
-  }
-}
+KeyboardController::KeyboardController(Tank& tank, Board& board) : mTank(tank), mBoard(board) {}
 
 void KeyboardController::update(const sf::Event& event) {
   if (event.type == sf::Event::KeyPressed) {
@@ -42,7 +29,9 @@ void KeyboardController::update(const sf::Event& event) {
         mTank.set_gear(Gear::Reverse);
         break;
       case sf::Keyboard::Space:
-        handle_shot();
+        if (const auto& missile = mTank.shoot()) {
+          mBoard.register_missile(missile.value());
+        }
         break;
       default:
         break;

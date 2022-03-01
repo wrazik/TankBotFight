@@ -8,40 +8,33 @@
 #include "Random.hpp"
 #include "Size.hpp"
 #include "SquareRootEngine.hpp"
-#include "TankFactory.hpp"
+#include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
 Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
-  mWindow.setFramerateLimit(30);
-}
-
-void Board::register_tank() {
-  using namespace std::string_literals;
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
-
   constexpr float TANK2_X = WIDTH / 2.0f;
   constexpr float TANK2_Y = 400.0f;
-
-  mTanks.emplace_back(TankFactory::Random(mStore, TANK_X, TANK_Y));
-  mTanks.emplace_back(TankFactory::Random(mStore, TANK2_X, TANK2_Y));
+  mWindow.setFramerateLimit(30);
+  mKeyboardPlayer =
+      std::make_unique<KeyboardPlayer>(*this, TankFactory::Random(mStore, TANK_X, TANK_Y));
+  mDummyPlayer =
+      std::make_unique<DummyPlayer>(*this, TankFactory::Random(mStore, TANK2_X, TANK2_Y));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);
 }
 
-void Board::fire_missle(Tank& tank) {
-  const auto angle = tank.get_tower_rotation();
-  const auto [x, y] = tank.get_position();
-  auto& missle_texture = mStore.get_texture("bulletDark3.png");
-  mMissles.emplace_back(missle_texture, MovementState{.mX = x, .mY = y, .mAngle = angle});
-  tank.shot();
-}
+void Board::register_missile(const Missle& missile) { mMissles.push_back(missile); }
 
 void Board::draw() {
   mWindow.clear();
   mBackground.draw(mWindow);
-  for (auto& tank : mTanks) {
-    tank.draw(mWindow);
+  if (mKeyboardPlayer) {
+    mKeyboardPlayer->draw(mWindow);
+  }
+  if (mDummyPlayer) {
+    mDummyPlayer->draw(mWindow);
   }
   for (auto& missle : mMissles) {
     missle.draw(mWindow);
@@ -51,9 +44,6 @@ void Board::draw() {
 }
 
 void Board::run() {
-  KeyboardController keyboard_controller(mTanks[0], *this);
-  DummyController dummyController(mTanks[1], *this);
-
   while (mWindow.isOpen()) {
     sf::Event event{};
     while (mWindow.pollEvent(event)) {
@@ -64,26 +54,57 @@ void Board::run() {
       if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
         mWindow.close();
       }
-      keyboard_controller.update(event);
+      if (mKeyboardPlayer) {
+        mKeyboardPlayer->handle_events(event);
+      }
     }
-
-    for (auto& tank : mTanks) {
-      tank.update();
+    if (mDummyPlayer) {
+      mDummyPlayer->update();
     }
-    dummyController.update();
+    if (mKeyboardPlayer) {
+      mKeyboardPlayer->update();
+    }
     draw();
     remove_missles();
+    remove_players();
   }
 }
 
 void Board::display_speed() {
-  mText.setString(std::to_string(mTanks[0].get_current_speed()));
-  mWindow.draw(mText);
+  if (mKeyboardPlayer) {
+    mText.setString(std::to_string(mKeyboardPlayer->get_tank().get_current_speed()));
+    mWindow.draw(mText);
+  }
 }
 
 void Board::remove_missles() {
   std::erase_if(mMissles, [](const auto& missle) -> bool {
     const auto [x, y] = missle.get_pos();
     return (x > WIDTH || y > HEIGHT || x < 0 || y < 0);
+  });
+}
+
+void Board::remove_players() {
+  std::vector<Missle> missiles_collided{};
+  auto remove_player_if_hit = [this, &missiles_collided](auto& player) {
+    if (!player) {
+      return;
+    }
+    const auto& it =
+        std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
+          return player->get_tank().get_body_rect().contains(missile.get_pos());
+        });
+    if (it != mMissles.cend()) {
+      player.reset();
+      missiles_collided.push_back(*it);
+    }
+  };
+
+  remove_player_if_hit(mKeyboardPlayer);
+  remove_player_if_hit(mDummyPlayer);
+
+  std::erase_if(mMissles, [&missiles_collided](const auto& missile) {
+    return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),
+                       [&missile](const auto& m) { return m == missile; });
   });
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include <chrono>
 
-class Tank;
 class Board;
+class Tank;
 
 enum class DummyMove {
   Forward,

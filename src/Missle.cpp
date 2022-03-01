@@ -5,6 +5,7 @@
 #include <gsl/gsl>
 
 #include "Size.hpp"
+#include "utility.hpp"
 
 Missle::Missle(sf::Texture& texture, const MovementState& state)
     : mPos({state.mX, state.mY}), mAngle(state.mAngle) {
@@ -27,3 +28,5 @@ void Missle::update() {
   mPos.x += mSpeed * gsl::narrow_cast<float>(std::cos(rotation_radians));
   mPos.y += mSpeed * gsl::narrow_cast<float>(std::sin(rotation_radians));
 }
+
+bool Missle::operator==(const Missle& rhs) const { return equal(mPos, rhs.get_pos()); }

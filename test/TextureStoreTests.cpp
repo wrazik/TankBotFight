@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <stdexcept>
+#include <tuple>
 
 #include "TextureStore.hpp"
 
@@ -9,7 +10,7 @@ struct TextureStoreTest : ::testing::Test {
 };
 
 TEST_F(TextureStoreTest, NonExistingSprite_ShouldThrowException) {
-  EXPECT_THROW(mTextureStore.get_texture("not_existing"), std::runtime_error);
+  EXPECT_THROW(std::ignore = mTextureStore.get_texture("not_existing"), std::runtime_error);
 }
 
 TEST_F(TextureStoreTest, GetSameTextureTwice_ShouldHaveTheSameAddress) {
