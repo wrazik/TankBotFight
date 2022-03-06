@@ -6,6 +6,8 @@ on:
   pull_request:
     branches:
       - main
+env:
+  VISUAL_STUDIO_PATH: C:\Program Files\Microsoft Visual Studio\2022\Enterprise
 
 jobs:
   build:
@@ -18,13 +20,13 @@ jobs:
       -  name: Install deps
          shell: cmd
          run: |
-           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+           call "${VISUAL_STUDIO_PATH}\VC\Auxiliary\Build\vcvars64.bat"
             .\vcpkg\bootstrap-vcpkg.bat
             .\vcpkg\vcpkg install
       -  name: Build
          shell: cmd
          run: |
-           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+           call "${VISUAL_STUDIO_PATH}\VC\Auxiliary\Build\vcvars64.bat"
            md build
            cd build
            cmake -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
