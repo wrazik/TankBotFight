@@ -1,0 +1,25 @@
+// Welcome to the first Coding Dojo!
+       ___
+ _____/_o_\_____
+(==(/_______\)==)
+ \==\/     \/==/
+
+Plan - 1 h
+- Introduction = 5 min
+-- vcpkg
+-- SFML
+-- Testing
+- Coding = 55 min
+
+Notes:
+- Features to implement:
+
+==== 1. Tower should rotate with the tank
+==== 2. Missle should collide with the tank
+==== 3. Reset the game when the tank is hit
+==== 4. Explosion animation
+==== 5. Score
+==== 6. Game over screen
+==== 7. Sound effects
+==== 8. Music
+
