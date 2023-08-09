@@ -60,7 +60,7 @@ TEST_F(TankTest, Given1UpdateWhenGetPositionThenReturnsPositionDelta) {
 
   mTankSUT.update();
 
-  expect_vec2f_eq(expected_position, mTankSUT.get_position());
+  expect_vec2f_eq(expected_position, mTankSUT.get_pos());
 }
 
 TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum) {
@@ -71,7 +71,7 @@ TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum)
 
   update_many(mTankSUT, update_count);
 
-  expect_vec2f_eq(expected_position, mTankSUT.get_position());
+  expect_vec2f_eq(expected_position, mTankSUT.get_pos());
 }
 
 TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
@@ -92,7 +92,7 @@ TEST_F(TankTest, WhenTankMoves_ThenItShouldNotMoveOutOfTheBoard) {
 
   update_many(mTankSUT, 100);
 
-  expect_vec2f_eq({0.f, 0.f}, mTankSUT.get_position());
+  expect_vec2f_eq({0.f, 0.f}, mTankSUT.get_pos());
 }
 
 TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis) {
@@ -102,7 +102,7 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
 
   update_many(mTankSUT, 100);
 
-  expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
+  expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_pos());
 }
 
 struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {

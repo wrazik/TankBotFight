@@ -20,6 +20,7 @@ class Board {
   void remove_players();
   void display_speed();
   void draw();
+  bool do_objects_collide(const GameObject& object1, const GameObject& object2);
 
   TextureStore mStore;
   sf::RenderWindow mWindow;

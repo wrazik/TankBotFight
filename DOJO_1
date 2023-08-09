@@ -9,17 +9,19 @@ Plan - 1 h
 -- vcpkg
 -- SFML
 -- Testing
-- Coding = 55 min
 
-Notes:
+- Coding = 55 min
 - Features to implement:
 
-==== 1. Tower should rotate with the tank
-==== 2. Missle should collide with the tank
-==== 3. Reset the game when the tank is hit
-==== 4. Explosion animation
-==== 5. Score
-==== 6. Game over screen
-==== 7. Sound effects
-==== 8. Music
+==== 1. Tracks should be drawn under the tank
+==== 2. Turret should rotate with the tank
+==== 3. Projectile should collide with the tank
+==== 4. Add obstacles on the screen
+==== 5. Reset the game when the tank is hit
+==== 6. Improve Computer AI
+==== 6. Explosion animation
+==== 7. Score
+==== 8. Game over screen
+==== 9. Sound effects
+==== 10. Music
 
