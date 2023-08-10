@@ -43,7 +43,6 @@ add_library(
   src/Tank/TankPart.cpp
   src/Tank/TankTower.cpp
   src/TextureStore.cpp
-  src/Obstacle.cpp
   src/Random.cpp
   src/SquareRootEngine.cpp
   src/TracesHandler.cpp
