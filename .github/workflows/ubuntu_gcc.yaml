@@ -8,7 +8,7 @@ on:
       - main
 env:
   BUILD_TYPE: Release
-  CLANG_TIDY_VERSION: 18
+  CLANG_TIDY_VERSION: 16
 
 jobs:
   build:
@@ -25,11 +25,8 @@ jobs:
 
     - name: Install deps
       run: |
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo add-apt-repository "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-${CLANG_TIDY_VERSION} main"
-        echo "deb http://mirrors.kernel.org/ubuntu $(lsb_release -cs) main universe" | sudo tee /etc/apt/sources.list.d/gcc-11.list 
         sudo apt-get update
-        sudo apt-get install -y gcc-11 g++-11 libx11-dev libxrandr-dev libgl1-mesa-dev clang-tidy-$CLANG_TIDY_VERSION libxcursor-dev   
+        sudo apt-get install -y gcc g++ libx11-dev libxrandr-dev libgl1-mesa-dev clang-tidy-$CLANG_TIDY_VERSION libxcursor-dev   
 
     - name: Check formatting
       run: |
