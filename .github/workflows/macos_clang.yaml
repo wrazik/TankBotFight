@@ -46,6 +46,4 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: |
-          ${CC} --version
-          ${CXX} --version
           cmake --build . --config $BUILD_TYPE
