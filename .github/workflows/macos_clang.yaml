@@ -40,8 +40,6 @@ jobs:
           CC: /usr/bin/clang
           CXX: /usr/bin/clang++
         run: |
-          ${CC} --version
-          ${CXX} --version
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build

@@ -24,9 +24,13 @@ jobs:
       run: git lfs checkout
 
     - name: Install deps
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gcc g++ libx11-dev libxrandr-dev libgl1-mesa-dev clang-tidy-$CLANG_TIDY_VERSION libxcursor-dev   
+      run:
+        sudo apt-get update &&
+        sudo apt-get install -y 
+          gcc g++ 
+          libx11-dev libxrandr-dev libgl1-mesa-dev
+          libxcursor-dev libudev-dev libxi-dev
+          clang-tidy-$CLANG_TIDY_VERSION
 
     - name: Check formatting
       run: |
