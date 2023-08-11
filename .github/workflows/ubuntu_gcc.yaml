@@ -8,7 +8,7 @@ on:
       - main
 env:
   BUILD_TYPE: Release
-  CLANG_TIDY_VERSION: 16
+  CLANG_TIDY_VERSION: 15
 
 jobs:
   build:

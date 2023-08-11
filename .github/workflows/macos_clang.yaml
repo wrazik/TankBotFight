@@ -16,7 +16,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           lfs: true
           submodules: true
@@ -36,8 +36,10 @@ jobs:
       - name: Configure CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
+        env:
+          CC: /usr/bin/clang
+          CXX: /usr/bin/clang++
         run: |
-          which clang
           ${CC} --version
           ${CXX} --version
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
