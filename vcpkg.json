@@ -7,7 +7,7 @@
     "ms-gsl",
     {
        "name": "range-v3",
-       "version>=": "2021-11-02"
+       "version>=": "0.12.0"
     }
   ]
 }
