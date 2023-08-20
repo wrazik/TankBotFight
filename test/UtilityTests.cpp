@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <cmath>
 
 #include "Size.hpp"
 #include "SquareRootEngine.hpp"
@@ -26,7 +27,7 @@ TEST_P(GetAngleTests, TestingGetAngleWithManyParameters) {
   EXPECT_NEAR(param.mExpectedDegrees, actual_degrees, PRECISION);
 }
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
     GetAngleTestInstantiation, GetAngleTests,
     ::testing::Values(
         GetAngleTestParam{"Given: {1.f, -1.f} vector then return 45 degrees", {1.f, -1.f}, 45.f},
@@ -40,9 +41,9 @@ INSTANTIATE_TEST_CASE_P(
         GetAngleTestParam{
             "Given: {-1.f, -1.f} vector then return 315 degrees", {-1.f, -1.f}, 315.f},
         GetAngleTestParam{
-            "Given: {-sqrt(3.f), -1.f} vector then return 300 degrees", {-sqrt(3.f), -1.f}, 300.f},
+            "Given: {-sqrt(3.f), -1.f} vector then return 300 degrees", {static_cast<float>(-sqrt(3.f)), -1.f}, 300.f},
         GetAngleTestParam{"Given: {-1.f, -sqrt(3.f)} vector then return 330 degrees",
-                          {-1.f, -sqrt(3.f)},
+                          {-1.f, static_cast<float>(-sqrt(3.0))},
                           330.f}));
 
 TEST(GetAngleTest, GetAngleShouldComplementGetPositionDelta) {

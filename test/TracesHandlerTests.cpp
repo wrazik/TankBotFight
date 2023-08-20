@@ -49,7 +49,7 @@ TEST_P(TracesHandlerRotationTest, GivenMove_ThenTraceShouldHaveOppositeRotation)
   EXPECT_NEAR(expected_rotation, get_trace_rotation(actual_traces, 0), PRECISION);
 }
 
-INSTANTIATE_TEST_CASE_P(RotationTestsWithManyValues, TracesHandlerRotationTest,
+INSTANTIATE_TEST_SUITE_P(RotationTestsWithManyValues, TracesHandlerRotationTest,
                         ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 270.f),
                                           std::make_pair(sf::Vector2f{2.f, 2.f}, 315.f),
                                           std::make_pair(sf::Vector2f{0.f, 2.f}, 0.f),
@@ -71,7 +71,7 @@ TEST_P(TracesHandlerTextureHeightTest, GivenMove_ThenTraceShouldHaveHeightEqualT
   EXPECT_NEAR(expected_height, get_trace_height(actual_traces, 0), PRECISION);
 }
 
-INSTANTIATE_TEST_CASE_P(TextureHeightTestsWithManyValues, TracesHandlerTextureHeightTest,
+INSTANTIATE_TEST_SUITE_P(TextureHeightTestsWithManyValues, TracesHandlerTextureHeightTest,
                         ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 2),
                                           std::make_pair(sf::Vector2f{1.f, 1.f}, 1.4142f),
                                           std::make_pair(sf::Vector2f{3.f, 4.f}, 5),

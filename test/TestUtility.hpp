@@ -3,7 +3,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <iterator>
 #include <memory>
-#include <range/v3/view/iota.hpp>
 
 inline constexpr double PRECISION{0.0001};
 void expect_vec2f_eq(const sf::Vector2f& lhs, const sf::Vector2f& rhs);
@@ -34,7 +33,7 @@ concept Updatable = requires(T a) {
 };
 
 void update_many(Updatable auto& updatable, int count) {
-  for (int i : ranges::iota_view(0, count)) {
+  for (int i = 0; i < count; ++i) {
     updatable.update();
   }
 }

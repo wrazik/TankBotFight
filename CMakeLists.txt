@@ -71,11 +71,7 @@ find_package(
 find_package(range-v3 REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 
-if(UNIX AND NOT APPLE)
-  # workaround for missing opengl dependency in SFML CMake
-  # (https://github.com/microsoft/vcpkg/issues/10949)
-  set(EXTRA_LIBS GL)
-endif()
+
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
                                                 Microsoft.GSL::GSL)
