@@ -1,13 +1,13 @@
 {
   "name": "tank-bot-fight",
   "version-string": "0.0.1",
-  "builtin-baseline": "c37cc7836a0e1cfd55747be8ec472eafa8055276",
+  "builtin-baseline": "c95000e1b5bb62884de08d5e952993c8bced9db6",
   "dependencies": [
     "sfml",
     "ms-gsl",
     {
        "name": "range-v3",
-       "version>=": "2021-11-02"
+       "version>=": "0.12.0"
     }
   ]
 }
