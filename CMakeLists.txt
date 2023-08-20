@@ -71,8 +71,6 @@ find_package(
 find_package(range-v3 REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 
-
-
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
                                                 Microsoft.GSL::GSL)
 target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics)

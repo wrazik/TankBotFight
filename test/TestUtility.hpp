@@ -16,8 +16,8 @@ void expect_vec_eq(const std::vector<T>& lhs, const std::vector<T>& rhs) {
 }
 
 template <typename Iter>
-requires std::input_iterator<Iter> std::vector<std::iter_value_t<Iter>> dereference_vec(
-    const std::vector<Iter>& vec) {
+  requires std::input_iterator<Iter>
+std::vector<std::iter_value_t<Iter>> dereference_vec(const std::vector<Iter>& vec) {
   std::vector<std::iter_value_t<Iter>> result{};
   for (const auto& iter : vec) {
     result.push_back(*iter);
@@ -28,9 +28,7 @@ requires std::input_iterator<Iter> std::vector<std::iter_value_t<Iter>> derefere
 std::unique_ptr<sf::Texture> create_dummy_texture(unsigned int = 5, unsigned int = 5);
 
 template <typename T>
-concept Updatable = requires(T a) {
-  a.update();
-};
+concept Updatable = requires(T a) { a.update(); };
 
 void update_many(Updatable auto& updatable, int count) {
   for (int i = 0; i < count; ++i) {

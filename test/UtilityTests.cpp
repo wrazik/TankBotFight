@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+
 #include <cmath>
 
 #include "Size.hpp"
@@ -40,8 +41,9 @@ INSTANTIATE_TEST_SUITE_P(
         GetAngleTestParam{"Given: {-1.f, 0.f} vector then return 270 degrees", {-1.f, 0.f}, 270.f},
         GetAngleTestParam{
             "Given: {-1.f, -1.f} vector then return 315 degrees", {-1.f, -1.f}, 315.f},
-        GetAngleTestParam{
-            "Given: {-sqrt(3.f), -1.f} vector then return 300 degrees", {static_cast<float>(-sqrt(3.f)), -1.f}, 300.f},
+        GetAngleTestParam{"Given: {-sqrt(3.f), -1.f} vector then return 300 degrees",
+                          {static_cast<float>(-sqrt(3.f)), -1.f},
+                          300.f},
         GetAngleTestParam{"Given: {-1.f, -sqrt(3.f)} vector then return 330 degrees",
                           {-1.f, static_cast<float>(-sqrt(3.0))},
                           330.f}));

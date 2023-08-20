@@ -50,11 +50,11 @@ TEST_P(TracesHandlerRotationTest, GivenMove_ThenTraceShouldHaveOppositeRotation)
 }
 
 INSTANTIATE_TEST_SUITE_P(RotationTestsWithManyValues, TracesHandlerRotationTest,
-                        ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 270.f),
-                                          std::make_pair(sf::Vector2f{2.f, 2.f}, 315.f),
-                                          std::make_pair(sf::Vector2f{0.f, 2.f}, 0.f),
-                                          std::make_pair(sf::Vector2f{-2.f, 2.f}, 45.f),
-                                          std::make_pair(sf::Vector2f{-2.f, -2.f}, 135.f)));
+                         ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 270.f),
+                                           std::make_pair(sf::Vector2f{2.f, 2.f}, 315.f),
+                                           std::make_pair(sf::Vector2f{0.f, 2.f}, 0.f),
+                                           std::make_pair(sf::Vector2f{-2.f, 2.f}, 45.f),
+                                           std::make_pair(sf::Vector2f{-2.f, -2.f}, 135.f)));
 
 class TracesHandlerTextureHeightTest
     : public BaseFixture,
@@ -72,11 +72,11 @@ TEST_P(TracesHandlerTextureHeightTest, GivenMove_ThenTraceShouldHaveHeightEqualT
 }
 
 INSTANTIATE_TEST_SUITE_P(TextureHeightTestsWithManyValues, TracesHandlerTextureHeightTest,
-                        ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 2),
-                                          std::make_pair(sf::Vector2f{1.f, 1.f}, 1.4142f),
-                                          std::make_pair(sf::Vector2f{3.f, 4.f}, 5),
-                                          std::make_pair(sf::Vector2f{6.f, 8.f}, 10),
-                                          std::make_pair(sf::Vector2f{0.f, -2.f}, 2)));
+                         ::testing::Values(std::make_pair(sf::Vector2f{2.f, 0.f}, 2),
+                                           std::make_pair(sf::Vector2f{1.f, 1.f}, 1.4142f),
+                                           std::make_pair(sf::Vector2f{3.f, 4.f}, 5),
+                                           std::make_pair(sf::Vector2f{6.f, 8.f}, 10),
+                                           std::make_pair(sf::Vector2f{0.f, -2.f}, 2)));
 
 class TracesHandlerTest : public BaseFixture, public ::testing::Test {};
 
