@@ -16,7 +16,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           lfs: true
           submodules: true
@@ -30,26 +30,20 @@ jobs:
          ./vcpkg/bootstrap-vcpkg.sh
          
       - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+        run: |
+          cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
         shell: bash
-        env:
-          CC: /usr/local/opt/llvm/bin/clang
-          CXX: /usr/local/opt/llvm/bin/clang++
         working-directory: ${{runner.workspace}}/build
+        env:
+          CC: /usr/bin/clang
+          CXX: /usr/bin/clang++
         run: |
-          ${CC} --version
-          ${CXX} --version
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        env:
-          CC: /usr/local/opt/llvm/bin/clang
-          CXX: /usr/local/opt/llvm/bin/clang++
         run: |
-          ${CC} --version
-          ${CXX} --version
           cmake --build . --config $BUILD_TYPE
