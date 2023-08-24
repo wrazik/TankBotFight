@@ -48,7 +48,7 @@ add_library(
   src/TracesHandler.cpp
   src/Trace.cpp
   src/Players/DummyPlayer.cpp
-  src/Players/KeyboardPlayer.cpp)
+  src/Players/KeyboardPlayer.cpp src/Game.cpp src/Game.hpp)
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 

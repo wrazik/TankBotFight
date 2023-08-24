@@ -122,6 +122,26 @@ void Tank::draw(sf::RenderWindow &window) {
   mBody.draw(window);
   mTower.draw(window);
   draw_tracks(window);
+  draw_health_bar(window);
+}
+void Tank::draw_health_bar(sf::RenderWindow &window) {
+  constexpr auto HEALTH_BAR_SIZE_WIDTH = 64.0f;
+  constexpr auto HEALTH_BAR_SIZE_HEIGHT = 10.0f;
+
+  sf::RectangleShape bar(sf::Vector2f(HEALTH_BAR_SIZE_WIDTH, HEALTH_BAR_SIZE_HEIGHT));
+
+  bar.setOutlineColor(sf::Color::Black);
+  bar.setOutlineThickness(1.0f);
+  bar.setFillColor(sf::Color::Transparent);
+  auto offset = sf::Vector2f (mBody.get_sprite().getLocalBounds().getSize());
+  bar.setPosition(mPos -offset);
+  window.draw(bar);
+
+  auto health_width = HEALTH_BAR_SIZE_WIDTH * (mHealth/100.0f);
+  sf::RectangleShape health(sf::Vector2f(health_width, HEALTH_BAR_SIZE_HEIGHT));
+  health.setFillColor(sf::Color::Red);
+  health.setPosition(mPos -offset);
+  window.draw(health);
 }
 
 void Tank::draw_tracks(sf::RenderWindow &window) {
@@ -129,3 +149,12 @@ void Tank::draw_tracks(sf::RenderWindow &window) {
     window.draw(trace);
   }
 }
+
+void Tank::take_damage(float damage) {
+  mHealth -= damage;
+  if (mHealth < 0) {
+    mHealth = 0;
+  }
+}
+
+bool Tank::is_alive() const { return mHealth > 0; }

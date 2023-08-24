@@ -94,8 +94,12 @@ void Board::remove_players() {
         std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
           return player->get_tank().get_body_rect().contains(missile.get_pos());
         });
+
     if (it != mMissles.cend()) {
-      player.reset();
+      player->get_tank().take_damage(25.0f);
+      if (!player->get_tank().is_alive()) {
+        player.reset();
+      }
       missiles_collided.push_back(*it);
     }
   };
@@ -107,4 +111,8 @@ void Board::remove_players() {
     return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),
                        [&missile](const auto& m) { return m == missile; });
   });
+}
+
+bool Board::is_gameover() const {
+  return mIsGameover;
 }

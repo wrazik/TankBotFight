@@ -46,6 +46,10 @@ class Tank {
   [[nodiscard]] sf::FloatRect get_body_rect() const;
   [[nodiscard]] float get_current_speed() const;
 
+  void take_damage(float damage);
+
+  bool is_alive() const;
+
  private:
   void draw_tracks(sf::RenderWindow& window);
   void update_position();
@@ -53,8 +57,10 @@ class Tank {
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
 
+  int mHealth = 75;
   TankPart mBody;
   TankTower mTower;
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
+  void draw_health_bar(sf::RenderWindow& window);
 };
