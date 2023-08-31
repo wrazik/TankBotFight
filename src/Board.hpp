@@ -15,6 +15,7 @@ class Board {
   void register_missile(const Missle& missile);
   void run();
   bool is_gameover() const;
+
  private:
   void remove_missles();
   void remove_players();

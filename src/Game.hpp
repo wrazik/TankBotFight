@@ -1,24 +1,24 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 enum class GameState {
-        Playing,
-        GameOver,
+  Playing,
+  GameOver,
 };
 
 class Game {
-        public:
-        Game();
+ public:
+  Game();
 
-        void run();
+  void run();
 
-        private:
-        void process_events();
-        void update();
-        void render();
+ private:
+  void process_events();
+  void update();
+  void render();
 
-        sf::RenderWindow mWindow;
-        GameState mState = GameState::Playing;
-        sf::Font mFont;
-        sf::Text mText;
+  sf::RenderWindow mWindow;
+  GameState mState = GameState::Playing;
+  sf::Font mFont;
+  sf::Text mText;
 };
-

@@ -133,14 +133,14 @@ void Tank::draw_health_bar(sf::RenderWindow &window) {
   bar.setOutlineColor(sf::Color::Black);
   bar.setOutlineThickness(1.0f);
   bar.setFillColor(sf::Color::Transparent);
-  auto offset = sf::Vector2f (mBody.get_sprite().getLocalBounds().getSize());
-  bar.setPosition(mPos -offset);
+  auto offset = sf::Vector2f(mBody.get_sprite().getLocalBounds().getSize());
+  bar.setPosition(mPos - offset);
   window.draw(bar);
 
-  auto health_width = HEALTH_BAR_SIZE_WIDTH * (mHealth/100.0f);
+  auto health_width = HEALTH_BAR_SIZE_WIDTH * (mHealth / 100.0f);
   sf::RectangleShape health(sf::Vector2f(health_width, HEALTH_BAR_SIZE_HEIGHT));
   health.setFillColor(sf::Color::Red);
-  health.setPosition(mPos -offset);
+  health.setPosition(mPos - offset);
   window.draw(health);
 }
 

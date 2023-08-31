@@ -113,6 +113,4 @@ void Board::remove_players() {
   });
 }
 
-bool Board::is_gameover() const {
-  return mIsGameover;
-}
+bool Board::is_gameover() const { return mIsGameover; }
