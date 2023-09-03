@@ -7,11 +7,10 @@
 #include "utility.hpp"
 
 constexpr int TANK_INITIAL_ROTATION = 180;
-constexpr int TANK_HEALTH = 100;
 
 Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engine> &&engine,
            const TracesHandlerConfig &traces_handler_config,
-           const std::chrono::milliseconds &shot_cooldown)
+           const std::chrono::milliseconds &shot_cooldown, unsigned int health)
     : mPos({x, y}),
       mBody(textures.mBody),
       mTower(TankTowerTextures{.mTower = textures.mTower,
@@ -21,8 +20,8 @@ Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engin
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
                                                      traces_handler_config)),
-      mHealth(TANK_HEALTH),
-      mHealthBar(TANK_HEALTH) {
+      mHealth(health),
+      mHealthBar(health) {
   set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
   mTower.set_position(mPos);
