@@ -19,6 +19,7 @@ class KeyboardPlayer {
   void draw(sf::RenderWindow& window);
   void handle_events(const sf::Event& event);
   void update();
+  bool take_hit(unsigned int damage);
 
   [[nodiscard]] const Tank& get_tank() const;
 
