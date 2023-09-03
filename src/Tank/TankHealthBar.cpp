@@ -4,6 +4,7 @@
 #include "Files.hpp"
 
 constexpr float HEALTHBAR_Y_OFFSET = -50.f;
+constexpr unsigned int HEALTHBAR_FONT_SIZE = 10;
 
 TankHealthBar::TankHealthBar(unsigned int total_health)
     : mTotalHealth(total_health), mHealth(total_health) {
@@ -27,8 +28,7 @@ void TankHealthBar::draw(sf::RenderWindow& window) {
 
 void TankHealthBar::setup_text() {
   mText.setFont(mFont);
-  mText.setCharacterSize(10);
-  mText.setOrigin(20.f, 20.f);
+  mText.setCharacterSize(HEALTHBAR_FONT_SIZE);
   mText.setFillColor(sf::Color::Black);
 }
 
