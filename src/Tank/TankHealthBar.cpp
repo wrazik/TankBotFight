@@ -1,6 +1,8 @@
 #include "TankHealthBar.hpp"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
+
 #include "Files.hpp"
 
 constexpr float HEALTHBAR_Y_OFFSET = -50.f;
@@ -22,9 +24,7 @@ void TankHealthBar::set_health(unsigned int health) {
   update_string();
 }
 
-void TankHealthBar::draw(sf::RenderWindow& window) {
-  window.draw(mText);
-}
+void TankHealthBar::draw(sf::RenderWindow& window) { window.draw(mText); }
 
 void TankHealthBar::setup_text() {
   mText.setFont(mFont);
@@ -35,7 +35,5 @@ void TankHealthBar::setup_text() {
 void TankHealthBar::update_string() {
   mText.setString(std::to_string(mHealth) + " / " + std::to_string(mTotalHealth));
   sf::FloatRect textRect = mText.getLocalBounds();
-  mText.setOrigin(textRect.left + textRect.width / 2.f,
-                  textRect.top + textRect.height / 2.f);
+  mText.setOrigin(textRect.left + textRect.width / 2.f, textRect.top + textRect.height / 2.f);
 }
-

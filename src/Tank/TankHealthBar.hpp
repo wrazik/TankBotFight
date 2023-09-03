@@ -21,4 +21,3 @@ class TankHealthBar {
   sf::Font mFont;
   sf::Text mText;
 };
-

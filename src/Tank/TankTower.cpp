@@ -71,7 +71,8 @@ std::optional<Missle> TankTower::shoot() {
     mDrawShot = true;
     const auto& [x, y] = calculate_shot_position();
     return std::make_optional<Missle>(
-        mMissileTexture, MovementState{.mX = x, .mY = y, .mAngle = mTower.get_rotation()}, MISSLE_DAMAGE);
+        mMissileTexture, MovementState{.mX = x, .mY = y, .mAngle = mTower.get_rotation()},
+        MISSLE_DAMAGE);
   }
   return std::nullopt;
 }
