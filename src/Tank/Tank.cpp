@@ -90,6 +90,12 @@ void Tank::set_rotation(const float angle) {
   mBody.set_rotation(angle);
 }
 
+bool Tank::take_hit(unsigned int damage) {
+  mHealth -= damage;
+  mHealthBar.set_health(mHealth);
+  return mHealth <= 0 ? true : false;
+}
+
 sf::Vector2f Tank::get_position() const { return mPos; }
 
 sf::FloatRect Tank::get_body_rect() const { return mBody.get_sprite().getGlobalBounds(); }

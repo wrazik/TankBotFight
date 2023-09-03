@@ -36,6 +36,7 @@ class Tank {
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
   void set_rotation(float angle);
+  bool take_hit(unsigned int damage);
 
   void set_gear(Gear gear);
   void draw(sf::RenderWindow& window);
