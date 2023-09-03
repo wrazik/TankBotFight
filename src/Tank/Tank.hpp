@@ -9,6 +9,7 @@
 
 #include "Engine.hpp"
 #include "Missle.hpp"
+#include "Tank/TankHealthBar.hpp"
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
 #include "TracesHandler.hpp"
@@ -52,9 +53,11 @@ class Tank {
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
+  int mHealth;
 
   TankPart mBody;
   TankTower mTower;
+  TankHealthBar mHealthBar;
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
 };

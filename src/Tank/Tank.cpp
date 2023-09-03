@@ -7,6 +7,7 @@
 #include "utility.hpp"
 
 constexpr int TANK_INITIAL_ROTATION = 180;
+constexpr int TANK_HEALTH = 100;
 
 Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engine> &&engine,
            const TracesHandlerConfig &traces_handler_config,
@@ -18,8 +19,9 @@ Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engin
                                .mMissile = textures.mMissile},
              shot_cooldown),
       mEngine(std::move(engine)),
-      mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
-                                                     traces_handler_config)) {
+      mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos, traces_handler_config)),
+      mHealth(TANK_HEALTH),
+      mHealthBar(TANK_HEALTH) {
   set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
   mTower.set_position(mPos);
@@ -31,9 +33,9 @@ Tank::Tank(const Tank &rhs)
       mBody(rhs.mBody),
       mTower(rhs.mTower),
       mEngine(rhs.mEngine->copy()),
-      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
-                                                     mBody.get_sprite(), mPos,
-                                                     rhs.mTracesHandler->get_config())) {}
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos, rhs.mTracesHandler->get_config())),
+      mHealth(rhs.mHealth),
+      mHealthBar(rhs.mHealthBar) {}
 
 Tank::Tank(Tank &&rhs) noexcept
     : mPos(rhs.mPos),
@@ -41,9 +43,9 @@ Tank::Tank(Tank &&rhs) noexcept
       mBody(std::move(rhs.mBody)),
       mTower(std::move(rhs.mTower)),
       mEngine(std::move(rhs.mEngine)),
-      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
-                                                     mBody.get_sprite(), mPos,
-                                                     rhs.mTracesHandler->get_config())) {}
+      mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(), mPos, rhs.mTracesHandler->get_config())),
+      mHealth(rhs.mHealth),
+      mHealthBar(std::move(rhs.mHealthBar)) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
   if (this == &rhs) {
@@ -51,6 +53,7 @@ Tank &Tank::operator=(const Tank &rhs) {
   }
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
+  mHealth = rhs.mHealth;
   mBody = rhs.mBody;
   mTower = rhs.mTower;
   mEngine = rhs.mEngine->copy();
@@ -66,6 +69,7 @@ Tank &Tank::operator=(Tank &&rhs) noexcept {
   }
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
+  mHealth = rhs.mHealth;
   mBody = std::move(rhs.mBody);
   mTower = std::move(rhs.mTower);
   mEngine = std::move(rhs.mEngine);
@@ -110,6 +114,7 @@ void Tank::update_position() {
   }
   mBody.get_sprite().setPosition(mPos);
   mTower.set_position(mPos);
+  mHealthBar.set_position(mPos);
 }
 
 std::optional<Missle> Tank::shoot() { return mTower.shoot(); }
@@ -122,6 +127,7 @@ void Tank::draw(sf::RenderWindow &window) {
   mBody.draw(window);
   mTower.draw(window);
   draw_tracks(window);
+  mHealthBar.draw(window);
 }
 
 void Tank::draw_tracks(sf::RenderWindow &window) {
