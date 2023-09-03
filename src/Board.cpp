@@ -94,10 +94,13 @@ void Board::remove_players() {
         std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
           return player->get_tank().get_body_rect().contains(missile.get_pos());
         });
-    if (it != mMissles.cend()) {
-      player.reset();
-      missiles_collided.push_back(*it);
+    if (it == mMissles.cend()) {
+      return;
     }
+    if (auto destroyed = player->take_hit((*it).get_damage())) {
+      player.reset();
+    }
+    missiles_collided.push_back(*it);
   };
 
   remove_player_if_hit(mKeyboardPlayer);
