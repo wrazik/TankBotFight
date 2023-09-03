@@ -58,13 +58,14 @@ Tank &Tank::operator=(const Tank &rhs) {
   }
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
-  mHealth = rhs.mHealth;
   mBody = rhs.mBody;
   mTower = rhs.mTower;
   mEngine = rhs.mEngine->copy();
   mTracesHandler =
       std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
                                       mPos, rhs.mTracesHandler->get_config());
+  mHealth = rhs.mHealth;
+  mHealthBar = rhs.mHealthBar;
   return *this;
 }
 
@@ -74,13 +75,14 @@ Tank &Tank::operator=(Tank &&rhs) noexcept {
   }
   mPos = rhs.mPos;
   mCurrentSpeed = rhs.mCurrentSpeed;
-  mHealth = rhs.mHealth;
   mBody = std::move(rhs.mBody);
   mTower = std::move(rhs.mTower);
   mEngine = std::move(rhs.mEngine);
   mTracesHandler =
       std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
                                       mPos, rhs.mTracesHandler->get_config());
+  mHealth = rhs.mHealth;
+  mHealthBar = std::move(rhs.mHealthBar);
   return *this;
 }
 
