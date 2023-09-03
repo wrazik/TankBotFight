@@ -33,10 +33,17 @@ struct TankTestData {
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
       std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
+  std::chrono::milliseconds shot_cooldown = std::chrono::milliseconds{500};
+  unsigned int health = 100;
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return {0, 0, mTextures, std::move(engine),
-            TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
+    return {0,
+            0,
+            mTextures,
+            std::move(engine),
+            TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
+            shot_cooldown,
+            health};
   }
 };
 
@@ -103,6 +110,14 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
   update_many(mTankSUT, 100);
 
   expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
+}
+
+TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldBeDestroyed) {
+  EXPECT_FALSE(mTankSUT.take_hit(0));
+}
+
+TEST_F(TankTest, WhenTankTakesHitForWholeHealth_ThenShouldBeDestroyed) {
+  EXPECT_TRUE(mTankSUT.take_hit(health));
 }
 
 struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {
