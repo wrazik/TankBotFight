@@ -112,18 +112,22 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
   expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
 }
 
-TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldNotBeDestroyed) {
-  EXPECT_FALSE(mTankSUT.take_hit(0));
+TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldBeAlive) {
+  mTankSUT.take_damage(0);
+  EXPECT_TRUE(mTankSUT.is_alive());
 }
 
-TEST_F(TankTest, WhenTankTakesTwoHitsForHalfHealth_ThenShouldBeDestroyedAfterSecondOne) {
-  unsigned int half_health = health / 2u;
-  EXPECT_FALSE(mTankSUT.take_hit(half_health));
-  EXPECT_TRUE(mTankSUT.take_hit(health - half_health));
+TEST_F(TankTest, WhenTankTakesTwoHitsForHalfHealth_ThenShouldNotBeAliveAfterSecondOne) {
+  auto half_health = health / 2u;
+  mTankSUT.take_damage(half_health);
+  EXPECT_TRUE(mTankSUT.is_alive());
+  mTankSUT.take_damage(health - half_health);
+  EXPECT_FALSE(mTankSUT.is_alive());
 }
 
-TEST_F(TankTest, WhenTankTakesHitForWholeHealth_ThenShouldBeDestroyed) {
-  EXPECT_TRUE(mTankSUT.take_hit(health));
+TEST_F(TankTest, WhenTankTakesHitForWholeHealth_ThenShouldNotBeAlive) {
+  mTankSUT.take_damage(health);
+  EXPECT_FALSE(mTankSUT.is_alive());
 }
 
 struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {
