@@ -112,7 +112,7 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
   expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
 }
 
-TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldBeDestroyed) {
+TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldNotBeDestroyed) {
   EXPECT_FALSE(mTankSUT.take_hit(0));
 }
 
