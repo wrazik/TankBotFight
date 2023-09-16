@@ -6,7 +6,7 @@
 
 class TankHealthBar {
  public:
-  TankHealthBar(unsigned int total_health);
+  explicit TankHealthBar(unsigned int total_health);
 
   void set_position(const sf::Vector2f& pos);
   void set_health(unsigned int health);
