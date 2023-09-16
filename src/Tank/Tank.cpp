@@ -96,10 +96,12 @@ void Tank::set_rotation(const float angle) {
   mBody.set_rotation(angle);
 }
 
-bool Tank::take_hit(unsigned int damage) {
+void Tank::take_damage(unsigned int damage) {
   mHealth -= damage;
+  if (mHealth < 0) {
+    mHealth = 0;
+  }
   mHealthBar.set_health(mHealth);
-  return mHealth <= 0 ? true : false;
 }
 
 sf::Vector2f Tank::get_position() const { return mPos; }
@@ -132,6 +134,8 @@ void Tank::update_position() {
 std::optional<Missle> Tank::shoot() { return mTower.shoot(); }
 
 float Tank::get_current_speed() const { return mEngine->get_current_speed(); }
+
+bool Tank::is_alive() const { return mHealth > 0; }
 
 float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
 

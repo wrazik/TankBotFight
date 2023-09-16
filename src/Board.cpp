@@ -97,7 +97,8 @@ void Board::remove_players() {
     if (it == mMissles.cend()) {
       return;
     }
-    if (auto destroyed = player->take_hit((*it).get_damage())) {
+    player->get_tank().take_damage((*it).get_damage());
+    if (!player->get_tank().is_alive()) {
       player.reset();
     }
     missiles_collided.push_back(*it);

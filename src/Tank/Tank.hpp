@@ -37,7 +37,7 @@ class Tank {
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
   void set_rotation(float angle);
-  bool take_hit(unsigned int damage);
+  void take_damage(unsigned int damage);
 
   void set_gear(Gear gear);
   void draw(sf::RenderWindow& window);
@@ -48,6 +48,7 @@ class Tank {
   [[nodiscard]] sf::Vector2f get_position() const;
   [[nodiscard]] sf::FloatRect get_body_rect() const;
   [[nodiscard]] float get_current_speed() const;
+  [[nodiscard]] bool is_alive() const;
 
  private:
   void draw_tracks(sf::RenderWindow& window);

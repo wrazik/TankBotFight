@@ -14,6 +14,6 @@ void DummyPlayer::update() {
   mTank->update();
 }
 
-bool DummyPlayer::take_hit(unsigned int damage) { return mTank->take_hit(damage); }
-
 const Tank& DummyPlayer::get_tank() const { return *mTank; }
+
+Tank& DummyPlayer::get_tank() { return *mTank; }

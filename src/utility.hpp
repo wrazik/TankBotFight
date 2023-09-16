@@ -67,3 +67,7 @@ inline void print_point(const auto& point) {
   }
   return opposite_angle;
 }
+
+[[nodiscard]] inline sf::Vector2f get_center_of_rect(const sf::FloatRect& rect) {
+  return sf::Vector2f {rect.left + rect.width / 2.f, rect.top + rect.height / 2.f};
+}

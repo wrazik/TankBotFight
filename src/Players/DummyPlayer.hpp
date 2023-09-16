@@ -18,9 +18,9 @@ class DummyPlayer {
 
   void draw(sf::RenderWindow& window);
   void update();
-  bool take_hit(unsigned int damage);
 
   [[nodiscard]] const Tank& get_tank() const;
+  [[nodiscard]] Tank& get_tank();
 
  private:
   Board& mBoard;
