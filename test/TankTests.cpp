@@ -116,6 +116,12 @@ TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldNotBeDestroyed) {
   EXPECT_FALSE(mTankSUT.take_hit(0));
 }
 
+TEST_F(TankTest, WhenTankTakesTwoHitsForHalfHealth_ThenShouldBeDestroyedAfterSecondOne) {
+  unsigned int half_health = health / 2u;
+  EXPECT_FALSE(mTankSUT.take_hit(half_health));
+  EXPECT_TRUE(mTankSUT.take_hit(health - half_health));
+}
+
 TEST_F(TankTest, WhenTankTakesHitForWholeHealth_ThenShouldBeDestroyed) {
   EXPECT_TRUE(mTankSUT.take_hit(health));
 }
