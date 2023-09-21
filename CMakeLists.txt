@@ -48,7 +48,8 @@ add_library(
   src/TracesHandler.cpp
   src/Trace.cpp
   src/Players/DummyPlayer.cpp
-  src/Players/KeyboardPlayer.cpp)
+  src/Players/KeyboardPlayer.cpp
+  src/Sound.cpp)
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 
@@ -66,13 +67,13 @@ target_include_directories(tank_bot_fight PRIVATE src)
 
 find_package(
   SFML 2.5.1
-  COMPONENTS graphics
+  COMPONENTS graphics audio
   REQUIRED)
 find_package(range-v3 REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
                                                 Microsoft.GSL::GSL)
-target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics)
+target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics sfml-audio)
 
 add_subdirectory(test)
