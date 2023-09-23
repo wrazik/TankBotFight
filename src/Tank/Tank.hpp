@@ -26,8 +26,7 @@ class Tank {
  public:
   Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
        const TracesHandlerConfig& traces_handler_config = {},
-       const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500},
-       unsigned int health = 100);
+       const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500});
   Tank(const Tank& rhs);
   Tank(Tank&& rhs) noexcept;
   Tank& operator=(const Tank& rhs);
