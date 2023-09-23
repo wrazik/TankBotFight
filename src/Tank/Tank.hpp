@@ -56,7 +56,7 @@ class Tank {
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
-  int mHealth;
+  int mHealth = 100;
 
   TankPart mBody;
   TankTower mTower;
