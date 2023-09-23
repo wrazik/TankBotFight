@@ -19,9 +19,7 @@ Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engin
              shot_cooldown),
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
-                                                     traces_handler_config)),
-      mHealthBar(0) {
-  mHealthBar.set_health(mHealth);
+                                                     traces_handler_config)) {
   set_rotation(TANK_INITIAL_ROTATION);
   mBody.get_sprite().setPosition(mPos);
   mTower.set_position(mPos);

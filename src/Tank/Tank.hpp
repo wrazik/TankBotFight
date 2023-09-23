@@ -14,6 +14,8 @@
 #include "Tank/TankTower.hpp"
 #include "TracesHandler.hpp"
 
+constexpr int TANK_HEALTH = 100;
+
 struct TankTextures {
   std::reference_wrapper<sf::Texture> mBody;
   std::reference_wrapper<sf::Texture> mTower;
@@ -55,11 +57,11 @@ class Tank {
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
-  int mHealth = 100;
+  int mHealth{TANK_HEALTH};
 
   TankPart mBody;
   TankTower mTower;
-  TankHealthBar mHealthBar;
+  TankHealthBar mHealthBar{TANK_HEALTH};
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
 };
