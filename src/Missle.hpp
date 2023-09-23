@@ -15,7 +15,7 @@ class Missle {
  private:
   sf::Sprite mSprite;
   float mSpeed = 20.0f;
-  unsigned int mDamage = 20.f;
+  unsigned int mDamage = 20;
 
   sf::Vector2f mPos;
   float mAngle;
