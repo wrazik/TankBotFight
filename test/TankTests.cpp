@@ -42,8 +42,7 @@ struct TankTestData {
             mTextures,
             std::move(engine),
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
-            shot_cooldown,
-            health};
+            shot_cooldown};
   }
 };
 
