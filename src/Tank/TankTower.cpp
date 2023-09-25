@@ -8,6 +8,7 @@ constexpr int ROTATION_OFFSET = 90;
 constexpr int SHOT_ANIMATION_DISTANCE = 30;
 constexpr std::chrono::milliseconds SHOT_ANIMATION_DURATION = std::chrono::milliseconds(100);
 constexpr auto SHOT_COOLDOWN = std::chrono::milliseconds{500};
+constexpr unsigned int MISSLE_DAMAGE = 20;
 
 TankTower::TankTower(const TankTowerTextures& textures,
                      const std::chrono::milliseconds& shot_cooldown)
@@ -70,7 +71,8 @@ std::optional<Missle> TankTower::shoot() {
     mDrawShot = true;
     const auto& [x, y] = calculate_shot_position();
     return std::make_optional<Missle>(
-        mMissileTexture, MovementState{.mX = x, .mY = y, .mAngle = mTower.get_rotation()});
+        mMissileTexture, MovementState{.mX = x, .mY = y, .mAngle = mTower.get_rotation()},
+        MISSLE_DAMAGE);
   }
   return std::nullopt;
 }

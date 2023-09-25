@@ -17,7 +17,7 @@ class Board {
 
  private:
   void remove_missles();
-  void remove_players();
+  void update_players();
   void display_speed();
   void draw();
 

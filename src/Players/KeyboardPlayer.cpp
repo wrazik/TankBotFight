@@ -14,3 +14,5 @@ void KeyboardPlayer::handle_events(const sf::Event& event) { mController->update
 void KeyboardPlayer::update() { mTank->update(); }
 
 const Tank& KeyboardPlayer::get_tank() const { return *mTank; }
+
+Tank& KeyboardPlayer::get_tank() { return *mTank; }

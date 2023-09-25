@@ -15,3 +15,5 @@ void DummyPlayer::update() {
 }
 
 const Tank& DummyPlayer::get_tank() const { return *mTank; }
+
+Tank& DummyPlayer::get_tank() { return *mTank; }

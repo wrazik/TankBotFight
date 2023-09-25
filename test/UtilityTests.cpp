@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <SFML/Graphics/Rect.hpp>
 #include <cmath>
 
 #include "Size.hpp"
@@ -58,3 +59,46 @@ TEST(GetAngleTest, GetAngleShouldComplementGetPositionDelta) {
 
   EXPECT_NEAR(actual_angle_degrees, to_degrees(expected_angle_radians), PRECISION);
 }
+
+struct GetCenterOfRectTestParam {
+  std::string mTestName{};
+  sf::FloatRect mRect{};
+  sf::Vector2f mExpectedVector{};
+
+  friend std::ostream& operator<<(std::ostream& os, const GetCenterOfRectTestParam& p) {
+    os << p.mTestName;
+    return os;
+  }
+};
+
+class GetCenterOFRectTests : public ::testing::TestWithParam<GetCenterOfRectTestParam> {};
+
+TEST_P(GetCenterOFRectTests, TestingGetCenterOfRectWithManyParameters) {
+  auto param = GetParam();
+
+  auto actual_vector = get_center_of_rect(param.mRect);
+
+  expect_vec2f_eq(param.mExpectedVector, actual_vector);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    GetCenterOfRectTestInstantiation, GetCenterOFRectTests,
+    ::testing::Values(
+        GetCenterOfRectTestParam{"Given: {0.f, 0.f, 0.f, 0.f} rect return {0.f, 0.f} vector",
+                                 {0.f, 0.f, 0.f, 0.f},
+                                 {0.f, 0.f}},
+        GetCenterOfRectTestParam{"Given: {1.f, 1.f, 0.f, 0.f} rect return {1.f, 1.f} vector",
+                                 {1.f, 1.f, 0.f, 0.f},
+                                 {1.f, 1.f}},
+        GetCenterOfRectTestParam{"Given: {0.f, 0.f, 1.f, 1.f} rect return {0.5f, 0.5f} vector",
+                                 {0.f, 0.f, 1.f, 1.f},
+                                 {0.5f, 0.5f}},
+        GetCenterOfRectTestParam{"Given: {0.f, 0.f, -1.f, -1.f} rect return {-0.5f, -0.5f} vector",
+                                 {0.f, 0.f, -1.f, -1.f},
+                                 {-0.5f, -0.5f}},
+        GetCenterOfRectTestParam{"Given: {10.f, 5.f, -5.f, 10.f} rect return {7.5f, 10.f} vector",
+                                 {10.f, 5.f, -5.f, 10.f},
+                                 {7.5f, 10.f}},
+        GetCenterOfRectTestParam{"Given: {-1.f, -1.f, 2.f, 2.f} rect return {0.f, 0.f} vector",
+                                 {-1.f, -1.f, 2.f, 2.f},
+                                 {0.f, 0.f}}));

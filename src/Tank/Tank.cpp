@@ -33,7 +33,9 @@ Tank::Tank(const Tank &rhs)
       mEngine(rhs.mEngine->copy()),
       mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
                                                      mBody.get_sprite(), mPos,
-                                                     rhs.mTracesHandler->get_config())) {}
+                                                     rhs.mTracesHandler->get_config())),
+      mHealth(rhs.mHealth),
+      mHealthBar(rhs.mHealthBar) {}
 
 Tank::Tank(Tank &&rhs) noexcept
     : mPos(rhs.mPos),
@@ -43,7 +45,9 @@ Tank::Tank(Tank &&rhs) noexcept
       mEngine(std::move(rhs.mEngine)),
       mTracesHandler(std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(),
                                                      mBody.get_sprite(), mPos,
-                                                     rhs.mTracesHandler->get_config())) {}
+                                                     rhs.mTracesHandler->get_config())),
+      mHealth(rhs.mHealth),
+      mHealthBar(std::move(rhs.mHealthBar)) {}
 
 Tank &Tank::operator=(const Tank &rhs) {
   if (this == &rhs) {
@@ -57,6 +61,8 @@ Tank &Tank::operator=(const Tank &rhs) {
   mTracesHandler =
       std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
                                       mPos, rhs.mTracesHandler->get_config());
+  mHealth = rhs.mHealth;
+  mHealthBar = rhs.mHealthBar;
   return *this;
 }
 
@@ -72,6 +78,8 @@ Tank &Tank::operator=(Tank &&rhs) noexcept {
   mTracesHandler =
       std::make_unique<TracesHandler>(rhs.mTracesHandler->get_trace_texture(), mBody.get_sprite(),
                                       mPos, rhs.mTracesHandler->get_config());
+  mHealth = rhs.mHealth;
+  mHealthBar = std::move(rhs.mHealthBar);
   return *this;
 }
 
@@ -84,6 +92,14 @@ void Tank::rotate_tower(Rotation r) { mTower.rotate(r); }
 void Tank::set_rotation(const float angle) {
   mTower.set_rotation(angle);
   mBody.set_rotation(angle);
+}
+
+void Tank::take_damage(unsigned int damage) {
+  mHealth -= damage;
+  if (mHealth < 0) {
+    mHealth = 0;
+  }
+  mHealthBar.set_health(mHealth);
 }
 
 sf::Vector2f Tank::get_position() const { return mPos; }
@@ -110,11 +126,14 @@ void Tank::update_position() {
   }
   mBody.get_sprite().setPosition(mPos);
   mTower.set_position(mPos);
+  mHealthBar.set_position(mPos);
 }
 
 std::optional<Missle> Tank::shoot() { return mTower.shoot(); }
 
 float Tank::get_current_speed() const { return mEngine->get_current_speed(); }
+
+bool Tank::is_alive() const { return mHealth > 0; }
 
 float Tank::get_tower_rotation() const { return mTower.get_rotation(); }
 
@@ -122,6 +141,7 @@ void Tank::draw(sf::RenderWindow &window) {
   mBody.draw(window);
   mTower.draw(window);
   draw_tracks(window);
+  mHealthBar.draw(window);
 }
 
 void Tank::draw_tracks(sf::RenderWindow &window) {

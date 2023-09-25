@@ -66,7 +66,7 @@ void Board::run() {
     }
     draw();
     remove_missles();
-    remove_players();
+    update_players();
   }
 }
 
@@ -84,9 +84,9 @@ void Board::remove_missles() {
   });
 }
 
-void Board::remove_players() {
+void Board::update_players() {
   std::vector<Missle> missiles_collided{};
-  auto remove_player_if_hit = [this, &missiles_collided](auto& player) {
+  auto update_player_if_hit = [this, &missiles_collided](auto& player) {
     if (!player) {
       return;
     }
@@ -94,14 +94,18 @@ void Board::remove_players() {
         std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
           return player->get_tank().get_body_rect().contains(missile.get_pos());
         });
-    if (it != mMissles.cend()) {
-      player.reset();
-      missiles_collided.push_back(*it);
+    if (it == mMissles.cend()) {
+      return;
     }
+    player->get_tank().take_damage((*it).get_damage());
+    if (!player->get_tank().is_alive()) {
+      player.reset();
+    }
+    missiles_collided.push_back(*it);
   };
 
-  remove_player_if_hit(mKeyboardPlayer);
-  remove_player_if_hit(mDummyPlayer);
+  update_player_if_hit(mKeyboardPlayer);
+  update_player_if_hit(mDummyPlayer);
 
   std::erase_if(mMissles, [&missiles_collided](const auto& missile) {
     return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),
