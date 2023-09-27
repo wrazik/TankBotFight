@@ -4,5 +4,5 @@
 
 class TankFactory {
  public:
-  static Tank Random(TextureStore& store, float x, float y);
+  static Tank Random(TextureStore& store, float x, float y, Sound& shot_sound);
 };

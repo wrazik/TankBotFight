@@ -3,7 +3,7 @@
 #include "Random.hpp"
 #include "SquareRootEngine.hpp"
 
-Tank TankFactory::Random(TextureStore& store, float x, float y) {
+Tank TankFactory::Random(TextureStore& store, float x, float y, Sound& shot_sound) {
   using namespace std::string_literals;
   const sf::IntRect TRACKS_TEXTURE_RECT = {0, 0, 37, 48};
   constexpr int STEP_COUNT = 70;

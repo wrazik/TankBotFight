@@ -12,6 +12,7 @@
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
 #include "TracesHandler.hpp"
+#include "Sound.hpp"
 
 struct TankTextures {
   std::reference_wrapper<sf::Texture> mBody;
@@ -24,6 +25,7 @@ struct TankTextures {
 class Tank {
  public:
   Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
+        Sound shot_sound,
        const TracesHandlerConfig& traces_handler_config = {},
        const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500});
   Tank(const Tank& rhs);
@@ -49,7 +51,6 @@ class Tank {
  private:
   void draw_tracks(sf::RenderWindow& window);
   void update_position();
-
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
 

@@ -16,11 +16,16 @@ class Sound {
   // to play a sound, sf::Sound instance is needed.
   sf::Sound mSound;
 
+
+ public:
+  Sound();
+  Sound(const Sound& sound);
+  Sound& operator=(const Sound& sound);
+  
+  Sound(std::string file_name);
+  ~Sound();
+  void play();
   bool load_from_file(std::string file_name);
   void set_buffer();
 
- public:
-  void play();
-  Sound(std::string path_to_file);
-  ~Sound();
 };
