@@ -20,6 +20,7 @@ class DummyPlayer {
   void update();
 
   [[nodiscard]] const Tank& get_tank() const;
+  [[nodiscard]] Tank& get_tank();
 
  private:
   Board& mBoard;

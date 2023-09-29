@@ -9,9 +9,12 @@
 
 #include "Engine.hpp"
 #include "Missle.hpp"
+#include "Tank/TankHealthBar.hpp"
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
 #include "TracesHandler.hpp"
+
+constexpr int TANK_HEALTH = 100;
 
 struct TankTextures {
   std::reference_wrapper<sf::Texture> mBody;
@@ -35,6 +38,7 @@ class Tank {
   void rotate_body(Rotation r);
   void rotate_tower(Rotation r);
   void set_rotation(float angle);
+  void take_damage(unsigned int damage);
 
   void set_gear(Gear gear);
   void draw(sf::RenderWindow& window);
@@ -45,6 +49,7 @@ class Tank {
   [[nodiscard]] sf::Vector2f get_position() const;
   [[nodiscard]] sf::FloatRect get_body_rect() const;
   [[nodiscard]] float get_current_speed() const;
+  [[nodiscard]] bool is_alive() const;
 
  private:
   void draw_tracks(sf::RenderWindow& window);
@@ -52,9 +57,11 @@ class Tank {
 
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
+  int mHealth{TANK_HEALTH};
 
   TankPart mBody;
   TankTower mTower;
+  TankHealthBar mHealthBar{TANK_HEALTH};
   std::unique_ptr<Engine> mEngine;
   std::unique_ptr<TracesHandler> mTracesHandler;
 };

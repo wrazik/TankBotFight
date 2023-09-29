@@ -7,8 +7,8 @@
 #include "Size.hpp"
 #include "utility.hpp"
 
-Missle::Missle(sf::Texture& texture, const MovementState& state)
-    : mPos({state.mX, state.mY}), mAngle(state.mAngle) {
+Missle::Missle(sf::Texture& texture, const MovementState& state, unsigned int damage)
+    : mPos({state.mX, state.mY}), mAngle(state.mAngle), mDamage(damage) {
   mSprite.setTexture(texture);
   mSprite.setPosition(mPos.x, mPos.y);
   mSprite.setRotation(mAngle);
@@ -20,6 +20,8 @@ void Missle::draw(sf::RenderWindow& window) {
 }
 
 sf::Vector2f Missle::get_pos() const { return mPos; }
+
+unsigned int Missle::get_damage() const { return mDamage; }
 
 void Missle::update() {
   const auto rotation_degree = mAngle - 90;
