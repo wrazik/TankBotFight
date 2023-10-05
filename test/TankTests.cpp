@@ -5,6 +5,7 @@
 
 #include "SquareRootEngine.hpp"
 #include "Tank/Tank.hpp"
+#include "Sound.hpp"
 #include "TestUtility.hpp"
 #include "TracesHandler.hpp"
 #include "gmock/gmock.h"
@@ -24,6 +25,7 @@ struct TankTestData {
   std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mMissile{create_dummy_texture()};
+  Sound emptySound;
   TankTextures mTextures{.mBody = *mBody,
                          .mTower = *mTower,
                          .mShot = *mShot,
@@ -37,10 +39,8 @@ struct TankTestData {
   unsigned int health = 100;
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return {0,
-            0,
-            mTextures,
-            std::move(engine),
+    return {0, 0, mTextures, std::move(engine),
+            emptySound,
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
             shot_cooldown};
   }

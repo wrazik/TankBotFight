@@ -39,6 +39,7 @@ target_link_libraries(
   sfml-graphics
   tank_bot_fight_lib
   range-v3::range-v3
+  sfml-audio
 )
 
 include(GoogleTest)

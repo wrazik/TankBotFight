@@ -11,10 +11,12 @@ constexpr auto SHOT_COOLDOWN = std::chrono::milliseconds{500};
 constexpr unsigned int MISSLE_DAMAGE = 20;
 
 TankTower::TankTower(const TankTowerTextures& textures,
-                     const std::chrono::milliseconds& shot_cooldown)
+                     const std::chrono::milliseconds& shot_cooldown,
+                     Sound shot_sound)
     : mTower(textures.mTower),
       mShotAnimation(textures.mShotAnimation),
       mMissileTexture(textures.mMissile),
+      mShotSound(shot_sound),
       mShotCooldown(shot_cooldown) {}
 
 void TankTower::set_position(const sf::Vector2f& pos) {
@@ -64,11 +66,13 @@ void TankTower::update_shot_time() {
 }
 
 std::optional<Missle> TankTower::shoot() {
+  
   auto now = std::chrono::system_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - mLastShot);
   if (elapsed >= mShotCooldown) {
     mLastShot = std::chrono::system_clock::now();
     mDrawShot = true;
+    mShotSound.play();
     const auto& [x, y] = calculate_shot_position();
     return std::make_optional<Missle>(
         mMissileTexture, MovementState{.mX = x, .mY = y, .mAngle = mTower.get_rotation()},

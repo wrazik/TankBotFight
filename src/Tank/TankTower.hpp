@@ -5,6 +5,7 @@
 
 #include "Missle.hpp"
 #include "SFML/Graphics.hpp"
+#include "Sound.hpp"
 #include "Tank/TankPart.hpp"
 
 struct TankTowerTextures {
@@ -15,7 +16,7 @@ struct TankTowerTextures {
 
 class TankTower {
  public:
-  TankTower(const TankTowerTextures& textures, const std::chrono::milliseconds& shot_cooldown);
+  TankTower(const TankTowerTextures& textures, const std::chrono::milliseconds& shot_cooldown, Sound shot_sound);
 
   void set_position(const sf::Vector2f& pos);
   void set_rotation(float angle);
@@ -27,12 +28,14 @@ class TankTower {
   [[nodiscard]] std::optional<Missle> shoot();
   [[nodiscard]] float get_rotation() const;
 
+  
  private:
   sf::Vector2f calculate_shot_position() const;
   void update_shot_time();
 
   TankPart mTower;
-  TankPart mShotAnimation;
+  TankPart mShotAnimation;  
+  Sound mShotSound;
   std::reference_wrapper<sf::Texture> mMissileTexture;
   std::chrono::time_point<std::chrono::system_clock> mLastShot;
   std::chrono::milliseconds mShotCooldown;
