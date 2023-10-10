@@ -7,5 +7,6 @@ class Sound;
 
 class TankFactory {
  public:
-  [[nodiscard]] static std::unique_ptr<Tank> Random(TextureStore& store, float x, float y,  Sound shot_sound);
+  [[nodiscard]] static std::unique_ptr<Tank> Random(TextureStore& store, float x, float y,
+                                                    const Sound& shot_sound);
 };
