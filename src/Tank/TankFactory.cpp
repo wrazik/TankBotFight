@@ -1,12 +1,13 @@
 #include "TankFactory.hpp"
 
 #include "Random.hpp"
+#include "Sound.hpp"
 #include "SquareRootEngine.hpp"
 #include "Tank/Tank.hpp"
 #include "TextureStore.hpp"
-#include "Sound.hpp"
 
-std::unique_ptr<Tank> TankFactory::Random(TextureStore& store, const float x, const float y,  Sound shot_sound) {
+std::unique_ptr<Tank> TankFactory::Random(TextureStore& store, const float x, const float y,
+                                          const Sound& shot_sound) {
   using namespace std::string_literals;
   const sf::IntRect TRACKS_TEXTURE_RECT = {0, 0, 37, 48};
   auto& body_texture = store.get_texture(one_of("tankBody_red.png"s, "tankBody_dark.png"s,
@@ -31,7 +32,7 @@ std::unique_ptr<Tank> TankFactory::Random(TextureStore& store, const float x, co
                                              .mTracks = tracks_texture,
                                              .mMissile = missile_texture},
                                 std::make_unique<SquareRootEngine>(
-                                SquareRootEngineConfig{.mStepCount = 70, .mMaxSpeed = 5.f}),
+                                    SquareRootEngineConfig{.mStepCount = 70, .mMaxSpeed = 5.f}),
                                 shot_sound,
                                 TracesHandlerConfig{.mMaxTraceAge = 50, .mDecayRate = 0.1f});
 }

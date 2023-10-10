@@ -9,11 +9,11 @@
 
 #include "Engine.hpp"
 #include "Missle.hpp"
+#include "Sound.hpp"
 #include "Tank/TankHealthBar.hpp"
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
 #include "TracesHandler.hpp"
-#include "Sound.hpp"
 
 constexpr int TANK_HEALTH = 100;
 
@@ -28,8 +28,7 @@ struct TankTextures {
 class Tank {
  public:
   Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
-        Sound shot_sound,
-       const TracesHandlerConfig& traces_handler_config = {},
+       const Sound& shot_sound, const TracesHandlerConfig& traces_handler_config = {},
        const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500});
   Tank(const Tank& rhs);
   Tank(Tank&& rhs) noexcept;
