@@ -381,3 +381,4 @@ res/PNG/Retina/specialBarrel7_outline.png filter=lfs diff=lfs merge=lfs -text
 res/Vector/topdownTanks_vector.svg filter=lfs diff=lfs merge=lfs -text
 res/Vector/topdownTanks_vector.swf filter=lfs diff=lfs merge=lfs -text
 res/DejaVuSans.ttf filter=lfs diff=lfs merge=lfs -text
+res/Sounds/tank_shot.flac filter=lfs merge=lfs -text
