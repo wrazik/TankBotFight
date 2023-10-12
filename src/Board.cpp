@@ -18,10 +18,10 @@ Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackgro
   constexpr float TANK2_Y = 400.0f;
   Sound tank_shot_sound("tank_shot.flac");
   mWindow.setFramerateLimit(30);
-  mKeyboardPlayer =
-      std::make_unique<KeyboardPlayer>(*this, TankFactory::Random(mStore, TANK_X, TANK_Y, tank_shot_sound));
-  mDummyPlayer =
-      std::make_unique<DummyPlayer>(*this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, tank_shot_sound));
+  mKeyboardPlayer = std::make_unique<KeyboardPlayer>(
+      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, tank_shot_sound));
+  mDummyPlayer = std::make_unique<DummyPlayer>(
+      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, tank_shot_sound));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);
 }
