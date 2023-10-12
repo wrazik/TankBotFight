@@ -50,7 +50,7 @@ add_library(
   src/Trace.cpp
   src/Players/DummyPlayer.cpp
   src/Players/KeyboardPlayer.cpp
-  src/Sound.cpp)
+  src/Sound.cpp src/Animation.cpp src/Animation.hpp)
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 

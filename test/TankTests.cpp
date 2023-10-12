@@ -5,6 +5,7 @@
 
 #include "SquareRootEngine.hpp"
 #include "Tank/Tank.hpp"
+#include "Sound.hpp"
 #include "TestUtility.hpp"
 #include "TracesHandler.hpp"
 #include "gmock/gmock.h"
@@ -37,10 +38,13 @@ struct TankTestData {
   unsigned int health = 100;
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
+    Sound emptySound {"tank_shot.flac"};
+
     return {0,
             0,
             mTextures,
             std::move(engine),
+            emptySound,
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
             shot_cooldown};
   }

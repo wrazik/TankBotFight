@@ -7,12 +7,13 @@
 #include "Players/DummyPlayer.hpp"
 #include "Players/KeyboardPlayer.hpp"
 #include "background/Background.hpp"
-
+#include "Animation.hpp"
 class Board {
  public:
   Board();
 
   void register_missile(const Missle& missile);
+  void register_animation(const Animation& animation);
   void run();
 
  private:
@@ -29,4 +30,6 @@ class Board {
   std::vector<Missle> mMissles;
   sf::Font mFont;
   sf::Text mText;
+  Sound mTankExplodeSound;
+  std::vector<Animation> mAnimations;
 };
