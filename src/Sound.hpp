@@ -13,6 +13,8 @@ class Sound {
   sf::Sound mSound;
 
  public:
+  // default constructor is needed for testing
+  Sound() = default;
   Sound(const Sound& sound);
 
   Sound(const std::string& file_name);
