@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
+#include "Sound.hpp"
 #include "SquareRootEngine.hpp"
 #include "Tank/Tank.hpp"
-#include "Sound.hpp"
 #include "TestUtility.hpp"
 #include "TracesHandler.hpp"
 #include "gmock/gmock.h"
@@ -39,7 +39,10 @@ struct TankTestData {
   unsigned int health = 100;
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return {0, 0, mTextures, std::move(engine),
+    return {0,
+            0,
+            mTextures,
+            std::move(engine),
             emptySound,
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
             shot_cooldown};
