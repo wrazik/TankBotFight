@@ -21,7 +21,7 @@ Currently we have moving & shooting tank, background with customly generated roa
 https://user-images.githubusercontent.com/6102580/141752043-4d35d34a-1e36-4264-9967-169acfb3823b.mp4
 
 
-# How to run
+# How to update
 To compile the project you should have compiler that supports C++20 & cmake.
 You have to remember about two things: 
 - Graphical files are stored in git-lfs
@@ -38,9 +38,9 @@ So, before you start, you must first download checkout git-lfs (https://git-lfs.
 > git lfs install
 > git lfs pull
 ```
-In case you already run `git lfs install` before cloning the repo, `pull` is not needed
+In case you already update `git lfs install` before cloning the repo, `pull` is not needed
 
-To download submodules, run:
+To download submodules, update:
 ```bash
 > git submodule init
 > git submodule update

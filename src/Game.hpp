@@ -1,4 +1,6 @@
 #pragma once
+#include "Board.hpp"
+#include "Size.hpp"
 #include <SFML/Graphics.hpp>
 
 enum class GameState {
@@ -18,6 +20,7 @@ class Game {
   void render();
 
   sf::RenderWindow mWindow;
+  Board mBoard;
   GameState mState = GameState::Playing;
   sf::Font mFont;
   sf::Text mText;

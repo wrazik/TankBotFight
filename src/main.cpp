@@ -1,7 +1,8 @@
 #include "Board.hpp"
+#include "Game.hpp"
 
 int main() {
-  Board b;
-  b.run();
+  Game game;
+  game.run();
   return 0;
 }

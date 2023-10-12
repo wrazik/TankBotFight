@@ -11,12 +11,11 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
+Board::Board() : mBackground(mStore) {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
   constexpr float TANK2_Y = 400.0f;
-  mWindow.setFramerateLimit(30);
   mKeyboardPlayer =
       std::make_unique<KeyboardPlayer>(*this, TankFactory::Random(mStore, TANK_X, TANK_Y));
   mDummyPlayer =
@@ -27,54 +26,44 @@ Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackgro
 
 void Board::register_missile(const Missle& missile) { mMissles.push_back(missile); }
 
-void Board::draw() {
-  mWindow.clear();
-  mBackground.draw(mWindow);
+void Board::draw(sf::RenderWindow &window) {
+  mBackground.draw(window);
   if (mKeyboardPlayer) {
-    mKeyboardPlayer->draw(mWindow);
+    mKeyboardPlayer->draw(window);
   }
   if (mDummyPlayer) {
-    mDummyPlayer->draw(mWindow);
+    mDummyPlayer->draw(window);
   }
   for (auto& missle : mMissles) {
-    missle.draw(mWindow);
+    missle.draw(window);
   }
-  display_speed();
-  mWindow.display();
+  display_score(window);
 }
 
-void Board::run() {
-  while (mWindow.isOpen()) {
-    sf::Event event{};
-    while (mWindow.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        mWindow.close();
-      }
-
-      if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-        mWindow.close();
-      }
-      if (mKeyboardPlayer) {
-        mKeyboardPlayer->handle_events(event);
-      }
-    }
-    if (mDummyPlayer) {
-      mDummyPlayer->update();
-    }
-    if (mKeyboardPlayer) {
-      mKeyboardPlayer->update();
-    }
-    draw();
-    remove_missles();
-    remove_players();
-  }
-}
-
-void Board::display_speed() {
+void Board::process_events(const sf::Event &event) {
   if (mKeyboardPlayer) {
-    mText.setString(std::to_string(mKeyboardPlayer->get_tank().get_current_speed()));
-    mWindow.draw(mText);
+    mKeyboardPlayer->handle_events(event);
   }
+}
+
+void Board::update() {
+  if (mDummyPlayer) {
+    mDummyPlayer->update();
+  }
+  if (mKeyboardPlayer) {
+    mKeyboardPlayer->update();
+  }
+  remove_missles();
+  remove_players();
+}
+
+void Board::display_score(sf::RenderWindow &window) {
+        mText.setString("Player: " + std::to_string(mPlayerScore) + " Enemy: " + std::to_string(mEnemyScore));
+        mText.setCharacterSize(24);
+        mText.setFillColor(sf::Color::White);
+        mText.setPosition(10.0f, 10.0f);
+        mText.setStyle(sf::Text::Bold);
+        window.draw(mText);
 }
 
 void Board::remove_missles() {
@@ -86,9 +75,9 @@ void Board::remove_missles() {
 
 void Board::remove_players() {
   std::vector<Missle> missiles_collided{};
-  auto remove_player_if_hit = [this, &missiles_collided](auto& player) {
+  auto remove_player_if_hit = [this, &missiles_collided](auto& player) -> bool{
     if (!player) {
-      return;
+      return false;
     }
     const auto& it =
         std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
@@ -97,20 +86,39 @@ void Board::remove_players() {
 
     if (it != mMissles.cend()) {
       player->get_tank().take_damage(25.0f);
+      missiles_collided.push_back(*it);
       if (!player->get_tank().is_alive()) {
         player.reset();
+        return true;
       }
-      missiles_collided.push_back(*it);
     }
+    return false;
   };
 
-  remove_player_if_hit(mKeyboardPlayer);
-  remove_player_if_hit(mDummyPlayer);
+  if(remove_player_if_hit(mKeyboardPlayer)) {
+      mEnemyScore++;
+      reset_tanks();
+  }
+  if(remove_player_if_hit(mDummyPlayer)){
+      mPlayerScore++;
+      reset_tanks();
+  }
 
   std::erase_if(mMissles, [&missiles_collided](const auto& missile) {
     return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),
                        [&missile](const auto& m) { return m == missile; });
   });
+}
+
+void Board::reset_tanks() {
+        constexpr float TANK_X = WIDTH / 2.0f;
+        constexpr float TANK_Y = 50.f;
+        constexpr float TANK2_X = WIDTH / 2.0f;
+        constexpr float TANK2_Y = 400.0f;
+        mKeyboardPlayer =
+        std::make_unique<KeyboardPlayer>(*this, TankFactory::Random(mStore, TANK_X, TANK_Y));
+        mDummyPlayer =
+        std::make_unique<DummyPlayer>(*this, TankFactory::Random(mStore, TANK2_X, TANK2_Y));
 }
 
 bool Board::is_gameover() const { return mIsGameover; }
