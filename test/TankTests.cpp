@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
+#include "Sound.hpp"
 #include "SquareRootEngine.hpp"
 #include "Tank/Tank.hpp"
 #include "TestUtility.hpp"
@@ -24,6 +25,7 @@ struct TankTestData {
   std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mMissile{create_dummy_texture()};
+  Sound emptySound;
   TankTextures mTextures{.mBody = *mBody,
                          .mTower = *mTower,
                          .mShot = *mShot,
@@ -41,6 +43,7 @@ struct TankTestData {
             0,
             mTextures,
             std::move(engine),
+            emptySound,
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
             shot_cooldown};
   }

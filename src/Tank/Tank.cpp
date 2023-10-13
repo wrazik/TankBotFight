@@ -9,14 +9,14 @@
 constexpr int TANK_INITIAL_ROTATION = 180;
 
 Tank::Tank(float x, float y, const TankTextures &textures, std::unique_ptr<Engine> &&engine,
-           const TracesHandlerConfig &traces_handler_config,
+           const Sound &shot_sound, const TracesHandlerConfig &traces_handler_config,
            const std::chrono::milliseconds &shot_cooldown)
     : mPos({x, y}),
       mBody(textures.mBody),
       mTower(TankTowerTextures{.mTower = textures.mTower,
                                .mShotAnimation = textures.mShot,
                                .mMissile = textures.mMissile},
-             shot_cooldown),
+             shot_cooldown, shot_sound),
       mEngine(std::move(engine)),
       mTracesHandler(std::make_unique<TracesHandler>(textures.mTracks, mBody.get_sprite(), mPos,
                                                      traces_handler_config)) {

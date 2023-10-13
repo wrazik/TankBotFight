@@ -9,6 +9,7 @@
 
 #include "Engine.hpp"
 #include "Missle.hpp"
+#include "Sound.hpp"
 #include "Tank/TankHealthBar.hpp"
 #include "Tank/TankPart.hpp"
 #include "Tank/TankTower.hpp"
@@ -27,7 +28,7 @@ struct TankTextures {
 class Tank {
  public:
   Tank(float x, float y, const TankTextures& textures, std::unique_ptr<Engine>&& engine,
-       const TracesHandlerConfig& traces_handler_config = {},
+       const Sound& shot_sound, const TracesHandlerConfig& traces_handler_config = {},
        const std::chrono::milliseconds& shot_cooldown = std::chrono::milliseconds{500});
   Tank(const Tank& rhs);
   Tank(Tank&& rhs) noexcept;
@@ -54,7 +55,6 @@ class Tank {
  private:
   void draw_tracks(sf::RenderWindow& window);
   void update_position();
-
   sf::Vector2f mPos;
   float mCurrentSpeed = 0.0f;
   int mHealth{TANK_HEALTH};
