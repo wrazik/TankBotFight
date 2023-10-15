@@ -11,16 +11,20 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
+Board::Board()
+    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"),
+      mBackground(mStore),
+      mTankExplodeSound("explosion.flac") {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
   constexpr float TANK2_Y = 400.0f;
+  Sound tank_shot_sound("tank_shot.flac");
   mWindow.setFramerateLimit(30);
-  mKeyboardPlayer =
-      std::make_unique<KeyboardPlayer>(*this, TankFactory::Random(mStore, TANK_X, TANK_Y));
-  mDummyPlayer =
-      std::make_unique<DummyPlayer>(*this, TankFactory::Random(mStore, TANK2_X, TANK2_Y));
+  mKeyboardPlayer = std::make_unique<KeyboardPlayer>(
+      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, tank_shot_sound));
+  mDummyPlayer = std::make_unique<DummyPlayer>(
+      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, tank_shot_sound));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);
 }
@@ -39,6 +43,9 @@ void Board::draw() {
   for (auto& missle : mMissles) {
     missle.draw(mWindow);
   }
+  for (auto& animation : mAnimations) {
+    animation.draw(mWindow);
+  };
   display_speed();
   mWindow.display();
 }
@@ -66,7 +73,7 @@ void Board::run() {
     }
     draw();
     remove_missles();
-    remove_players();
+    update_players();
   }
 }
 
@@ -84,9 +91,9 @@ void Board::remove_missles() {
   });
 }
 
-void Board::remove_players() {
+void Board::update_players() {
   std::vector<Missle> missiles_collided{};
-  auto remove_player_if_hit = [this, &missiles_collided](auto& player) {
+  auto update_player_if_hit = [this, &missiles_collided](auto& player) {
     if (!player) {
       return;
     }
@@ -94,14 +101,21 @@ void Board::remove_players() {
         std::find_if(mMissles.cbegin(), mMissles.cend(), [&player](const auto& missile) {
           return player->get_tank().get_body_rect().contains(missile.get_pos());
         });
-    if (it != mMissles.cend()) {
-      player.reset();
-      missiles_collided.push_back(*it);
+    if (it == mMissles.cend()) {
+      return;
     }
+    player->get_tank().take_damage((*it).get_damage());
+    if (!player->get_tank().is_alive()) {
+      mTankExplodeSound.play();
+      mAnimations.push_back(
+          Animation("explosion", 5, 500, player->get_tank().get_position(), mStore));
+      player.reset();
+    }
+    missiles_collided.push_back(*it);
   };
 
-  remove_player_if_hit(mKeyboardPlayer);
-  remove_player_if_hit(mDummyPlayer);
+  update_player_if_hit(mKeyboardPlayer);
+  update_player_if_hit(mDummyPlayer);
 
   std::erase_if(mMissles, [&missiles_collided](const auto& missile) {
     return std::any_of(missiles_collided.cbegin(), missiles_collided.cend(),

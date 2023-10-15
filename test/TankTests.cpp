@@ -33,10 +33,19 @@ struct TankTestData {
       std::make_unique<testing::NiceMock<EngineMock>>()};
   std::shared_ptr<testing::NiceMock<EngineMock>> mEngineNiceMock{
       std::shared_ptr<testing::NiceMock<EngineMock>>{}, mEngine.get()};
+  std::chrono::milliseconds shot_cooldown = std::chrono::milliseconds{500};
+  unsigned int health = 100;
 
   Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
-    return {0, 0, mTextures, std::move(engine),
-            TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f}};
+    Sound emptySound {"tank_shot.flac"};
+
+    return {0,
+            0,
+            mTextures,
+            std::move(engine),
+            emptySound,
+            TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
+            shot_cooldown};
   }
 };
 
@@ -103,6 +112,24 @@ TEST_F(TankTest, WhenTankIsOneAxisOutOfTheBoard_ThenShouldAllowToMoveOnlyOneAxis
   update_many(mTankSUT, 100);
 
   expect_vec2f_eq({0.f, 500.f}, mTankSUT.get_position());
+}
+
+TEST_F(TankTest, WhenTankTakesHitForZeroDamage_ThenShouldBeAlive) {
+  mTankSUT.take_damage(0);
+  EXPECT_TRUE(mTankSUT.is_alive());
+}
+
+TEST_F(TankTest, WhenTankTakesTwoHitsForHalfHealth_ThenShouldNotBeAliveAfterSecondOne) {
+  auto half_health = health / 2u;
+  mTankSUT.take_damage(half_health);
+  EXPECT_TRUE(mTankSUT.is_alive());
+  mTankSUT.take_damage(health - half_health);
+  EXPECT_FALSE(mTankSUT.is_alive());
+}
+
+TEST_F(TankTest, WhenTankTakesHitForWholeHealth_ThenShouldNotBeAlive) {
+  mTankSUT.take_damage(health);
+  EXPECT_FALSE(mTankSUT.is_alive());
 }
 
 struct TankShootingTest : TankTestData, ::testing::TestWithParam<float> {

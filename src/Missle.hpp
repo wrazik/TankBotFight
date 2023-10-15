@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "MovementState.hpp"
+
 class Missle {
  public:
   Missle(sf::Texture& texture, const MovementState& state);
