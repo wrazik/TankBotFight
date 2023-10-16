@@ -34,6 +34,7 @@ add_library(
   src/background/Ground.cpp
   src/background/RoadGenerator.cpp
   src/background/SurfaceGenerator.cpp
+  src/Animation.cpp
   src/Board.cpp
   src/Controllers/KeyboardController.cpp
   src/Controllers/DummyController.cpp

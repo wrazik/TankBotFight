@@ -11,7 +11,10 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
+Board::Board()
+    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"),
+      mBackground(mStore),
+      mTankExplodeSound("explosion.flac") {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
@@ -40,6 +43,9 @@ void Board::draw() {
   for (auto& missle : mMissles) {
     missle.draw(mWindow);
   }
+  for (auto& animation : mAnimations) {
+    animation.draw(mWindow);
+  };
   display_speed();
   mWindow.display();
 }
@@ -100,10 +106,15 @@ void Board::update_players() {
     }
     player->get_tank().take_damage((*it).get_damage());
     if (!player->get_tank().is_alive()) {
+      mTankExplodeSound.play();
+      mAnimations.push_back(
+          Animation("explosion", 5, 500, player->get_tank().get_position(), mStore));
       player.reset();
     }
     missiles_collided.push_back(*it);
   };
+
+  std::erase_if(mAnimations, [](const auto& animation) { return animation.is_finished(); });
 
   update_player_if_hit(mKeyboardPlayer);
   update_player_if_hit(mDummyPlayer);
