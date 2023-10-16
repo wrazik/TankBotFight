@@ -42,7 +42,7 @@ add_library(
   src/Tank/Tank.cpp
   src/Tank/TankFactory.cpp
   src/Tank/TankPart.cpp
-  src/Tank/TankTower.cpp
+  src/Tank/TankTurret.cpp
   src/Tank/TankHealthBar.cpp
   src/TextureStore.cpp
   src/Random.cpp

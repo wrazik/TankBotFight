@@ -19,12 +19,11 @@ Board::Board()
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
   constexpr float TANK2_Y = 400.0f;
-  Sound tank_shot_sound("tank_shot.flac");
   mWindow.setFramerateLimit(30);
   mKeyboardPlayer = std::make_unique<KeyboardPlayer>(
-      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, tank_shot_sound));
+      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, Sound("tank_shot.flac")));
   mDummyPlayer = std::make_unique<DummyPlayer>(
-      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, tank_shot_sound));
+      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, Sound("tank_shot.flac")));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);
 }
