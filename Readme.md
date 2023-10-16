@@ -29,8 +29,6 @@ You have to remember about two things:
 - Dependencies are installed via vcpkg
 
 
-
-
 ## Downloading the repo
 
 So, before you start, you must first download checkout git-lfs (https://git-lfs.github.com/)

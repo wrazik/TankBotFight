@@ -21,13 +21,12 @@ struct EngineMock : Engine {
 
 struct TankTestData {
   std::unique_ptr<sf::Texture> mBody{create_dummy_texture()};
-  std::unique_ptr<sf::Texture> mTower{create_dummy_texture()};
+  std::unique_ptr<sf::Texture> mTurret{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mShot{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mTracks{create_dummy_texture()};
   std::unique_ptr<sf::Texture> mMissile{create_dummy_texture()};
-  Sound emptySound;
   TankTextures mTextures{.mBody = *mBody,
-                         .mTower = *mTower,
+                         .mTurret = *mTurret,
                          .mShot = *mShot,
                          .mTracks = *mTracks,
                          .mMissile = *mMissile};
@@ -38,12 +37,12 @@ struct TankTestData {
   std::chrono::milliseconds shot_cooldown = std::chrono::milliseconds{500};
   unsigned int health = 100;
 
-  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) {
+  Tank create_tank(std::unique_ptr<testing::NiceMock<EngineMock>>&& engine) const {
     return {0,
             0,
             mTextures,
             std::move(engine),
-            emptySound,
+            Sound("tank_shot.flac"),
             TracesHandlerConfig{.mMaxTraceAge = 10, .mDecayRate = 0.1f},
             shot_cooldown};
   }
@@ -52,8 +51,7 @@ struct TankTestData {
 struct TankTest : TankTestData, ::testing::Test {
   Tank mTankSUT{create_tank(std::move(mEngine))};
 
-  float mSpeed{1.f};
-  int mAngle{90};
+  float mAngle{90};
 };
 
 TEST_F(TankTest, GivenAngleRotationWhenUpdateThenShouldCallGetPositionDeltaWithAngleRotation) {
@@ -83,12 +81,12 @@ TEST_F(TankTest, GivenMultipleUpdatesWhenGetPositionThenReturnsPositionDeltaSum)
   expect_vec2f_eq(expected_position, mTankSUT.get_position());
 }
 
-TEST_F(TankTest, RotateTower_ShouldntAffectMoving) {
+TEST_F(TankTest, RotateTurret_ShouldntAffectMoving) {
   EXPECT_CALL(*mEngineNiceMock, get_position_delta(to_radians(mAngle)));
   mTankSUT.set_rotation(mAngle);
 
-  mTankSUT.rotate_tower(Rotation::Clockwise);
-  mTankSUT.rotate_tower(Rotation::Clockwise);
+  mTankSUT.rotate_turret(Rotation::Clockwise);
+  mTankSUT.rotate_turret(Rotation::Clockwise);
   mTankSUT.update();
 }
 

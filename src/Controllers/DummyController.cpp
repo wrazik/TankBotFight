@@ -31,11 +31,11 @@ void DummyController::update() {
       break;
     case DummyMove::TurnLeft:
       mTank.rotate_body(Rotation::Clockwise);
-      mTank.rotate_tower(Rotation::Clockwise);
+      mTank.rotate_turret(Rotation::Clockwise);
       break;
     case DummyMove::TurnRight:
       mTank.rotate_body(Rotation::Counterclockwise);
-      mTank.rotate_tower(Rotation::Counterclockwise);
+      mTank.rotate_turret(Rotation::Counterclockwise);
       break;
     case DummyMove::Idle:
       mTank.set_gear(Gear::Neutral);
