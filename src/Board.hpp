@@ -3,16 +3,17 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
+#include "Animation.hpp"
 #include "Missle.hpp"
 #include "Players/DummyPlayer.hpp"
 #include "Players/KeyboardPlayer.hpp"
 #include "background/Background.hpp"
-
 class Board {
  public:
   Board();
 
   void register_missile(const Missle& missile);
+  void register_animation(const Animation& animation);
   void run();
 
  private:
@@ -29,4 +30,6 @@ class Board {
   std::vector<Missle> mMissles;
   sf::Font mFont;
   sf::Text mText;
+  Sound mTankExplodeSound;
+  std::vector<Animation> mAnimations;
 };
