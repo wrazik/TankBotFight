@@ -42,7 +42,7 @@ add_library(
   src/Tank/Tank.cpp
   src/Tank/TankFactory.cpp
   src/Tank/TankPart.cpp
-  src/Tank/TankTower.cpp
+  src/Tank/TankTurret.cpp
   src/Tank/TankHealthBar.cpp
   src/TextureStore.cpp
   src/Random.cpp
@@ -73,9 +73,14 @@ find_package(
   REQUIRED)
 find_package(range-v3 REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
+if (APPLE)
+  find_package(OpenAL REQUIRED)
+  target_link_libraries(tank_bot_fight PRIVATE OpenAL::OpenAL)
+endif()
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
                                                 Microsoft.GSL::GSL)
 target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics sfml-audio)
+
 
 add_subdirectory(test)
