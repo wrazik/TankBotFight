@@ -33,6 +33,10 @@ jobs:
         run: |
           cmake -E make_directory ${{runner.workspace}}/build
 
+      - name: Install OpenAl audio
+        run: |
+          brew install openal-soft
+
       - name: Configure CMake
         shell: bash
         working-directory: ${{runner.workspace}}/build
