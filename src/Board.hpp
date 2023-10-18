@@ -10,7 +10,7 @@
 
 class Board {
  public:
-  Board();
+  Board(sf::RenderWindow window);
 
   void register_missile(const Missle& missile);
   void run();
@@ -22,7 +22,7 @@ class Board {
   void draw();
 
   TextureStore mStore;
-  sf::RenderWindow mWindow;
+  sf::RenderWindow& mWindow;
   Background mBackground;
   std::unique_ptr<KeyboardPlayer> mKeyboardPlayer;
   std::unique_ptr<DummyPlayer> mDummyPlayer;

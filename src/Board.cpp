@@ -11,7 +11,8 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board() : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
+Board::Board(sf::RenderWindow window)
+    : mWindow{window}(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"), mBackground(mStore) {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
