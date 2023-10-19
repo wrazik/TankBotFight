@@ -1,4 +1,4 @@
-[![MacOS / clang](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml/badge.svg)](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml)
+[![MacOS (arm) / clang](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml/badge.svg)](https://github.com/wrazik/TankBotFight/actions/workflows/macos_clang.yaml)
 [![Ubuntu / gcc11](https://github.com/wrazik/TankBotFight/actions/workflows/ubuntu_gcc.yaml/badge.svg)](https://github.com/wrazik/TankBotFight/actions/workflows/ubuntu_gcc.yaml)
 [![Windows / msvc](https://github.com/wrazik/TankBotFight/actions/workflows/windows_msvc.yaml/badge.svg)](https://github.com/wrazik/TankBotFight/actions/workflows/windows_msvc.yaml)
 # TankBotFight - platform for code competition
