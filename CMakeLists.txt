@@ -55,6 +55,12 @@ add_library(
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  message(STATUS "Using OpenAL from system - Apple")
+  find_package(OpenAL REQUIRED)
+  target_link_libraries(tank_bot_fight_lib PRIVATE OpenAL::OpenAL)
+endif()
+
 add_executable(tank_bot_fight src/main.cpp)
 
 if(MSVC)
@@ -73,10 +79,6 @@ find_package(
   REQUIRED)
 find_package(range-v3 REQUIRED)
 find_package(Microsoft.GSL CONFIG REQUIRED)
-if (APPLE)
-  find_package(OpenAL REQUIRED)
-  target_link_libraries(tank_bot_fight PRIVATE OpenAL::OpenAL)
-endif()
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
                                                 Microsoft.GSL::GSL)

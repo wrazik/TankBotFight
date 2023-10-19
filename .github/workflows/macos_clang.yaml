@@ -24,10 +24,6 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
-      - name: Install OpenAl audio
-        run: |
-          brew install openal-soft
-
       - name: Install vcpkg packages
         # vcpkg binary can only be compiled using gcc for now (bootstrap step)
         run: |
