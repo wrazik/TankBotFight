@@ -10,6 +10,5 @@ class MenuLevel {
   MenuLevel* mPrevLevel;
 
  public:
-  MenuLevel(std::initializer_list<Button> buttons, MenuLevel* prevLevel = nullptr)
-      : mButtons{buttons}, mPrevLevel{prevLevel} {}
+  MenuLevel(std::initializer_list<Button> buttons, MenuLevel* prevLevel = nullptr);
 };
