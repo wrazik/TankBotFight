@@ -23,6 +23,6 @@ class Button {
 
  public:
   Button(std::string text, void (*callback)(void),
-         Button_type button_type = Button_type::Not_clickable);
+         Button_type button_type = Button_type::Not_clickable, MenuLevel* next_level = nullptr);
   bool is_clicked(const sf::Event& event);
 };

@@ -2,8 +2,26 @@
 
 #include "Size.hpp"
 
+void main_menu_start_callback(void) { std::cout << "Start clicked!\n"; }
+void main_menu_options_callback(void) { std::cout << "Options clicked!\n"; }
+void main_menu_exit_callback(void) { std::cout << "Exit clicked!\n"; }
+
+void options_back_callback(void) { std::cout << "Options: back clicked\n"; }
+
+// button -> text, callback, clickable, nextLevel
+
+extern MenuLevel options;
+
+MenuLevel main_menu{{{"Start", main_menu_start_callback, Button_type::Clickable, nullptr},
+                     {"Options", main_menu_options_callback, Button_type::Clickable, &options},
+                     {"Exit", main_menu_exit_callback, Button_type::Clickable, nullptr}}};
+
+MenuLevel options{{"Back", options_back_callback, Button_type::Clickable, &main_menu}};
+
 GameManager::GameManager()
-    : mWindow{sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"}, mBoard{mWindow} {}
+    : mWindow{sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"},
+      mBoard{mWindow},
+      mMainMenu{mWindow, {&main_menu, &options}, &main_menu} {}
 
 void GameManager::start() {
   while (mWindow.isOpen()) {

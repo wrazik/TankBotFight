@@ -7,13 +7,13 @@
 
 class MainMenu {
  public:
-  MainMenu(sf::Window& window, std::initializer_list<MenuLevel*> menu_level_ptrs,
+  MainMenu(sf::RenderWindow& window, std::initializer_list<MenuLevel*> menu_level_ptrs,
            MenuLevel* current_level);
 
   void process_and_draw(const sf::Event& event);
 
  private:
-  sf::Window& mWindow;
+  sf::RenderWindow& mWindow;
   std::vector<MenuLevel*> mMenuLevelPtrs;
   MenuLevel* mCurrentLevel = nullptr;
 };

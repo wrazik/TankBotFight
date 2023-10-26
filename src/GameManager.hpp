@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Board.hpp"
+#include "MainMenu.h"
 
 enum class GameManagerState {
   MainMenu,
@@ -18,6 +19,7 @@ class GameManager {
   // objects
   GameManagerState mGameManagerState = GameManagerState::MainMenu;
   sf::RenderWindow mWindow;
+  MainMenu mMainMenu;
   Board mBoard;
 
   // methods
