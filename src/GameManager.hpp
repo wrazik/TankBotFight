@@ -18,10 +18,11 @@ class GameManager {
   // objects
   GameManagerState mGameManagerState = GameManagerState::MainMenu;
   sf::RenderWindow mWindow;
-  Board board;
+  Board mBoard;
 
   // methods
+ public:
   void start();
   void transitState(GameManagerState desired_state);
-  void exit;
-}
+  void performStateMachine(const sf::Event& event);
+};

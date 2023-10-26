@@ -10,10 +10,10 @@
 
 class Board {
  public:
-  Board(sf::RenderWindow window);
+  Board(sf::RenderWindow& window);
 
   void register_missile(const Missle& missile);
-  void run();
+  void play(const sf::Event& event);
 
  private:
   void remove_missles();
