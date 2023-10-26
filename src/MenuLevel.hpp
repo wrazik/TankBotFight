@@ -5,10 +5,12 @@
 
 #include "Button.hpp"
 
+class Button;
+
 class MenuLevel {
   std::vector<Button> mButtons;
   MenuLevel* mPrevLevel;
 
  public:
-  MenuLevel(std::initializer_list<Button> buttons, MenuLevel* prevLevel = nullptr);
+  MenuLevel(std::initializer_list<Button> buttons);
 };
