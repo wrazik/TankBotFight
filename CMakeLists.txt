@@ -51,6 +51,7 @@ add_library(
   src/Players/DummyPlayer.cpp
   src/Players/KeyboardPlayer.cpp
   src/Sound.cpp
+  src/MainMenu.cpp
   src/GameManager.cpp
   src/MenuLevel.cpp
   src/Button.cpp
