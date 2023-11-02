@@ -12,11 +12,20 @@ void options_back_callback(void) { std::cout << "Options: back clicked\n"; }
 
 extern MenuLevel options;
 
-MenuLevel main_menu{{{"Start", main_menu_start_callback, Button_type::Clickable, nullptr},
-                     {"Options", main_menu_options_callback, Button_type::Clickable, &options},
-                     {"Exit", main_menu_exit_callback, Button_type::Clickable, nullptr}}};
+const unsigned int buttonWidth = WIDTH / 5;
+const unsigned int buttonHeight = HEIGHT / 10;
+constexpr unsigned int verticalSpacing = 20;
 
-MenuLevel options{{"Back", options_back_callback, Button_type::Clickable, &main_menu}};
+MenuLevel main_menu{
+    {{"Start", point_t((WIDTH - buttonWidth) / 2, verticalSpacing + buttonHeight * 1), buttonWidth,
+      buttonHeight, main_menu_start_callback, nullptr},
+     {"Options", point_t((WIDTH - buttonWidth) / 2, verticalSpacing + buttonHeight * 3),
+      buttonWidth, buttonHeight, main_menu_options_callback, &options},
+     {"Exit", point_t((WIDTH - buttonWidth) / 2, verticalSpacing + buttonHeight * 5), buttonWidth,
+      buttonHeight, main_menu_exit_callback, nullptr}}};
+
+MenuLevel options{{"Back", point_t(WIDTH / 2 - buttonWidth, 2 * buttonHeight + 20), buttonWidth,
+                   buttonHeight, options_back_callback, &main_menu}};
 
 GameManager::GameManager()
     : mWindow{sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"},
@@ -50,6 +59,8 @@ void GameManager::start() {
 void GameManager::performStateMachine(const sf::Event& event) {
   switch (mGameManagerState) {
     case GameManagerState::MainMenu:
+      mMainMenu.process_and_draw(event);
+      /*
       [this]() {
         std::string input;
         std::cout << "Welcome to the game!\n";
@@ -64,7 +75,7 @@ void GameManager::performStateMachine(const sf::Event& event) {
             break;
         }
       }();
-
+      */
       break;
     case GameManagerState::Started:
       mBoard.play(event);

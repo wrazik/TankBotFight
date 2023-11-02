@@ -4,25 +4,29 @@
 #include <string>
 #include <vector>
 
+#include "MenuItem.hpp"
 #include "MenuLevel.hpp"
 
-using point_t = sf::Vector2u;
-
-enum class Button_type { Clickable, Not_clickable };
+using point_t = sf::Vector2f;
 
 class MenuLevel;
 
-class Button {
+class Button : MenuItem {
   std::string mText;
-  point_t mTopLeft;
   unsigned int mWidth;
   unsigned int mHeight;
+
   void (*mCallback)(void);
+
+  bool mIsSelected = false;
+
   MenuLevel* mNextLevel;
-  Button_type mButtonType;
 
  public:
-  Button(std::string text, void (*callback)(void),
-         Button_type button_type = Button_type::Not_clickable, MenuLevel* next_level = nullptr);
+  Button(std::string text, point_t top_left_corner, unsigned int width, unsigned int height,
+         void (*callback)(void), MenuLevel* next_level = nullptr);
   bool is_clicked(const sf::Event& event);
+  void draw(sf::RenderWindow& window);
+  void select();
+  void deselect();
 };

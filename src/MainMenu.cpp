@@ -6,6 +6,7 @@ MainMenu::MainMenu(sf::RenderWindow& window, std::initializer_list<MenuLevel*> m
 
 void MainMenu::process_and_draw(const sf::Event& event) {
   // process inputs
+  mCurrentLevel->draw(mWindow, event);
 
   // draw menu
 
