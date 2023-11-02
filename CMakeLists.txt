@@ -55,6 +55,7 @@ add_library(
   src/GameManager.cpp
   src/MenuLevel.cpp
   src/Button.cpp
+  src/MenuItem.cpp
   )
 
 target_include_directories(tank_bot_fight_lib PRIVATE src)
