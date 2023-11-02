@@ -2,7 +2,7 @@
 
 MenuLevel::MenuLevel(std::initializer_list<Button> buttons) : mButtons{buttons} {}
 
-void MenuLevel::draw(sf::RenderWindow& window, const sf::Event& event) {
+void MenuLevel::processEvents(const sf::Event& event) {
   // process input
   static sf::Keyboard::Key lastPressedKey;
   if (event.type == sf::Event::KeyPressed) {
@@ -26,8 +26,10 @@ void MenuLevel::draw(sf::RenderWindow& window, const sf::Event& event) {
   } else if (event.type == sf::Event::KeyReleased) {
     lastPressedKey = sf::Keyboard::Unknown;
   }
+}
 
-  // select button
+void MenuLevel::draw(sf::RenderWindow& window, const sf::Font& font) {
+  // select button - draw outline
   for (int i = 0; i < mButtons.size(); ++i) {
     if (i == mSelectedButton) {
       mButtons[i].select();
@@ -38,6 +40,6 @@ void MenuLevel::draw(sf::RenderWindow& window, const sf::Event& event) {
 
   // draw buttons
   for (auto& button : mButtons) {
-    button.draw(window);
+    button.draw(window, font);
   }
 }

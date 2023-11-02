@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Board.hpp"
-#include "MainMenu.h"
+#include "MainMenu.hpp"
 
 enum class GameManagerState {
   MainMenu,

@@ -14,5 +14,6 @@ class MenuLevel {
 
  public:
   MenuLevel(std::initializer_list<Button> buttons);
-  void draw(sf::RenderWindow&, const sf::Event& event);
+  void draw(sf::RenderWindow&, const sf::Font& font);
+  void processEvents(const sf::Event& event);
 };

@@ -12,21 +12,18 @@ using point_t = sf::Vector2f;
 class MenuLevel;
 
 class Button : MenuItem {
-  std::string mText;
+  std::string mTextContent;
+  sf::Text mText;
   unsigned int mWidth;
   unsigned int mHeight;
-
   void (*mCallback)(void);
-
   bool mIsSelected = false;
-
   MenuLevel* mNextLevel;
 
  public:
   Button(std::string text, point_t top_left_corner, unsigned int width, unsigned int height,
          void (*callback)(void), MenuLevel* next_level = nullptr);
-  bool is_clicked(const sf::Event& event);
-  void draw(sf::RenderWindow& window);
+  void draw(sf::RenderWindow& window, const sf::Font& font);
   void select();
   void deselect();
 };
