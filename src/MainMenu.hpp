@@ -16,4 +16,5 @@ class MainMenu {
   sf::RenderWindow& mWindow;
   std::vector<MenuLevel*> mMenuLevelPtrs;
   MenuLevel* mCurrentLevel = nullptr;
+  sf::Font mFont;
 };
