@@ -7,11 +7,22 @@
 #include "MenuItem.hpp"
 #include "MenuLevel.hpp"
 
-using point_t = sf::Vector2f;
+enum class ButtonType { Callback, LevelChanger };
 
 class MenuLevel;
 
 class Button : MenuItem {
+ public:
+  Button(std::string text, sf::Vector2f top_left_corner, unsigned int width, unsigned int height,
+         void (*callback)(void), ButtonType button_type, MenuLevel* next_level = nullptr);
+  void draw(sf::RenderWindow& window, const sf::Font& font);
+  void select();
+  void deselect();
+  void click();
+  ButtonType get_button_type() const;
+  MenuLevel* get_next_level() const;
+
+ private:
   std::string mTextContent;
   sf::Text mText;
   unsigned int mWidth;
@@ -19,11 +30,5 @@ class Button : MenuItem {
   void (*mCallback)(void);
   bool mIsSelected = false;
   MenuLevel* mNextLevel;
-
- public:
-  Button(std::string text, point_t top_left_corner, unsigned int width, unsigned int height,
-         void (*callback)(void), MenuLevel* next_level = nullptr);
-  void draw(sf::RenderWindow& window, const sf::Font& font);
-  void select();
-  void deselect();
+  ButtonType mButtonType;
 };

@@ -9,7 +9,6 @@ class MainMenu {
  public:
   MainMenu(sf::RenderWindow& window, std::initializer_list<MenuLevel*> menu_level_ptrs,
            MenuLevel* current_level);
-
   void process_and_draw(const sf::Event& event);
 
  private:

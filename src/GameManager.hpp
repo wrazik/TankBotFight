@@ -9,11 +9,15 @@ enum class GameManagerState {
   MainMenu,
   Started,
   Exit,
+  InvalidState,
 };
 
 class GameManager {
  public:
   GameManager();
+  void start();
+  void performStateMachine(const sf::Event& event);
+  void transitState();
 
  private:
   // objects
@@ -21,10 +25,10 @@ class GameManager {
   sf::RenderWindow mWindow;
   MainMenu mMainMenu;
   Board mBoard;
+  static bool request_state_change;
+  static GameManagerState desired_state;
 
-  // methods
- public:
-  void start();
-  void transitState(GameManagerState desired_state);
-  void performStateMachine(const sf::Event& event);
+  // friends: buttons' callbacks
+  friend void main_menu_start_callback(void);
+  friend void main_menu_exit_callback(void);
 };

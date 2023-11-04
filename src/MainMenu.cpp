@@ -9,11 +9,15 @@ MainMenu::MainMenu(sf::RenderWindow& window, std::initializer_list<MenuLevel*> m
 }
 
 void MainMenu::process_and_draw(const sf::Event& event) {
+  // check if menu should be changed
+  if (mCurrentLevel->is_level_change_requested()) {
+    mCurrentLevel->reset_level_request();
+    mCurrentLevel = mCurrentLevel->get_next_level();
+  }
+
   // process inputs
   mCurrentLevel->processEvents(event);
 
   // draw menu
   mCurrentLevel->draw(mWindow, mFont);
-
-  // perform actions
 }

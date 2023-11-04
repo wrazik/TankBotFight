@@ -1,12 +1,14 @@
 #include "Button.hpp"
 
-Button::Button(std::string text, point_t top_left_corner, unsigned int width, unsigned int height,
-               void (*callback)(void), MenuLevel* next_level)
+Button::Button(std::string text, sf::Vector2f top_left_corner, unsigned int width,
+               unsigned int height, void (*callback)(void), ButtonType button_type,
+               MenuLevel* next_level)
     : mTextContent{text},
       mCallback{callback},
       MenuItem{top_left_corner},
       mWidth{width},
       mHeight{height},
+      mButtonType{button_type},
       mNextLevel{next_level} {}
 
 void Button::draw(sf::RenderWindow& window, const sf::Font& font) {
@@ -28,12 +30,25 @@ void Button::draw(sf::RenderWindow& window, const sf::Font& font) {
   mText.setString(mTextContent);
 
   // move objects in window and draw
-  rectangle.move(mPosition);
+  rectangle.setPosition(mPosition);
   window.draw(rectangle);
-  mText.move(mPosition);
+
+  // center text
+  mText.setOrigin(mText.getGlobalBounds().getSize() / 2.f + mText.getLocalBounds().getPosition());
+  mText.setPosition(rectangle.getPosition() + (rectangle.getSize() / 2.f));
   window.draw(mText);
 }
 
 void Button::select() { mIsSelected = true; }
 
 void Button::deselect() { mIsSelected = false; }
+
+void Button::click() {
+  if (mButtonType == ButtonType::Callback && mIsSelected) {
+    mCallback();
+  }
+}
+
+ButtonType Button::get_button_type() const { return mButtonType; }
+
+MenuLevel* Button::get_next_level() const { return mNextLevel; }
