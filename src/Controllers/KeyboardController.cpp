@@ -12,17 +12,17 @@ void KeyboardController::update(const sf::Event& event) {
     switch (event.key.code) {
       case sf::Keyboard::A:
         mTank.rotate_body(Rotation::Counterclockwise);
-        mTank.rotate_tower(Rotation::Counterclockwise);
+        mTank.rotate_turret(Rotation::Counterclockwise);
         break;
       case sf::Keyboard::D:
         mTank.rotate_body(Rotation::Clockwise);
-        mTank.rotate_tower(Rotation::Clockwise);
+        mTank.rotate_turret(Rotation::Clockwise);
         break;
       case sf::Keyboard::Left:
-        mTank.rotate_tower(Rotation::Counterclockwise);
+        mTank.rotate_turret(Rotation::Counterclockwise);
         break;
       case sf::Keyboard::Right:
-        mTank.rotate_tower(Rotation::Clockwise);
+        mTank.rotate_turret(Rotation::Clockwise);
         break;
       case sf::Keyboard::W:
         mTank.set_gear(Gear::Drive);
@@ -44,11 +44,11 @@ void KeyboardController::update(const sf::Event& event) {
       case sf::Keyboard::A:
       case sf::Keyboard::D:
         mTank.rotate_body(Rotation::None);
-        mTank.rotate_tower(Rotation::None);
+        mTank.rotate_turret(Rotation::None);
         break;
       case sf::Keyboard::Left:
       case sf::Keyboard::Right:
-        mTank.rotate_tower(Rotation::None);
+        mTank.rotate_turret(Rotation::None);
         break;
       case sf::Keyboard::W:
       case sf::Keyboard::S:

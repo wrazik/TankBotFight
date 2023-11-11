@@ -8,16 +8,16 @@
 #include "Sound.hpp"
 #include "Tank/TankPart.hpp"
 
-struct TankTowerTextures {
-  std::reference_wrapper<sf::Texture> mTower;
+struct TankTurretTextures {
+  std::reference_wrapper<sf::Texture> mTurret;
   std::reference_wrapper<sf::Texture> mShotAnimation;
   std::reference_wrapper<sf::Texture> mMissile;
 };
 
-class TankTower {
+class TankTurret {
  public:
-  TankTower(const TankTowerTextures& textures, const std::chrono::milliseconds& shot_cooldown,
-            const Sound& shot_sound);
+  TankTurret(const TankTurretTextures& textures, const std::chrono::milliseconds& shot_cooldown,
+            Sound&& shot_sound);
 
   void set_position(const sf::Vector2f& pos);
   void set_rotation(float angle);
@@ -33,7 +33,7 @@ class TankTower {
   sf::Vector2f calculate_shot_position() const;
   void update_shot_time();
 
-  TankPart mTower;
+  TankPart mTurret;
   TankPart mShotAnimation;
   Sound mShotSound;
   std::reference_wrapper<sf::Texture> mMissileTexture;

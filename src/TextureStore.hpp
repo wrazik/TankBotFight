@@ -8,8 +8,8 @@ class TextureStore {
   TextureStore() = default;
   TextureStore(TextureStore&) = delete;
   TextureStore& operator=(TextureStore&) = delete;
-  TextureStore(TextureStore&&) = delete;
-  TextureStore& operator=(TextureStore&&) = delete;
+  TextureStore(TextureStore&&) = default;
+  TextureStore& operator=(TextureStore&&) = default;
   ~TextureStore() = default;
 
   [[nodiscard]] sf::Texture& get_texture(const std::string& path,

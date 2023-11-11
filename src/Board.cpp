@@ -11,17 +11,17 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board(sf::RenderWindow& window) : mWindow{window}, mBackground(mStore) {
+Board::Board(sf::RenderWindow& window)
+    : mWindow{window}, mBackground(mStore), mTankExplodeSound{"explosion.flac"} {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
   constexpr float TANK2_Y = 400.0f;
-  Sound tank_shot_sound("tank_shot.flac");
   mWindow.setFramerateLimit(30);
   mKeyboardPlayer = std::make_unique<KeyboardPlayer>(
-      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, tank_shot_sound));
+      *this, TankFactory::Random(mStore, TANK_X, TANK_Y, Sound("tank_shot.flac")));
   mDummyPlayer = std::make_unique<DummyPlayer>(
-      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, tank_shot_sound));
+      *this, TankFactory::Random(mStore, TANK2_X, TANK2_Y, Sound("tank_shot.flac")));
   mFont.loadFromFile(files::asset_path() + "DejaVuSans.ttf");
   mText.setFont(mFont);
 }
@@ -39,6 +39,9 @@ void Board::draw() {
   for (auto& missle : mMissles) {
     missle.draw(mWindow);
   }
+  for (auto& animation : mAnimations) {
+    animation.draw(mWindow);
+  };
   display_speed();
 }
 
@@ -88,10 +91,15 @@ void Board::update_players() {
     }
     player->get_tank().take_damage((*it).get_damage());
     if (!player->get_tank().is_alive()) {
+      mTankExplodeSound.play();
+      mAnimations.push_back(
+          Animation("explosion", 5, 500, player->get_tank().get_position(), mStore));
       player.reset();
     }
     missiles_collided.push_back(*it);
   };
+
+  std::erase_if(mAnimations, [](const auto& animation) { return animation.is_finished(); });
 
   update_player_if_hit(mKeyboardPlayer);
   update_player_if_hit(mDummyPlayer);
