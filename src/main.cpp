@@ -1,9 +1,7 @@
-#include <iostream>
-
-#include "Board.hpp"
+#include "GameManager.hpp"
 
 int main() {
-  Board b;
-  b.run();
+  GameManager gm{};
+  gm.start();
   return 0;
 }

@@ -11,10 +11,8 @@
 #include "Tank/TankFactory.hpp"
 #include "TracesHandler.hpp"
 
-Board::Board()
-    : mWindow(sf::VideoMode(WIDTH, HEIGHT), "TankBotFight"),
-      mBackground(mStore),
-      mTankExplodeSound("explosion.flac") {
+Board::Board(sf::RenderWindow& window)
+    : mWindow{window}, mBackground(mStore), mTankExplodeSound{"explosion.flac"} {
   constexpr float TANK_X = WIDTH / 2.0f;
   constexpr float TANK_Y = 50.f;
   constexpr float TANK2_X = WIDTH / 2.0f;
@@ -31,7 +29,6 @@ Board::Board()
 void Board::register_missile(const Missle& missile) { mMissles.push_back(missile); }
 
 void Board::draw() {
-  mWindow.clear();
   mBackground.draw(mWindow);
   if (mKeyboardPlayer) {
     mKeyboardPlayer->draw(mWindow);
@@ -46,34 +43,23 @@ void Board::draw() {
     animation.draw(mWindow);
   };
   display_speed();
-  mWindow.display();
 }
 
-void Board::run() {
-  while (mWindow.isOpen()) {
-    sf::Event event{};
-    while (mWindow.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        mWindow.close();
-      }
-
-      if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-        mWindow.close();
-      }
-      if (mKeyboardPlayer) {
-        mKeyboardPlayer->handle_events(event);
-      }
-    }
-    if (mDummyPlayer) {
-      mDummyPlayer->update();
-    }
-    if (mKeyboardPlayer) {
-      mKeyboardPlayer->update();
-    }
-    draw();
-    remove_missles();
-    update_players();
+void Board::play(const sf::Event& event) {
+  if (mKeyboardPlayer) {
+    mKeyboardPlayer->handle_events(event);
   }
+
+  if (mDummyPlayer) {
+    mDummyPlayer->update();
+  }
+
+  if (mKeyboardPlayer) {
+    mKeyboardPlayer->update();
+  }
+  draw();
+  remove_missles();
+  update_players();
 }
 
 void Board::display_speed() {
