@@ -1,0 +1,199 @@
+syntax = "proto3";
+
+package tbf;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/empty.proto";
+
+extend google.protobuf.FieldOptions {
+  optional float min_value = 50000;
+  optional float max_length = 50001;
+}
+
+// Represents a point on a 2D plane
+// (0, 0) is the upper left corner
+// Negative x values go left, positive x values go right
+// Negative y values go up, positive y values go down 
+message Point {
+    float x = 1;
+    float y = 2;
+}
+
+// Represents an object size on a 2D plane
+message Size {
+    float width = 1 [(min_value) = 0];
+    float height = 2 [(min_value) = 0];
+}
+
+// Represents an angle in degrees
+message Angle {
+    // value 0 points to "12:00" on the clock
+    // values greater than 0 rotate clockwise
+    // values less than 0 rotate counter clockwise
+    float value = 1;
+}
+
+message MissileState {
+    // Points to the center of the missile
+    Point position = 1;
+    // Represents missile rotation
+    Angle rotation = 2;
+    // Represents missile speed (points per update)
+    float speed = 3 [(min_value) = 0]; // TODO: if this is const, maybe it should be placed in PersistentGameState?
+    // Represents missile damage (tank looses health equal to missile damage upon collision)
+    int32 damage = 4 [(min_value) = 0]; // TODO: if this is const, maybe it should be placed in PersistentGameState?
+}
+
+// Represents engine state which affects tank movement
+message EngineState {
+    // Represents max speed of object using engine (points per update)
+    double max_speed = 1 [(min_value) = 0];
+    // Represents required number of update frames to reach max speed (acceleration)
+    // Tank accelerates faster if the value is smaller
+    double steps_to_reach_max_speed = 2 [(min_value) = 1];
+}
+
+// Represents tank state which changes during game 
+message TankState {
+    // Points to the center of the tank
+    Point position = 1;
+    // Represents tank body rotation
+    Angle rotation = 2;
+    // Represents turret rotation
+    Angle turret_rotation = 3;
+    // Represents current tank health
+    int32 health = 4 [(min_value) = 0];
+}
+
+// Represents tank state which does not change during game 
+message PersistentTankState {
+    // Represents tank movement capability
+    EngineState engine = 1;
+    // Represents how frequently tank can shoot
+    google.protobuf.Duration reload_time = 2;
+    // Represents tank size (matters when detecting collisions)
+    Size tank_size = 3;
+    // Represents both tank max and initial health
+    int32 max_health = 4;
+}
+
+// Represents board state which does not change during game 
+message PersistentBoardState {
+    // Represents the size of the entire board (tanks cannot move beyond the board)
+    Size size = 1;
+}
+
+// Represents game state which changes during game
+message GameState {
+    // Represents tank controlled by the player (client)
+    TankState my_tank = 1;
+    // Represents tank controlled by the opponent
+    TankState other_tank = 2;
+    // Represents all missiles on the board
+    repeated MissileState missiles = 3;
+}
+
+// Represents game state which does not change during game
+message PersistentGameState {
+    // Represents tank controlled by the player (client)
+    PersistentTankState my_tank = 1;
+    // Represents tank controlled by the opponent
+    PersistentTankState other_tank = 2;
+    PersistentBoardState board = 3;
+}
+
+// Represents player (client) specific data, used by the server to differentiate players 
+message PlayerData {
+    // Unique name of the player used to identify tanks
+    string name = 1 [(max_length) = 64];
+}
+
+// Represents player (client) credentials returned by the server
+message PlayerCredentials {
+    // Unique access token that must be used to authenticate player (client) during calls to the server
+    string token = 1;
+}
+
+// Represents possible actions that can be executed by the tank
+enum ActionType {
+    // Every enum definition must contain constant that maps to 0 as first element 
+    ACTION_TYPE_UNSPECIFIED = 0;
+
+    // Do not perform any action 
+    // (tank has intertia and it takes time for the tank to stop if it was moving before)
+    ACTION_TYPE_IDLE = 1;
+
+    // Accelerate
+    ACTION_TYPE_MOVE_FORWARD = 2;
+
+    // Brake, in case tank was moving forward
+    // Move backwards, in case tank was standing still
+    ACTION_TYPE_MOVE_BACKWARDS = 3;
+
+    // Rotate both tank body and turret left by 10 degrees
+    ACTION_TYPE_ROTATE_TANK_LEFT = 4;
+
+    // Rotate both tank body and turret right by 10 degrees
+    ACTION_TYPE_ROTATE_TANK_RIGHT = 5;
+
+    // Rotate tank body left by 10 degrees
+    ACTION_TYPE_ROTATE_TANK_BODY_LEFT = 6;
+
+    // Rotate tank body right by 10 degrees
+    ACTION_TYPE_ROTATE_TANK_BODY_RIGHT = 7;
+
+    // Rotate turret left by 10 degrees
+    ACTION_TYPE_ROTATE_TURRET_LEFT = 8;
+
+    // Rotate turret right by 10 degrees
+    ACTION_TYPE_ROTATE_TURRET_RIGHT = 9;
+
+    // Shoot in the direction pointed by the turret
+    ACTION_TYPE_SHOOT = 10;
+}
+
+message Action {
+    ActionType type = 1;
+}
+
+// Server-facing (top-level) structure
+message RegisterRequest {
+    PlayerData player = 1;
+}
+
+// Client-facing (top-level) structure
+message RegisterResponse {
+    PersistentGameState game_state = 1;
+    PlayerCredentials credentials = 2;
+}
+
+// Server-facing (top-level) structure
+message GameStateRequest {
+    // Authentication data received from the server after calling RegisterPlayer
+    PlayerCredentials credentials = 1;
+}
+
+// Client-facing (top-level) structure
+message GameStateResponse {
+    GameState game_state = 1;
+}
+
+// Server-facing (top-level) structure
+message ActionRequest {
+    // Authentication data received from the server after calling RegisterPlayer
+    PlayerCredentials credentials = 1;
+    // Action that should be executed
+    Action action = 2;
+}
+
+// Client-facing (top-level) structure
+message ActionResponse {
+    google.protobuf.Empty empty = 1;
+}
+
+service TankBotFightService {
+    rpc RegisterPlayer(RegisterRequest) returns (RegisterResponse);
+    rpc GetGameState(GameStateRequest) returns (stream GameStateResponse);
+    rpc ExecuteAction(ActionRequest) returns (ActionResponse);
+}
