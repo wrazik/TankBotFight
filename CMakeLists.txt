@@ -27,6 +27,8 @@ if(ENABLE_CLANG_TIDY)
     ${CMAKE_SOURCE_DIR}/src/Players/*)
 endif()
 
+add_subdirectory(protos)
+
 add_library(
   tank_bot_fight_lib STATIC
   src/background/Background.cpp
@@ -79,7 +81,9 @@ if (APPLE)
 endif()
 
 target_link_libraries(tank_bot_fight_lib PUBLIC sfml-graphics ${EXTRA_LIBS}
-                                                Microsoft.GSL::GSL)
+                                                Microsoft.GSL::GSL
+                                                tbf_grpc_proto
+)
 target_link_libraries(tank_bot_fight PRIVATE tank_bot_fight_lib sfml-graphics sfml-audio)
 
 
