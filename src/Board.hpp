@@ -10,11 +10,11 @@
 #include "background/Background.hpp"
 class Board {
  public:
-  Board();
+  Board(sf::RenderWindow& window);
 
   void register_missile(const Missle& missile);
   void register_animation(const Animation& animation);
-  void run();
+  void play(const sf::Event& event);
 
  private:
   void remove_missles();
@@ -23,7 +23,7 @@ class Board {
   void draw();
 
   TextureStore mStore;
-  sf::RenderWindow mWindow;
+  sf::RenderWindow& mWindow;
   Background mBackground;
   std::unique_ptr<KeyboardPlayer> mKeyboardPlayer;
   std::unique_ptr<DummyPlayer> mDummyPlayer;
